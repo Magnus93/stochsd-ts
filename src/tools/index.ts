@@ -33,7 +33,10 @@ export class ToolBox {
     // "step": StepTool,
     // "reset": ResetTool
   } as any // TODO remove any type
-  static currentTool: BaseTool
+  static get currentTool() {
+    return this.tools[this.current] ?? MouseTool
+  }
+  private static current: string
 	static init() {
     $(".tool-button").on("mousedown", function(event) {
       console.log("Toolbox init")
@@ -47,7 +50,7 @@ export class ToolBox {
 			$("#btn_"+toolName).addClass("pressed");
 			
 			// this.currentTool.leaveTool(); // TODO add back - not working
-			this.currentTool = this.tools[toolName];
+			this.current = toolName;
 			// this.currentTool.enterTool(whichMouseButton); // TODO add back - not working
 		} else {
 			errorPopUp("The tool "+toolName+" does not exist");

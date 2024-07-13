@@ -4,6 +4,7 @@ import $ from "jquery"
 import {Model} from "simulation"
 import { SVG } from './SVG';
 import { ToolBox } from './tools';
+import { Mouse } from './Mouse';
 
 new Model({})
 
@@ -17,7 +18,8 @@ $(window).on("load", () => {
 		if(environment.openLink(url)) {			
 			e.preventDefault();
 		}
-  }) */ // TODO make work
-	SVG.init()
-	ToolBox.init()
+  }) */ // TODO make opening links work
+	SVG.init();
+	Mouse.init();
+	ToolBox.init();
 })

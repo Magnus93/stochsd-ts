@@ -219,26 +219,26 @@ export namespace SVG {
  
   // Drawing primitive for drawing svg rects
   /* replaces svg_rect */
-export class Rect extends SVGRectElement {
-  constructor(x: number, y: number, width: number, height: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
-    super();
-    this.setAttribute("class",markclass);
-    this.setAttribute("x", `${x}`);
-    this.setAttribute("y", `${y}`);	
-    this.setAttribute("width", `${width}`);
-    this.setAttribute("height", `${height}`);
-    this.setAttribute("fill", fill);
-    this.setAttribute("stroke", stroke);
-    if (extraAttributes) {
-      for(var key in extraAttributes) {
-        this.setAttribute(key, extraAttributes[key]);
+  export class Rect extends SVGRectElement {
+    constructor(x: number, y: number, width: number, height: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
+      super();
+      this.setAttribute("class",markclass);
+      this.setAttribute("x", `${x}`);
+      this.setAttribute("y", `${y}`);	
+      this.setAttribute("width", `${width}`);
+      this.setAttribute("height", `${height}`);
+      this.setAttribute("fill", fill);
+      this.setAttribute("stroke", stroke);
+      if (extraAttributes) {
+        for(var key in extraAttributes) {
+          this.setAttribute(key, extraAttributes[key]);
+        }
       }
+      svgElement.appendChild(this);
     }
-    svgElement.appendChild(this);
   }
-}
   export class Circle extends SVGCircleElement {
-    constructor(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+    constructor(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
       super();
       this.setAttribute("class",markclass);
       this.setAttribute("cx", `${cx}`);
