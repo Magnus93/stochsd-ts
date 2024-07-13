@@ -3,6 +3,7 @@ import $ from "jquery"
 // @ts-ignore: Ignore missing type definitions for 'simulation'
 import {Model} from "simulation"
 import { SVG } from './SVG';
+import { ToolBox } from './tools';
 
 new Model({})
 
@@ -18,4 +19,5 @@ $(window).on("load", () => {
 		}
   }) */ // TODO make work
 	SVG.init()
+	ToolBox.init()
 })

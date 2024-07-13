@@ -1,3 +1,4 @@
+import $ from "jquery"
 import { errorPopUp } from "../debug/debug";
 import { BaseTool } from "./BaseTool";
 import { MouseTool } from "./MouseTool";
@@ -34,7 +35,11 @@ export class ToolBox {
   } as any // TODO remove any type
   static currentTool: BaseTool
 	static init() {
-		
+    $(".tool-button").on("mousedown", function(event) {
+      console.log("Toolbox init")
+      let toolName = $(this).attr("data-tool") as string;
+      ToolBox.setTool(toolName, event.which);
+    });
 	}
 	static setTool(toolName: string, whichMouseButton: number) {
 		if (toolName in this.tools) {
