@@ -3,7 +3,7 @@ import $ from "jquery"
 // @ts-ignore: Ignore missing type definitions for 'simulation'
 import {Model} from "simulation"
 import { SVG } from './SVG';
-import { ToolBox } from './tools';
+import { Tool } from './Tool';
 import { Mouse } from './Mouse';
 import { Menu } from "./Menu"
 
@@ -23,5 +23,5 @@ $(window).on("load", () => {
 	Menu.init();
 	SVG.init();
 	Mouse.init();
-	ToolBox.init();
+	Tool.init();
 })

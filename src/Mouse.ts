@@ -1,7 +1,7 @@
 import $ from "jquery";
 import { do_global_log } from "./debug";
 import { SVG } from "./SVG";
-import { ToolBox } from "./tools";
+import { Box } from "./Tool/Box";
 
 
 // NOTE: values for event.which should be used
@@ -44,11 +44,11 @@ export class Mouse {
       case mouseWhichEnum.left:
         // if left mouse button down
         Mouse.leftIsDown = true;
-        ToolBox.currentTool.leftMouseDown(x,y);
+        Box.currentTool.leftMouseDown(x,y);
         break;
       case mouseWhichEnum.right: 
         // if right mouse button down
-        ToolBox.currentTool.rightMouseDown(x,y);
+        Box.currentTool.rightMouseDown(x,y);
         break;
     }
   }
@@ -60,7 +60,7 @@ export class Mouse {
     Mouse.lastPosition = { x, y };
     
     if (Mouse.leftIsDown) {
-      ToolBox.currentTool.mouseMove(x, y, event.shiftKey);
+      Box.currentTool.mouseMove(x, y, event.shiftKey);
     }
   }
   /* replaces mouseUpHandler */
@@ -75,7 +75,7 @@ export class Mouse {
       let x = event.pageX-offset.left;
       let y = event.pageY-offset.top;
       
-      ToolBox.currentTool.leftMouseUp(x, y, event.shiftKey);
+      Box.currentTool.leftMouseUp(x, y, event.shiftKey);
       Mouse.leftIsDown = false;
       // InfoBar.update(); // TODO add InfoBar
       // History.storeUndoState(); // TODO add History

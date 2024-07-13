@@ -4,7 +4,7 @@ import { do_global_log } from "../../debug";
 import { RectSelector } from "./RectSelector";
 import { VisualController } from "../../VisualController";
 import { anchorTypeEnum } from "../../anchorTypeEnum";
-import { ToolBox } from "..";
+import { Box } from "../Box";
 
 export class MouseTool extends BaseTool {
 	static init() {
@@ -54,7 +54,7 @@ export class MouseTool extends BaseTool {
 			// 	RectangleVisual => RectangleTool
 			// 	LinkVisual => LinkTool
 			let parent = VisualController.twoPointers[only_selected_anchor["parent_id"] ?? ""];
-			let tool = ToolBox.tools[parent.type];
+			let tool = Box.tools[parent.type];
 			tool.mouseMoveSingleAnchor(x,y, shiftKey, only_selected_anchor["child_id"]);
 			parent.update();
 		} else if ( only_selected_link ) {
@@ -101,7 +101,7 @@ export class MouseTool extends BaseTool {
 
 		if (selected_anchor && VisualController.twoPointers[selected_anchor.parent_id].getStartAttach) {			
 			let parent = VisualController.twoPointers[selected_anchor.parent_id];
-			let tool = ToolBox.tools[parent.getType()];
+			let tool = Box.tools[parent.getType()];
 			tool.mouseUpSingleAnchor(x, y, false, selected_anchor.child_id);
 		}
 

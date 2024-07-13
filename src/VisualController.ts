@@ -243,4 +243,52 @@ export class VisualController {
       }
     }
   }
+  /* replaces get_all_objects */
+  static getAll() {
+    const result: Record<string, any> = {}; // TODO fix type
+    for(let key in this.onePointers) {
+      result[key] = this.onePointers[key];
+    }
+    for(let key in this.twoPointers) {
+      result[key] = this.twoPointers[key];
+    }
+    return result;
+  }
+  /* replaces get_root_objects */
+  static getRootVisuals() {
+    let result: Record<string, any> = {}; // TODO fix type
+    let all = this.getAll();
+    for(let key in all) {
+      if (key.indexOf(".") == -1) {
+        result[key]=all[key];
+      }
+    }
+    return result;
+  }
+    /* replaces get_selected_root_objects */
+    static getSelectedRootVisuals() {
+      let result: Record<string, any> = {};
+      const all = this.getAll();
+      for(let key in all) {
+        let parent = this.getParent(all[key]);
+        
+        // If any element is selected we add its parent
+        if (all[key].isSelected()) {
+          result[parent.id]=parent;
+        }
+      }
+      return result;
+    }
+  /* replaces delete_selected_objects */
+  static deleteSelected() {
+    // Delete all objects that are selected
+    let selection = this.getSelectedRootVisuals();
+    for(let key in selection) {
+      // check if object not already deleted
+      // e.i. link gets deleted automatically if any of it's attachments gets deleted
+      if (this.get(key)) {
+        // tool_deletePrimitive(key); // TODO add this function somewhere
+      }
+    }
+  }
 }

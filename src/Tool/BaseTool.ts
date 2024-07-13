@@ -17,6 +17,8 @@ export class BaseTool {
 	static mouseMove(x: number, y: number, shiftKey: boolean) {
 		// Is triggered when mouse moves
 	}
+	static mouseMoveSingleAnchor(x: number, y: number, shiftKey: boolean, nodeId: string) {}
+	static mouseUpSingleAnchor(x: number, y: number, shiftKey: boolean, nodeId: string) {}
 	static leftMouseUp(x: number, y: number, shiftKey: boolean) {
 		// Is triggered when mouse goes up for this tool
 	}
@@ -24,7 +26,7 @@ export class BaseTool {
 		// Is triggered when right mouse is clicked for this tool 
 	}
   /** mouseButton from event.which */
-	static enterTool(mouseButton: number) {
+	static enterTool(mouseButton?: number) {
 		// Is triggered when the tool is selected
 	}
 	static leaveTool() {
