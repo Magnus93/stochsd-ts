@@ -216,26 +216,25 @@ export namespace SVG {
       this.cutDiv.style.height = `${h}px`; 
     }
   }
- 
-  // Drawing primitive for drawing svg rects
   /* replaces svg_rect */
-  export class Rect extends SVGRectElement {
-    constructor(x: number, y: number, width: number, height: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
-      super();
-      this.setAttribute("class",markclass);
-      this.setAttribute("x", `${x}`);
-      this.setAttribute("y", `${y}`);	
-      this.setAttribute("width", `${width}`);
-      this.setAttribute("height", `${height}`);
-      this.setAttribute("fill", fill);
-      this.setAttribute("stroke", stroke);
-      if (extraAttributes) {
-        for(var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]);
-        }
+  export function rect(x: number, y: number, width: number, height: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
+    //<rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+    const element = document.createElementNS("http://www.w3.org/2000/svg", 'rect'); // Create a path in SVG's namespace
+    element.setAttribute("class",markclass);
+    element.setAttribute("x", `${x}`);
+    element.setAttribute("y", `${y}`);	
+    element.setAttribute("width", `${width}`);
+    element.setAttribute("height", `${height}`);
+    element.setAttribute("fill", fill);
+    element.setAttribute("stroke", stroke);
+  
+    if (extraAttributes) {
+      for(var key in extraAttributes) {
+        element.setAttribute(key, extraAttributes[key]);
       }
-      svgElement.appendChild(this);
     }
+    svgElement.appendChild(element);
+    return element;
   }
   export class Circle extends SVGCircleElement {
     constructor(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {

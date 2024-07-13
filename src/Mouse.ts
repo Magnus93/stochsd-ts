@@ -1,3 +1,4 @@
+import $ from "jquery";
 import { do_global_log } from "./debug";
 import { SVG } from "./SVG";
 import { ToolBox } from "./tools";

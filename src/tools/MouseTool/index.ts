@@ -7,6 +7,10 @@ import { anchorTypeEnum } from "../../anchorTypeEnum";
 import { ToolBox } from "..";
 
 export class MouseTool extends BaseTool {
+	static init() {
+		RectSelector.init();
+	}
+
 	static leftMouseDown(x: number, y: number) {
 		Mouse.downPosition = { x, y }
 		do_global_log("last_click_object_clicked "+Mouse.lastClickObjectClicked);

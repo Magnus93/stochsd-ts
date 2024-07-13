@@ -38,6 +38,7 @@ export class ToolBox {
   }
   private static current: string
 	static init() {
+    Object.values(this.tools).map(t => (t as any)?.init());
     $(".tool-button").on("mousedown", function(event) {
       console.log("Toolbox init")
       let toolName = $(this).attr("data-tool") as string;

@@ -4,9 +4,10 @@ import { VisualController } from "../../VisualController";
 import { SVG } from "../../SVG"
 
 export class RectSelector {
-  static rect = new CoordRect(new SVG.Rect(-30,-30,60,60, "black", "none", "rect-selector"));
+  static rect: CoordRect<SVGRectElement>
   
   static init() {
+    this.rect = new CoordRect(SVG.rect(-30,-30,60,60, "black", "none", "rect-selector"));
     this.rect.element.setAttribute("stroke-dasharray", "4 4");
     this.rect.setVisible(false);
   }
