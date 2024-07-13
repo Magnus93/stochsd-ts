@@ -1,0 +1,67 @@
+/*
+
+This file may distributed and/or modified under the
+terms of the Affero General Public License (http://www.gnu.org/licenses/agpl-3.0.html).
+
+*/
+
+.eMenu {
+	display: inline-block;
+	position: relative;
+	z-index: 1000;
+}
+
+.eMenu .menuContent {
+	position: absolute;
+	display: none;
+	min-width: 100px;
+	z-index: 1001;
+}
+
+.eMenu .menuContent > span {
+	display: block;
+}
+
+.eMenu .menuContent img {
+	height: 22px;
+	margin-right: 6px;
+	pointer-events: none;
+}
+
+div.recent-path {
+	display: inline; 
+	color: dimgray; 
+	font-size: 12px;
+}
+
+button:hover > .recent-path {
+	color: black;
+}
+
+div.recent-name {
+	display: inline;
+}
+
+.color-sample {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 14px;
+	height: 14px;
+	border: 2px solid white;
+	border-radius: 100%;
+	margin-right: 4px;
+}
+
+.eMenu .menuContent button {
+	width: 100%;
+	text-align: left;
+	white-space: nowrap;
+	display: flex;
+	/* Center text vertically */
+	align-items: center;
+}
+
+.eMenu .menuContent a {
+	/* Dont have any decorations on links (for manuals) */
+	text-decoration: none;
+}

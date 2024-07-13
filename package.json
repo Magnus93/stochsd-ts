@@ -1,0 +1,32 @@
+{
+  "name": "starter-test-2",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/jquery": "^3.5.30",
+    "http-server": "^14.1.1",
+    "rollup": "^2.79.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "codemirror": "^6.0.1",
+    "idb": "^8.0.0",
+    "jquery": "^3.7.1",
+    "jquery-ui": "^1.13.3",
+    "simulation": "^4.0.0"
+  }
+}
