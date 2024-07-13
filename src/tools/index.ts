@@ -1,36 +1,37 @@
 import { errorPopUp } from "../debug/debug";
 import { BaseTool } from "./BaseTool";
+import { MouseTool } from "./MouseTool";
 
 export class ToolBox {
   static tools = <const>{
-    // "mouse":MouseTool,
-    // "delete":DeleteTool,
-    // "undo":UndoTool,
-    // "redo":RedoTool,
-    // "stock":StockTool,
-    // "converter":ConverterTool,
-    // "variable":VariableTool,
-    // "constant":ConstantTool,
-    // "flow":FlowTool,
-    // "link":LinkTool,
-    // "rotatename":RotateNameTool,
-    // "movevalve":MoveValveTool,
-    // "straightenlink": StraightenLinkTool,
-    // "ghost":GhostTool,
-    // "text":TextAreaTool,
-    // "rectangle":RectangleTool,
-    // "ellipse":EllipseTool,
-    // "line":LineTool,
-    // "table":TableTool,
-    // "timeplot":TimePlotTool,
-    // "compareplot":ComparePlotTool,
-    // "xyplot":XyPlotTool,
-    // "histoplot":HistoPlotTool,
-    // "numberbox":NumberboxTool,
-    // "run":RunTool,
-    // "step":StepTool,
-    // "reset":ResetTool
-  } as any
+    "mouse": MouseTool,
+    // "delete": DeleteTool,
+    // "undo": UndoTool,
+    // "redo": RedoTool,
+    // "stock": StockTool,
+    // "converter": ConverterTool,
+    // "variable": VariableTool,
+    // "constant": ConstantTool,
+    // "flow": FlowTool,
+    // "link": LinkTool,
+    // "rotatename": RotateNameTool,
+    // "movevalve": MoveValveTool,
+    // "straightenlink":  StraightenLinkTool,
+    // "ghost": GhostTool,
+    // "text": TextAreaTool,
+    // "rectangle": RectangleTool,
+    // "ellipse": EllipseTool,
+    // "line": LineTool,
+    // "table": TableTool,
+    // "timeplot": TimePlotTool,
+    // "compareplot": ComparePlotTool,
+    // "xyplot": XyPlotTool,
+    // "histoplot": HistoPlotTool,
+    // "numberbox": NumberboxTool,
+    // "run": RunTool,
+    // "step": StepTool,
+    // "reset": ResetTool
+  } as any // TODO remove any type
   static currentTool: BaseTool
 	static init() {
 		

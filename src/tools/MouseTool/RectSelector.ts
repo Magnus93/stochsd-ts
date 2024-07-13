@@ -1,10 +1,15 @@
 import { CoordRect } from "../../CoordRect";
 import {Mouse} from "../../Mouse"
 import { VisualController } from "../../VisualController";
+import { SVG } from "../../SVG"
 
 export class RectSelector {
   static rect = new CoordRect()
-
+  
+  static init() {
+    this.rect.element = new SVG.Rect(-30,-30,60,60, "black", "none", "rect-selector");
+    this.rect.element.setAttribute("stroke-dasharray", "4 4");
+  }
   static start() {
     Mouse.emptyClickDown = true;
     VisualController.unselectAll();

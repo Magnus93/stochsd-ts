@@ -2,6 +2,7 @@ import { greet } from './greet';
 import $ from "jquery"
 // @ts-ignore: Ignore missing type definitions for 'simulation'
 import {Model} from "simulation"
+import { SVG } from './SVG';
 
 new Model({})
 
@@ -16,4 +17,5 @@ $(window).on("load", () => {
 			e.preventDefault();
 		}
   }) */ // TODO make work
+	SVG.init()
 })

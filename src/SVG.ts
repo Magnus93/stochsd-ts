@@ -8,15 +8,21 @@ import { Settings } from "./Settings";
 import * as TwoD from "./transform"
 
 export namespace SVG {
-  export function fromString(svg: SVGElement, inString: string) {
+  /* replaces svgplane */
+  export let svgElement: SVGElement
+  export function init() {
+    svgElement = document.getElementById("svgplane") as unknown as SVGElement;
+  }
+  /* replaces svg_from_string */
+  export function fromString(inString: string) {
     var container = document.createElementNS("http://www.w3.org/2000/svg", 'temp'); //Create a path in SVG's namespace
     container.innerHTML = inString;
     const newElement = container.children[0];
-    svg.appendChild(newElement);
+    svgElement.appendChild(newElement);
     return newElement;
   }
   export class Group extends SVGGElement {
-    constructor(svg: SVGElement, elements: Element[], transform?: string, markclass?: string) {
+    constructor(elements: Element[], transform?: string, markclass?: string) {
       super()
       for(let i=0; i<elements.length; i++) {
         this.appendChild(elements[i]);
@@ -27,7 +33,7 @@ export namespace SVG {
       if(markclass) {
         this.setAttribute("class", markclass)
       }
-      svg.appendChild(this)
+      svgElement.appendChild(this)
     }
   }
   export function translate(element: Element, x: number, y: number) {
@@ -36,8 +42,9 @@ export namespace SVG {
   export function transform(element: Element, x: number, y: number, r: number, s: number) {
     element.setAttribute("transform", "translate("+x+","+y+") rotate("+r+") scale("+s+")");
   }
+  /* replaces svg_curve and svg_curve_oneway */
   export class Curve extends SVGPathElement {
-    constructor(svg: SVGElement, public way: "oneway" | "twoway", public x1: number, public y1: number, public x2: number, public y2: number, public x3: number, public y3: number, public x4: number, public y4: number, extraAttributes: {[k:string]: string} | null=null) {
+    constructor(public way: "oneway" | "twoway", public x1: number, public y1: number, public x2: number, public y2: number, public x3: number, public y3: number, public x4: number, public y4: number, extraAttributes: {[k:string]: string} | null=null) {
       super()
       this.setAttribute("stroke","black");
       // fill must be "none" otherwise it may cover up objects behind
@@ -49,7 +56,7 @@ export namespace SVG {
         }
       }
       this.update();
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
     update() {
       let d = `M${this.x1},${this.y1} C${this.x2},${this.y2} ${this.x3},${this.y3} ${this.x4},${this.y4}` 
@@ -61,7 +68,7 @@ export namespace SVG {
     };
   }
   export class Path extends SVGPathElement {
-    constructor(svg: SVGElement, public dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
+    constructor(public dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
       super()
       this.setAttribute("class", markclass); //Set path's data
       this.setAttribute("stroke","black");
@@ -76,14 +83,14 @@ export namespace SVG {
       }
   
       this.update();
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
     update() {
       this.setAttribute("d", this.dstring);
     };
   }
   export class Text extends SVGTextElement {
-    constructor(svg: SVGElement, x: number, y: number, text: string, markclass: string, extraAttributes?: Record<string, string>) {
+    constructor(x: number, y: number, text: string, markclass: string, extraAttributes?: Record<string, string>) {
       super();
       this.setAttribute("class",markclass);
       this.setAttribute("x", `${x}`);
@@ -97,7 +104,7 @@ export namespace SVG {
           this.setAttribute(key, extraAttributes[key]);
         }
       }
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
   }
   export class ForeignScrollable extends SVGGElement {
@@ -105,7 +112,7 @@ export namespace SVG {
     contentDiv: HTMLDivElement;
     scrollDiv: HTMLDivElement;
     innerDiv: HTMLDivElement;
-    constructor(svg: SVGElement, x: number, y: number, width: number, height: number, innerHTML: string, fill="white") {
+    constructor(x: number, y: number, width: number, height: number, innerHTML: string, fill="white") {
       super()
       // foreignObject tag must be camel case to work which is weird
       // Using a tag on top might be better http://stackoverflow.com/questions/6538918/can-i-embed-html-into-an-html5-svg-fragment
@@ -143,7 +150,7 @@ export namespace SVG {
       this.setAttribute("y", `${y}`);	
       this.setAttribute("width", `${width}`);
       this.setAttribute("height", `${height}`);
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
     setX(x: number) { 
       this.cutDiv.style.marginLeft = `${x}px`; 
@@ -209,9 +216,29 @@ export namespace SVG {
       this.cutDiv.style.height = `${h}px`; 
     }
   }
-  
+ 
+  // Drawing primitive for drawing svg rects
+  /* replaces svg_rect */
+export class Rect extends SVGRectElement {
+  constructor(x: number, y: number, width: number, height: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
+    super();
+    this.setAttribute("class",markclass);
+    this.setAttribute("x", `${x}`);
+    this.setAttribute("y", `${y}`);	
+    this.setAttribute("width", `${width}`);
+    this.setAttribute("height", `${height}`);
+    this.setAttribute("fill", fill);
+    this.setAttribute("stroke", stroke);
+    if (extraAttributes) {
+      for(var key in extraAttributes) {
+        this.setAttribute(key, extraAttributes[key]);
+      }
+    }
+    svgElement.appendChild(this);
+  }
+}
   export class Circle extends SVGCircleElement {
-    constructor(svg: SVGElement, cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+    constructor(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
       super();
       this.setAttribute("class",markclass);
       this.setAttribute("cx", `${cx}`);
@@ -225,11 +252,11 @@ export namespace SVG {
           this.setAttribute(key, extraAttributes[key]);
         }
       }
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
   }
   export class Ellipse extends SVGEllipseElement {
-    constructor(svg: SVGElement, cx: number, cy: number, rx: number, ry: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+    constructor(cx: number, cy: number, rx: number, ry: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
       super();
       this.setAttribute("class", markclass);
       this.setAttribute("cx", `${cx}`);
@@ -244,11 +271,11 @@ export namespace SVG {
           this.setAttribute(key, extraAttributes[key]);
         }
       }
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
   }
   export class Line extends SVGLineElement {
-    constructor(svg: SVGElement, x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string,markclass: string, extraAttributes: Record<string, string>) {
+    constructor(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string,markclass: string, extraAttributes: Record<string, string>) {
       super();
       this.setAttribute("class",markclass);
       this.setAttribute("x1", `${x1}`);
@@ -265,13 +292,14 @@ export namespace SVG {
           this.setAttribute(key,extraAttributes[key]);
         }
       }
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
   }
+  /* replaces svg_arrow_head */
   export class ArrowHead extends SVGPathElement {
     templateArrowPoints: TwoD.Point[]
     arrowPoints: TwoD.Point[]
-    constructor(svg: SVGElement, stroke: string, fill: string, extraAttributes?: Record<string, string>) {
+    constructor(stroke: string, fill: string, extraAttributes?: Record<string, string>) {
       super();
       this.setAttribute("stroke", stroke);
       this.setAttribute("fill", fill);
@@ -284,7 +312,7 @@ export namespace SVG {
         }
       }
   
-      svg.appendChild(this);
+      svgElement.appendChild(this);
       return this;
     }
     setTemplatePoints(newPoints: TwoD.Point[]) {
@@ -309,7 +337,7 @@ export namespace SVG {
   }
   export class WidePath extends SVGPathElement {
     points: TwoD.Point[]
-    constructor(svg: SVGElement, width: number, color: string, extraAttributes?: Record<string, string>) {
+    constructor(width: number, color: string, extraAttributes?: Record<string, string>) {
       super();
       this.points = [];
       this.setAttribute("stroke", color);
@@ -322,7 +350,7 @@ export namespace SVG {
           this.setAttribute(key, extraAttributes[key]); //Set path's data
         }
       }
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
     setPoints(points: TwoD.Point[]) {
       this.points = points;
@@ -346,7 +374,7 @@ export namespace SVG {
     pos: TwoD.Point
     defaultStroke: string
     defaultFill: string
-    constructor(svg: SVGElement, stroke: string, fill: string, extraAttributes: Record<string, string>) {
+    constructor(stroke: string, fill: string, extraAttributes: Record<string, string>) {
       super();
       this.setAttribute("stroke", stroke);
       this.setAttribute("stroke-width", "1");
@@ -363,7 +391,7 @@ export namespace SVG {
           this.setAttribute(key, extraAttributes[key]); //Set path's data
         }
       }
-      svg.appendChild(this);
+      svgElement.appendChild(this);
     }
     setPos(pos: TwoD.Point, adjacentPos: TwoD.Point) {
       let offset: TwoD.Point = [0,0];
@@ -416,15 +444,15 @@ export namespace SVG {
     newElement.setAttribute("class", markclass);
     return newElement;
   }
-  export function questionmark(svg: SVGElement, color: string) {
-    return new Text(svg, 0, 6, "?", "questionmark", {"font-size": "18px", "font-weight": "bold", "stroke": color});;
+  export function questionmark(color: string) {
+    return new Text(0, 6, "?", "questionmark", {"font-size": "18px", "font-weight": "bold", "stroke": color});;
   }
   export class Icons extends Group {
     elements: Record<"ghost" | "questionmark" | "dice", Element>
-    constructor(svg: SVGElement, stroke: string, fill: string, markclass?: string) {
-      super(svg, [
+    constructor(stroke: string, fill: string, markclass?: string) {
+      super([
         ghost(stroke, fill, "ghost"),
-        questionmark(svg, stroke),
+        questionmark(stroke),
         dice(fill, stroke)
       ], undefined, markclass)
       this.elements = {
