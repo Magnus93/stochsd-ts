@@ -44,8 +44,9 @@ export class ToolBox {
       let toolName = $(this).attr("data-tool") as string;
       ToolBox.setTool(toolName, event.which);
     });
+    this.setTool("mouse");
 	}
-	static setTool(toolName: string, whichMouseButton: number) {
+	static setTool(toolName: string, whichMouseButton?: number) {
 		if (toolName in this.tools) {
 			$(".tool-button").removeClass("pressed");
 			$("#btn_"+toolName).addClass("pressed");
