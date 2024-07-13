@@ -5,6 +5,7 @@ import {Model} from "simulation"
 import { SVG } from './SVG';
 import { ToolBox } from './tools';
 import { Mouse } from './Mouse';
+import { Menu } from "./Menu"
 
 new Model({})
 
@@ -19,6 +20,7 @@ $(window).on("load", () => {
 			e.preventDefault();
 		}
   }) */ // TODO make opening links work
+	Menu.init();
 	SVG.init();
 	Mouse.init();
 	ToolBox.init();
