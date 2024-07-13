@@ -1,15 +1,13 @@
-export class CoordRect {
+export class CoordRect<El extends Element | undefined> {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
-  element: Element | null;
-	constructor(element?: Element) {
+	constructor(public element: El) {
 		this.x1 = 0;
 		this.y1 = 0;
 		this.x2 = 0;
 		this.y2 = 0;
-		this.element = element ?? null; // This is set at page ready
 	}
 	setVisible(visible: boolean) {
 		this.element?.setAttribute("visibility", visible ? "visible" : "hidden");
