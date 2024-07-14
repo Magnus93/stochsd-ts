@@ -1,5 +1,5 @@
-import $ from "jquery"
-import "jquery-ui/ui/widgets/dialog"
+// import $ from "jquery"
+// import "jquery-ui"
 
 export class jqDialog {
   // This is a static attribute that prevents delete key etc to be relevant when a dialog is open
@@ -36,7 +36,6 @@ export class jqDialog {
 		this.visible = false;
 		// Decides if we this dialog should lock the background
 		this.modal = true;
-		let frm_dialog_resize = true;
 		
 		this.dialogDiv = document.createElement("div");
 		this.dialogDiv.setAttribute("title",this.title);
