@@ -6,6 +6,7 @@ import { SVG } from './SVG';
 import { Tool } from './Tool';
 import { Mouse } from './Mouse';
 import { Menu } from "./Menu"
+import { Env } from './Environment';
 
 new Model({})
 
@@ -13,15 +14,17 @@ const message = greet('World');
 console.log(message);
 
 $(window).on("load", () => {
-  /* $("a").on("click", (e: JQuery.ClickEvent) => {
-		let url=e.currentTarget.href;
-		console.log(url)
-		if(environment.openLink(url)) {			
-			e.preventDefault();
-		}
-  }) */ // TODO make opening links work
+	Env.init();
 	Menu.init();
 	SVG.init();
 	Mouse.init();
 	Tool.init();
+
+	// TODO remove openLink, and add special code in the environments that need it.
+  $("a").on("click", (e: JQuery.ClickEvent) => { 
+		let url=e.currentTarget.href;
+		if(Env.environment.openLink(url)) {			
+			e.preventDefault();
+		}
+  })
 })

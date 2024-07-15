@@ -1,3 +1,4 @@
+import { BaseFileManager } from "./BaseFileManager";
 
 export class BaseEnvironment {
   getName() {
@@ -9,8 +10,9 @@ export class BaseEnvironment {
   keyDown(event: JQuery.KeyDownEvent) {
     // Override this
   }
-  getFileManager() {
+  getFileManager(): BaseFileManager {
     // Override this
+    return new BaseFileManager();
   }
   openLink(url: string) {
     // Returns true or false
