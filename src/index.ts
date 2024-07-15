@@ -1,4 +1,3 @@
-import { greet } from './greet';
 import $ from "jquery"
 // @ts-ignore: Ignore missing type definitions for 'simulation'
 import {Model} from "simulation"
@@ -9,9 +8,6 @@ import { Menu } from "./Menu"
 import { Env } from './Environment';
 
 new Model({})
-
-const message = greet('World');
-console.log(message);
 
 $(window).on("load", () => {
 	Env.init();
