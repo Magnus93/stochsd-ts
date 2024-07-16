@@ -5,6 +5,7 @@ terms of the Affero General Public License (http://www.gnu.org/licenses/agpl-3.0
 
 */
 import $ from "jquery"
+import { EventListeners } from "./EventListeners";
 
 export namespace Menu {
 	export function init() {
@@ -17,6 +18,7 @@ export namespace Menu {
 			$(".menuContent").hide();
 		  }
 		});
+		EventListeners.init()
 	}
 	function create(menu: HTMLElement) {
 		// Toggle the visibility of the menu

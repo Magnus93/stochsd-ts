@@ -6,10 +6,12 @@ import { Tool } from './Tool';
 import { Mouse } from './Mouse';
 import { Menu } from "./Menu"
 import { Env } from './Environment';
+import { Components } from "./components";
 
 new Model({})
 
 $(window).on("load", () => {
+	Components.init()
 	Env.init();
 	Menu.init();
 	SVG.init();
