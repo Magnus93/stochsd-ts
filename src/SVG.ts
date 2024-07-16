@@ -41,30 +41,53 @@ export namespace SVG {
   export function transform(element: Element, x: number, y: number, r: number, s: number) {
     element.setAttribute("transform", "translate(" + x + "," + y + ") rotate(" + r + ") scale(" + s + ")");
   }
-  /* replaces svg_curve and svg_curve_oneway */
-  export class Curve extends SVGPathElement {
-    constructor(public way: "oneway" | "twoway", public x1: number, public y1: number, public x2: number, public y2: number, public x3: number, public y3: number, public x4: number, public y4: number, extraAttributes: { [k: string]: string } | null = null) {
-      super()
-      this.setAttribute("stroke", "black");
-      // fill must be "none" otherwise it may cover up objects behind
-      this.setAttribute("fill", this.way == "oneway" ? "none" : "transparent");
-      // Is set last so it can override default attributes
-      if (extraAttributes) {
-        for (var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]); //Set path's data
-        }
-      }
-      this.update();
-      svgElement.appendChild(this);
+  export type Curve = SVGPathElement &
+    Record<"x1" | "y1" | "x2" | "y2" | "x3" | "y3" | "x4" | "y4", number> & {
+      way: "oneway" | "twoway"
+      x1: number
+      y1: number
+      x2: number
+      y2: number
+      x3: number
+      y3: number
+      x4: number
+      y4: number
+      update: () => void
     }
-    update() {
-      let d = `M${this.x1},${this.y1} C${this.x2},${this.y2} ${this.x3},${this.y3} ${this.x4},${this.y4}`
-      if (this.way == "twoway") {
+  /* replaces svg_curve and svg_curve_oneway */
+  export function curve(way: "oneway" | "twoway", x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number, extraAttributes: { [k: string]: string } | null = null): Curve {
+
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'path') as Curve
+    result.way = way
+    result.x1 = x1
+    result.y1 = y1
+    result.x2 = x2
+    result.y2 = y2
+    result.x3 = x3
+    result.y3 = y3
+    result.x4 = x4
+    result.y4 = y4
+    result.setAttribute("stroke", "black");
+    // fill must be "none" otherwise it may cover up objects behind
+    result.setAttribute("fill", result.way == "oneway" ? "none" : "transparent");
+    // Is set last so it can override default attributes
+    if (extraAttributes) {
+      for (var key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]); //Set path's data
+      }
+    }
+    result.update();
+    svgElement.appendChild(result);
+
+    result.update = function () {
+      let d = `M${result.x1},${result.y1} C${result.x2},${result.y2} ${result.x3},${result.y3} ${result.x4},${result.y4}`
+      if (result.way == "twoway") {
         // Only twoway should curve should be used as a click object
-        d += `C ${this.x3},${this.y3} ${this.x2},${this.y2} ${this.x1},${this.y1}`;
+        d += `C ${result.x3},${result.y3} ${result.x2},${result.y2} ${result.x1},${result.y1}`;
       }
       this.setAttribute("d", d);
-    };
+    }
+    return result
   }
   export class Path extends SVGPathElement {
     constructor(public dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
