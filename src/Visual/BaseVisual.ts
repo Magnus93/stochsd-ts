@@ -13,7 +13,7 @@ export class BaseVisual {
   selectorElements: Element[] // Elements visible when selected
   nameElement?: SVGTextElement
   icons?: SVG.Icons
-  group?: SVG.Group
+  group?: SVGGElement
   namePositionList: [number, number][]
   isGhost = false
 	constructor(public id: string, public type: string, pos: [number, number]) {
@@ -24,7 +24,7 @@ export class BaseVisual {
 		
 		this.elements = [];
 		this.selectorElements = [];
-		this.icons; 	// svg_group with icons such as ghost and questionmark
+		this.icons; 	// svg group with icons such as ghost and questionmark
 		this.group;
 		this.namePositionList = [[0, this.nameRadius+8], [this.nameRadius, 0], [0, -this.nameRadius], [-this.nameRadius, 0]];
 	}

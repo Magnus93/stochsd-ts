@@ -21,67 +21,66 @@ export namespace SVG {
     svgElement.appendChild(newElement);
     return newElement;
   }
-  export class Group extends SVGGElement {
-    constructor(elements: Element[], transform?: string, markclass?: string) {
-      super()
-      for(let i=0; i<elements.length; i++) {
-        this.appendChild(elements[i]);
-      }
-      if(transform) {
-        this.setAttribute("transform", transform);
-      }
-      if(markclass) {
-        this.setAttribute("class", markclass)
-      }
-      svgElement.appendChild(this)
+  export function group(elements: Element[], transform?: string, markclass?: string): SVGGElement {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'g')
+    for (let i = 0; i < elements.length; i++) {
+      result.appendChild(elements[i]);
     }
+    if (transform) {
+      result.setAttribute("transform", transform);
+    }
+    if (markclass) {
+      result.setAttribute("class", markclass)
+    }
+    svgElement.appendChild(result)
+    return result
   }
   export function translate(element: Element, x: number, y: number) {
-    element.setAttribute("transform",`translate("${x}","${y}") rotate(0)`);
+    element.setAttribute("transform", `translate("${x}","${y}") rotate(0)`);
   }
   export function transform(element: Element, x: number, y: number, r: number, s: number) {
-    element.setAttribute("transform", "translate("+x+","+y+") rotate("+r+") scale("+s+")");
+    element.setAttribute("transform", "translate(" + x + "," + y + ") rotate(" + r + ") scale(" + s + ")");
   }
   /* replaces svg_curve and svg_curve_oneway */
   export class Curve extends SVGPathElement {
-    constructor(public way: "oneway" | "twoway", public x1: number, public y1: number, public x2: number, public y2: number, public x3: number, public y3: number, public x4: number, public y4: number, extraAttributes: {[k:string]: string} | null=null) {
+    constructor(public way: "oneway" | "twoway", public x1: number, public y1: number, public x2: number, public y2: number, public x3: number, public y3: number, public x4: number, public y4: number, extraAttributes: { [k: string]: string } | null = null) {
       super()
-      this.setAttribute("stroke","black");
+      this.setAttribute("stroke", "black");
       // fill must be "none" otherwise it may cover up objects behind
-      this.setAttribute("fill",this.way == "oneway" ? "none" : "transparent");
+      this.setAttribute("fill", this.way == "oneway" ? "none" : "transparent");
       // Is set last so it can override default attributes
-      if(extraAttributes) {
-        for(var key in extraAttributes) {
-          this.setAttribute(key,extraAttributes[key]); //Set path's data
+      if (extraAttributes) {
+        for (var key in extraAttributes) {
+          this.setAttribute(key, extraAttributes[key]); //Set path's data
         }
       }
       this.update();
       svgElement.appendChild(this);
     }
     update() {
-      let d = `M${this.x1},${this.y1} C${this.x2},${this.y2} ${this.x3},${this.y3} ${this.x4},${this.y4}` 
+      let d = `M${this.x1},${this.y1} C${this.x2},${this.y2} ${this.x3},${this.y3} ${this.x4},${this.y4}`
       if (this.way == "twoway") {
         // Only twoway should curve should be used as a click object
         d += `C ${this.x3},${this.y3} ${this.x2},${this.y2} ${this.x1},${this.y1}`;
       }
-      this.setAttribute("d",d);
+      this.setAttribute("d", d);
     };
   }
   export class Path extends SVGPathElement {
     constructor(public dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
       super()
       this.setAttribute("class", markclass); //Set path's data
-      this.setAttribute("stroke","black");
-      this.setAttribute("fill","transparent");
-      this.setAttribute("fill",fill);
-      this.setAttribute("stroke",stroke);
-  
-      if(extraAttributes) {
-        for(var key in extraAttributes) {
+      this.setAttribute("stroke", "black");
+      this.setAttribute("fill", "transparent");
+      this.setAttribute("fill", fill);
+      this.setAttribute("stroke", stroke);
+
+      if (extraAttributes) {
+        for (var key in extraAttributes) {
           this.setAttribute(key, extraAttributes[key]); //Set path's data
         }
       }
-  
+
       this.update();
       svgElement.appendChild(this);
     }
@@ -92,15 +91,15 @@ export namespace SVG {
   export class Text extends SVGTextElement {
     constructor(x: number, y: number, text: string, markclass: string, extraAttributes?: Record<string, string>) {
       super();
-      this.setAttribute("class",markclass);
+      this.setAttribute("class", markclass);
       this.setAttribute("x", `${x}`);
       this.setAttribute("y", `${y}`);
       this.innerHTML = text;
       this.setAttribute("text-anchor", "middle");
       this.setAttribute("style", "font-size: " + Settings.primitiveFontSize + "px");
-    
-      if(extraAttributes != undefined) {
-        for(var key in extraAttributes) {
+
+      if (extraAttributes != undefined) {
+        for (var key in extraAttributes) {
           this.setAttribute(key, extraAttributes[key]);
         }
       }
@@ -112,72 +111,72 @@ export namespace SVG {
     contentDiv: HTMLDivElement;
     scrollDiv: HTMLDivElement;
     innerDiv: HTMLDivElement;
-    constructor(x: number, y: number, width: number, height: number, innerHTML: string, fill="white") {
+    constructor(x: number, y: number, width: number, height: number, innerHTML: string, fill = "white") {
       super()
       // foreignObject tag must be camel case to work which is weird
       // Using a tag on top might be better http://stackoverflow.com/questions/6538918/can-i-embed-html-into-an-html5-svg-fragment
       let foreign = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
       foreign.setAttribute("style", "width: 100%; height: 100%; pointer-events: none;");
-  
+
       this.cutDiv = document.createElement("div");
       // This div is nessecary to avoid overflow in some browsers
-      this.cutDiv.setAttribute("style","overflow: hidden; pointer-events: all;");
-      this.cutDiv.setAttribute("class","cutDiv");
-  
+      this.cutDiv.setAttribute("style", "overflow: hidden; pointer-events: all;");
+      this.cutDiv.setAttribute("class", "cutDiv");
+
       // This div holds the scrolling and sets the background color
       this.scrollDiv = document.createElement("div");
       this.scrollDiv.setAttribute(`style`, `background-color: ${fill}; overflow: auto;`);
-      this.scrollDiv.setAttribute("class","scrollDiv");
-  
+      this.scrollDiv.setAttribute("class", "scrollDiv");
+
       // This div is on the inside of the scroll div and reacts to things such as clicks
       this.innerDiv = document.createElement("div");
       this.innerDiv.setAttribute(`style`, `width: 100%; height: 100%; overflow: visible; background-color: ${fill}`);
-      this.innerDiv.setAttribute("class","innerDiv");
-  
+      this.innerDiv.setAttribute("class", "innerDiv");
+
       // This div is where we put the content
       this.contentDiv = document.createElement("div");
-      this.contentDiv.innerHTML=innerHTML;
+      this.contentDiv.innerHTML = innerHTML;
       this.contentDiv.setAttribute(`style`, `overflow: visible; background-color: ${fill}`);
-      this.contentDiv.setAttribute("class","contentDiv");
-  
+      this.contentDiv.setAttribute("class", "contentDiv");
+
       this.innerDiv.appendChild(this.contentDiv);
       this.scrollDiv.appendChild(this.innerDiv);
       this.cutDiv.appendChild(this.scrollDiv);
       foreign.appendChild(this.cutDiv);
       this.appendChild(foreign);
-  
+
       this.setAttribute("x", `${x}`);
-      this.setAttribute("y", `${y}`);	
+      this.setAttribute("y", `${y}`);
       this.setAttribute("width", `${width}`);
       this.setAttribute("height", `${height}`);
       svgElement.appendChild(this);
     }
-    setX(x: number) { 
-      this.cutDiv.style.marginLeft = `${x}px`; 
+    setX(x: number) {
+      this.cutDiv.style.marginLeft = `${x}px`;
     }
     setY(y: number) {
-      this.cutDiv.style.marginTop = `${y}px`; 
+      this.cutDiv.style.marginTop = `${y}px`;
     }
-    setWidth(w: number)  {
-      this.cutDiv.style.width = `${w}px`; 
+    setWidth(w: number) {
+      this.cutDiv.style.width = `${w}px`;
     }
     setHeight(h: number) {
-      this.cutDiv.style.height = `${h}px`; 
+      this.cutDiv.style.height = `${h}px`;
     }
   }
   export class Foreign extends SVGGElement {
     cutDiv: HTMLDivElement
     contentDiv: HTMLDivElement
-    constructor(svg: SVGGElement, x: number, y: number, width: number, height: number, innerHtml: string, fill="white") {
+    constructor(svg: SVGGElement, x: number, y: number, width: number, height: number, innerHtml: string, fill = "white") {
       super();
       // covers entire screen - never moves
       // if foreignObject moves in Chrome then automatic scroll
       let foreign = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
       foreign.setAttribute("style", `height: 100%; width: 100%; pointer-events: none;`);
-    
+
       this.cutDiv = document.createElement("div");
       this.cutDiv.setAttribute("style", `background: ${fill}; overflow: hidden; pointer-events: all;`);
-    
+
       this.contentDiv = document.createElement("div");
       this.contentDiv.innerHTML = innerHtml;
       let padding = 8;
@@ -185,35 +184,35 @@ export namespace SVG {
         position: relative; 
         left: ${padding}px; 
         top: ${padding}px; 
-        width: calc( 100% - ${2*padding}px );
-        height: calc( 100% - ${2*padding}px );
+        width: calc( 100% - ${2 * padding}px );
+        height: calc( 100% - ${2 * padding}px );
       `);
       this.contentDiv.setAttribute("class", "contentDiv");
-    
+
       this.appendChild(foreign);
       foreign.appendChild(this.cutDiv);
       this.cutDiv.appendChild(this.contentDiv);
-    
+
       this.cutDiv = this.cutDiv;
       this.contentDiv = this.contentDiv;
-    
+
       this.setAttribute("x", `${x}`);
-      this.setAttribute("y", `${y}`);	
+      this.setAttribute("y", `${y}`);
       this.setAttribute("width", `${width}`);
       this.setAttribute("height", `${height}`);
       svg.appendChild(this);
     }
-    setX(x: number) { 
-      this.cutDiv.style.marginLeft = `${x}px`; 
+    setX(x: number) {
+      this.cutDiv.style.marginLeft = `${x}px`;
     }
     setY(y: number) {
-      this.cutDiv.style.marginTop = `${y}px`; 
+      this.cutDiv.style.marginTop = `${y}px`;
     }
-    setWidth(w: number)  {
-      this.cutDiv.style.width = `${w}px`; 
+    setWidth(w: number) {
+      this.cutDiv.style.width = `${w}px`;
     }
     setHeight(h: number) {
-      this.cutDiv.style.height = `${h}px`; 
+      this.cutDiv.style.height = `${h}px`;
     }
   }
   /* replaces svg_rect */
@@ -222,14 +221,14 @@ export namespace SVG {
     const element = document.createElementNS("http://www.w3.org/2000/svg", 'rect'); // Create a path in SVG's namespace
     markclass && element.setAttribute("class", markclass);
     element.setAttribute("x", `${x}`);
-    element.setAttribute("y", `${y}`);	
+    element.setAttribute("y", `${y}`);
     element.setAttribute("width", `${width}`);
     element.setAttribute("height", `${height}`);
     element.setAttribute("fill", fill);
     element.setAttribute("stroke", stroke);
-  
+
     if (extraAttributes) {
-      for(var key in extraAttributes) {
+      for (var key in extraAttributes) {
         element.setAttribute(key, extraAttributes[key]);
       }
     }
@@ -239,7 +238,7 @@ export namespace SVG {
   export class Circle extends SVGCircleElement {
     constructor(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
       super();
-      this.setAttribute("class",markclass);
+      this.setAttribute("class", markclass);
       this.setAttribute("cx", `${cx}`);
       this.setAttribute("cy", `${cy}`);
       this.setAttribute("r", `${r}`);
@@ -247,7 +246,7 @@ export namespace SVG {
       this.setAttribute("stroke", stroke);
       this.setAttribute("data-attr", "selected");
       if (extraAttributes) {
-        for(var key in extraAttributes) {
+        for (var key in extraAttributes) {
           this.setAttribute(key, extraAttributes[key]);
         }
       }
@@ -274,9 +273,9 @@ export namespace SVG {
     }
   }
   export class Line extends SVGLineElement {
-    constructor(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string,markclass: string, extraAttributes: Record<string, string>) {
+    constructor(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
       super();
-      this.setAttribute("class",markclass);
+      this.setAttribute("class", markclass);
       this.setAttribute("x1", `${x1}`);
       this.setAttribute("y1", `${y1}`);
       this.setAttribute("x2", `${x2}`);
@@ -285,10 +284,10 @@ export namespace SVG {
       this.setAttribute("stroke", stroke);
       this.setAttribute("data-attr", "selected");
       this.setAttribute("stroke-width", "1");
-  
-      if(extraAttributes!=undefined) {
-        for(var key in extraAttributes) {
-          this.setAttribute(key,extraAttributes[key]);
+
+      if (extraAttributes != undefined) {
+        for (var key in extraAttributes) {
+          this.setAttribute(key, extraAttributes[key]);
         }
       }
       svgElement.appendChild(this);
@@ -302,33 +301,33 @@ export namespace SVG {
       super();
       this.setAttribute("stroke", stroke);
       this.setAttribute("fill", fill);
-      this.templateArrowPoints = [[12, -2],[12, -6], [0,0], [12, 6],[12, 2]];
+      this.templateArrowPoints = [[12, -2], [12, -6], [0, 0], [12, 6], [12, 2]];
       this.arrowPoints = [];
-  
+
       if (extraAttributes) {
-        for(var key in extraAttributes) {
+        for (var key in extraAttributes) {
           this.setAttribute(key, extraAttributes[key]);
         }
       }
-  
+
       svgElement.appendChild(this);
       return this;
     }
     setTemplatePoints(newPoints: TwoD.Point[]) {
       this.templateArrowPoints = newPoints;
     }
-  
-    setPos(pos: [number, number], directionVector: TwoD.Point = [1,0]) {
-      let sine = TwoD.sin([0,0], directionVector);
-      let cosine = TwoD.cos([0,0], directionVector);
+
+    setPos(pos: [number, number], directionVector: TwoD.Point = [1, 0]) {
+      let sine = TwoD.sin([0, 0], directionVector);
+      let cosine = TwoD.cos([0, 0], directionVector);
       this.arrowPoints = TwoD.rotatePoints(this.templateArrowPoints, sine, cosine);
       this.arrowPoints = TwoD.translatePoints(this.arrowPoints, pos);
     };
-  
+
     update() {
-      let d = "M"+this.arrowPoints[0][0]+","+this.arrowPoints[0][1];
+      let d = "M" + this.arrowPoints[0][0] + "," + this.arrowPoints[0][1];
       for (let i = 1; i < this.arrowPoints.length; i++) {
-        d += "L"+this.arrowPoints[i][0]+","+this.arrowPoints[i][1]+" ";
+        d += "L" + this.arrowPoints[i][0] + "," + this.arrowPoints[i][1] + " ";
       }
       // d += "Z";
       this.setAttribute("d", d);
@@ -342,10 +341,10 @@ export namespace SVG {
       this.setAttribute("stroke", color);
       this.setAttribute("fill", "transparent");
       this.setAttribute("stroke-width", width.toString());
-  
+
       // Is set last so it can override default attributes
-      if(extraAttributes) {
-        for(var key in extraAttributes) {
+      if (extraAttributes) {
+        for (var key in extraAttributes) {
           this.setAttribute(key, extraAttributes[key]); //Set path's data
         }
       }
@@ -356,13 +355,13 @@ export namespace SVG {
     }
     update() {
       let points = this.points;
-      if (points.length < 1) {return;}
-      let d = "M"+points[0][0]+","+points[0][1];
+      if (points.length < 1) { return; }
+      let d = "M" + points[0][0] + "," + points[0][1];
       for (let i = 1; i < this.points.length; i++) {
-        d += "L"+points[i][0]+","+points[i][1]+" ";
+        d += "L" + points[i][0] + "," + points[i][1] + " ";
       }
-      for (let i = this.points.length-2; 0 < i; i-- ) { 	// Draw path back upon itself - Reason: remove area in which to click on
-        d += "L"+points[i][0]+","+points[i][1]+" ";
+      for (let i = this.points.length - 2; 0 < i; i--) { 	// Draw path back upon itself - Reason: remove area in which to click on
+        d += "L" + points[i][0] + "," + points[i][1] + " ";
       }
       // d += "Z";
       this.setAttribute("d", d);
@@ -383,20 +382,20 @@ export namespace SVG {
       this.pos = [0, 0];
       this.defaultStroke = stroke;
       this.defaultFill = fill;
-  
+
       // Is set last so it can override default attributes
-      if(extraAttributes) {
-        for(var key in extraAttributes) {
+      if (extraAttributes) {
+        for (var key in extraAttributes) {
           this.setAttribute(key, extraAttributes[key]); //Set path's data
         }
       }
       svgElement.appendChild(this);
     }
     setPos(pos: TwoD.Point, adjacentPos: TwoD.Point) {
-      let offset: TwoD.Point = [0,0];
+      let offset: TwoD.Point = [0, 0];
       switch (TwoD.neswDirection(adjacentPos, pos)) {
         case "north":
-          offset = [0, 11];	
+          offset = [0, 11];
           break;
         case "east":
           offset = [14, -1];
@@ -405,23 +404,23 @@ export namespace SVG {
           offset = [0, -7];
           break;
         default: // west
-          offset = [-14, 0];	
+          offset = [-14, 0];
           break;
       }
       this.pos = TwoD.translate(pos, offset);
     }
-  
+
     update() {
-      this.setAttribute("transform","translate("+this.pos[0]+","+this.pos[1]+")");
+      this.setAttribute("transform", "translate(" + this.pos[0] + "," + this.pos[1] + ")");
     }
-  
+
     setVisibility(isVisible: boolean) {
       this.visible = isVisible;
       if (this.visible) {
         this.setAttribute("visibility", "visible");
       } else {
         this.setAttribute("visibility", "hidden");
-      } 
+      }
     }
   }
   export function ghost(stroke: string, fill: string, markclass: string = "") {
@@ -433,7 +432,7 @@ export namespace SVG {
     newElement.setAttribute("class", markclass);
     return newElement;
   }
-  
+
   export function dice(stroke: string, fill: string, markclass: string = "") {
     let newElement = document.createElementNS("http://www.w3.org/2000/svg", 'path');
     newElement.setAttribute("stroke", stroke);
@@ -444,29 +443,32 @@ export namespace SVG {
     return newElement;
   }
   export function questionmark(color: string) {
-    return new Text(0, 6, "?", "questionmark", {"font-size": "18px", "font-weight": "bold", "stroke": color});;
+    return new Text(0, 6, "?", "questionmark", { "font-size": "18px", "font-weight": "bold", "stroke": color });;
   }
-  export class Icons extends Group {
+  export type Icons = SVGGElement & {
     elements: Record<"ghost" | "questionmark" | "dice", Element>
-    constructor(stroke: string, fill: string, markclass?: string) {
-      super([
+    setColor: (color: string) => void
+    set: (icon: "ghost" | "questionmark" | "dice", visibility: "visible" | "hidden") => void
+  }
+  export function icons(stroke: string, fill: string, markclass?: string) {
+    const result: Icons = group(
+      [
         ghost(stroke, fill, "ghost"),
         questionmark(stroke),
         dice(fill, stroke)
-      ], undefined, markclass)
-      this.elements = {
-        "ghost": this.children[0],
-        "questionmark": this.children[1],
-        "dice": this.children[2]
-      }
+      ], undefined, markclass) as Icons
+    result.elements = {
+      "ghost": result.children[0],
+      "questionmark": result.children[1],
+      "dice": result.children[2]
     }
-    setColor(color: string) {
-      this.elements["ghost"].setAttribute("stroke", color);
-      this.elements["questionmark"].setAttribute("style", `fill: ${color}`);
-      this.elements["dice"].setAttribute("style", `fill: ${color}` );
+    result.setColor = (color: string) => {
+      result.elements["ghost"].setAttribute("stroke", color);
+      result.elements["questionmark"].setAttribute("style", `fill: ${color}`);
+      result.elements["dice"].setAttribute("style", `fill: ${color}`);
     }
-    set(icon: "ghost" | "questionmark" | "dice", visibility: "visible" | "hidden") {
-      this.elements[icon].setAttribute("visibility", visibility);
+    result.set = (icon: "ghost" | "questionmark" | "dice", visibility: "visible" | "hidden") => {
+      result.elements[icon].setAttribute("visibility", visibility);
     }
   }
 }
