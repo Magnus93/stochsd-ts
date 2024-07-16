@@ -1,10 +1,12 @@
 import { anchorTypeEnum } from "../anchorTypeEnum";
+import { DisplayDialog } from "../components/Dialog/DisplayDialog";
 import { VisualController } from "../VisualController";
 import { BaseVisual } from "./BaseVisual";
 
 export class TwoPointer extends BaseVisual {
   start_anchor: any // TODO OnePointer
   end_anchor: any // TODO OnePointer
+  dialog!: DisplayDialog;
 	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
 		super(id, type, pos0);
 		this.id = id;

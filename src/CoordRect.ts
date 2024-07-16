@@ -1,3 +1,5 @@
+import { SVG } from "./SVG";
+
 export class CoordRect<El extends Element | undefined> {
   x1: number;
   y1: number;
