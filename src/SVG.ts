@@ -128,112 +128,122 @@ export namespace SVG {
 		svgElement.appendChild(result);
 		return result
 	}
-	export class ForeignScrollable extends SVGGElement {
+	export type ForeignScrollable = SVGGElement & {
 		cutDiv: HTMLDivElement;
 		contentDiv: HTMLDivElement;
 		scrollDiv: HTMLDivElement;
 		innerDiv: HTMLDivElement;
-		constructor(x: number, y: number, width: number, height: number, innerHTML: string, fill = "white") {
-			super()
-			// foreignObject tag must be camel case to work which is weird
-			// Using a tag on top might be better http://stackoverflow.com/questions/6538918/can-i-embed-html-into-an-html5-svg-fragment
-			let foreign = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
-			foreign.setAttribute("style", "width: 100%; height: 100%; pointer-events: none;");
+		setX: (value: number) => void
+		setY: (value: number) => void
+		setWidth: (value: number) => void
+		setHeight: (value: number) => void
+	}
+	export function foreignScrollable(x: number, y: number, width: number, height: number, innerHTML: string, fill = "white") {
+		let result = document.createElementNS("http://www.w3.org/2000/svg", 'g') as ForeignScrollable
+		// foreignObject tag must be camel case to work which is weird
+		// Using a tag on top might be better http://stackoverflow.com/questions/6538918/can-i-embed-html-into-an-html5-svg-fragment
+		let foreign = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+		foreign.setAttribute("style", "width: 100%; height: 100%; pointer-events: none;");
 
-			this.cutDiv = document.createElement("div");
-			// This div is nessecary to avoid overflow in some browsers
-			this.cutDiv.setAttribute("style", "overflow: hidden; pointer-events: all;");
-			this.cutDiv.setAttribute("class", "cutDiv");
+		result.cutDiv = document.createElement("div");
+		// This div is nessecary to avoid overflow in some browsers
+		result.cutDiv.setAttribute("style", "overflow: hidden; pointer-events: all;");
+		result.cutDiv.setAttribute("class", "cutDiv");
 
-			// This div holds the scrolling and sets the background color
-			this.scrollDiv = document.createElement("div");
-			this.scrollDiv.setAttribute(`style`, `background-color: ${fill}; overflow: auto;`);
-			this.scrollDiv.setAttribute("class", "scrollDiv");
+		// This div holds the scrolling and sets the background color
+		result.scrollDiv = document.createElement("div");
+		result.scrollDiv.setAttribute(`style`, `background-color: ${fill}; overflow: auto;`);
+		result.scrollDiv.setAttribute("class", "scrollDiv");
 
-			// This div is on the inside of the scroll div and reacts to things such as clicks
-			this.innerDiv = document.createElement("div");
-			this.innerDiv.setAttribute(`style`, `width: 100%; height: 100%; overflow: visible; background-color: ${fill}`);
-			this.innerDiv.setAttribute("class", "innerDiv");
+		// This div is on the inside of the scroll div and reacts to things such as clicks
+		result.innerDiv = document.createElement("div");
+		result.innerDiv.setAttribute(`style`, `width: 100%; height: 100%; overflow: visible; background-color: ${fill}`);
+		result.innerDiv.setAttribute("class", "innerDiv");
 
-			// This div is where we put the content
-			this.contentDiv = document.createElement("div");
-			this.contentDiv.innerHTML = innerHTML;
-			this.contentDiv.setAttribute(`style`, `overflow: visible; background-color: ${fill}`);
-			this.contentDiv.setAttribute("class", "contentDiv");
+		// This div is where we put the content
+		result.contentDiv = document.createElement("div");
+		result.contentDiv.innerHTML = innerHTML;
+		result.contentDiv.setAttribute(`style`, `overflow: visible; background-color: ${fill}`);
+		result.contentDiv.setAttribute("class", "contentDiv");
 
-			this.innerDiv.appendChild(this.contentDiv);
-			this.scrollDiv.appendChild(this.innerDiv);
-			this.cutDiv.appendChild(this.scrollDiv);
-			foreign.appendChild(this.cutDiv);
-			this.appendChild(foreign);
+		result.innerDiv.appendChild(result.contentDiv);
+		result.scrollDiv.appendChild(result.innerDiv);
+		result.cutDiv.appendChild(result.scrollDiv);
+		foreign.appendChild(result.cutDiv);
+		result.appendChild(foreign);
 
-			this.setAttribute("x", `${x}`);
-			this.setAttribute("y", `${y}`);
-			this.setAttribute("width", `${width}`);
-			this.setAttribute("height", `${height}`);
-			svgElement.appendChild(this);
-		}
-		setX(x: number) {
+		result.setAttribute("x", `${x}`);
+		result.setAttribute("y", `${y}`);
+		result.setAttribute("width", `${width}`);
+		result.setAttribute("height", `${height}`);
+		svgElement.appendChild(result);
+
+		result.setX = function (x: number) {
 			this.cutDiv.style.marginLeft = `${x}px`;
 		}
-		setY(y: number) {
+		result.setY = function (y: number) {
 			this.cutDiv.style.marginTop = `${y}px`;
 		}
-		setWidth(w: number) {
+		result.setWidth = function (w: number) {
 			this.cutDiv.style.width = `${w}px`;
 		}
-		setHeight(h: number) {
+		result.setHeight = function (h: number) {
 			this.cutDiv.style.height = `${h}px`;
 		}
 	}
-	export class Foreign extends SVGGElement {
+	export type Foreign = SVGGElement & {
 		cutDiv: HTMLDivElement
 		contentDiv: HTMLDivElement
-		constructor(svg: SVGGElement, x: number, y: number, width: number, height: number, innerHtml: string, fill = "white") {
-			super();
-			// covers entire screen - never moves
-			// if foreignObject moves in Chrome then automatic scroll
-			let foreign = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
-			foreign.setAttribute("style", `height: 100%; width: 100%; pointer-events: none;`);
+		setX: (value: number) => void
+		setY: (value: number) => void
+		setWidth: (value: number) => void
+		setHeight: (value: number) => void
+	}
+	export function foreign(svg: SVGGElement, x: number, y: number, width: number, height: number, innerHtml: string, fill = "white") {
+		const result = document.createElementNS("http://www.w3.org/2000/svg", 'g') as Foreign
+		// covers entire screen - never moves
+		// if foreignObject moves in Chrome then automatic scroll
+		let foreign = document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+		foreign.setAttribute("style", `height: 100%; width: 100%; pointer-events: none;`);
 
-			this.cutDiv = document.createElement("div");
-			this.cutDiv.setAttribute("style", `background: ${fill}; overflow: hidden; pointer-events: all;`);
+		result.cutDiv = document.createElement("div");
+		result.cutDiv.setAttribute("style", `background: ${fill}; overflow: hidden; pointer-events: all;`);
 
-			this.contentDiv = document.createElement("div");
-			this.contentDiv.innerHTML = innerHtml;
-			let padding = 8;
-			this.contentDiv.setAttribute("style", `
+		result.contentDiv = document.createElement("div");
+		result.contentDiv.innerHTML = innerHtml;
+		let padding = 8;
+		result.contentDiv.setAttribute("style", `
         position: relative; 
         left: ${padding}px; 
         top: ${padding}px; 
         width: calc( 100% - ${2 * padding}px );
         height: calc( 100% - ${2 * padding}px );
       `);
-			this.contentDiv.setAttribute("class", "contentDiv");
+		result.contentDiv.setAttribute("class", "contentDiv");
 
-			this.appendChild(foreign);
-			foreign.appendChild(this.cutDiv);
-			this.cutDiv.appendChild(this.contentDiv);
+		result.appendChild(foreign);
+		foreign.appendChild(result.cutDiv);
+		result.cutDiv.appendChild(result.contentDiv);
 
-			this.cutDiv = this.cutDiv;
-			this.contentDiv = this.contentDiv;
+		result.cutDiv = result.cutDiv;
+		result.contentDiv = result.contentDiv;
 
-			this.setAttribute("x", `${x}`);
-			this.setAttribute("y", `${y}`);
-			this.setAttribute("width", `${width}`);
-			this.setAttribute("height", `${height}`);
-			svg.appendChild(this);
+		result.setAttribute("x", `${x}`);
+		result.setAttribute("y", `${y}`);
+		result.setAttribute("width", `${width}`);
+		result.setAttribute("height", `${height}`);
+		svg.appendChild(result);
+		
+		result.setX = function (x: number) {
+			result.cutDiv.style.marginLeft = `${x}px`;
 		}
-		setX(x: number) {
-			this.cutDiv.style.marginLeft = `${x}px`;
-		}
-		setY(y: number) {
+		result.setY = function (y: number) {
 			this.cutDiv.style.marginTop = `${y}px`;
 		}
-		setWidth(w: number) {
+		result.setWidth = function (w: number) {
 			this.cutDiv.style.width = `${w}px`;
 		}
-		setHeight(h: number) {
+		result.setHeight = function (h: number) {
 			this.cutDiv.style.height = `${h}px`;
 		}
 	}
