@@ -89,45 +89,44 @@ export namespace SVG {
     }
     return result
   }
-  export class Path extends SVGPathElement {
-    constructor(public dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
-      super()
-      this.setAttribute("class", markclass); //Set path's data
-      this.setAttribute("stroke", "black");
-      this.setAttribute("fill", "transparent");
-      this.setAttribute("fill", fill);
-      this.setAttribute("stroke", stroke);
+  export type Path = SVGPathElement & { update: () => void, dstring: string }
+  export function path(dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'path') as Path
+    result.dstring = dstring
+    result.setAttribute("class", markclass); //Set path's data
+    result.setAttribute("stroke", "black");
+    result.setAttribute("fill", "transparent");
+    result.setAttribute("fill", fill);
+    result.setAttribute("stroke", stroke);
 
-      if (extraAttributes) {
-        for (var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]); //Set path's data
-        }
+    if (extraAttributes) {
+      for (var key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]); //Set path's data
       }
-
-      this.update();
-      svgElement.appendChild(this);
     }
-    update() {
-      this.setAttribute("d", this.dstring);
+    result.update();
+    svgElement.appendChild(result);
+
+    result.update = function () {
+      result.setAttribute("d", result.dstring);
     };
   }
-  export class Text extends SVGTextElement {
-    constructor(x: number, y: number, text: string, markclass: string, extraAttributes?: Record<string, string>) {
-      super();
-      this.setAttribute("class", markclass);
-      this.setAttribute("x", `${x}`);
-      this.setAttribute("y", `${y}`);
-      this.innerHTML = text;
-      this.setAttribute("text-anchor", "middle");
-      this.setAttribute("style", "font-size: " + Settings.primitiveFontSize + "px");
+  export function text(x: number, y: number, text: string, markclass: string, extraAttributes?: Record<string, string>) {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'text')
+    result.setAttribute("class", markclass);
+    result.setAttribute("x", `${x}`);
+    result.setAttribute("y", `${y}`);
+    result.innerHTML = text;
+    result.setAttribute("text-anchor", "middle");
+    result.setAttribute("style", "font-size: " + Settings.primitiveFontSize + "px");
 
-      if (extraAttributes != undefined) {
-        for (var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]);
-        }
+    if (extraAttributes != undefined) {
+      for (var key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]);
       }
-      svgElement.appendChild(this);
     }
+    svgElement.appendChild(result);
+    return result
   }
   export class ForeignScrollable extends SVGGElement {
     cutDiv: HTMLDivElement;
@@ -258,104 +257,106 @@ export namespace SVG {
     svgElement.appendChild(element);
     return element;
   }
-  export class Circle extends SVGCircleElement {
-    constructor(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
-      super();
-      this.setAttribute("class", markclass);
-      this.setAttribute("cx", `${cx}`);
-      this.setAttribute("cy", `${cy}`);
-      this.setAttribute("r", `${r}`);
-      this.setAttribute("fill", fill);
-      this.setAttribute("stroke", stroke);
-      this.setAttribute("data-attr", "selected");
-      if (extraAttributes) {
-        for (var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]);
-        }
+  export function circle(cx: number, cy: number, r: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    result.setAttribute("class", markclass);
+    result.setAttribute("cx", `${cx}`);
+    result.setAttribute("cy", `${cy}`);
+    result.setAttribute("r", `${r}`);
+    result.setAttribute("fill", fill);
+    result.setAttribute("stroke", stroke);
+    result.setAttribute("data-attr", "selected");
+    if (extraAttributes) {
+      for (var key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]);
       }
-      svgElement.appendChild(this);
     }
+    svgElement.appendChild(result);
+    return result
   }
-  export class Ellipse extends SVGEllipseElement {
-    constructor(cx: number, cy: number, rx: number, ry: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
-      super();
-      this.setAttribute("class", markclass);
-      this.setAttribute("cx", `${cx}`);
-      this.setAttribute("cy", `${cy}`);
-      this.setAttribute("rx", `${rx}`);
-      this.setAttribute("ry", `${ry}`);
-      this.setAttribute("fill", fill);
-      this.setAttribute("stroke", stroke);
-      this.setAttribute("data-attr", "selected");
-      if (extraAttributes) {
-        for (let key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]);
-        }
+  export function ellipse(cx: number, cy: number, rx: number, ry: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
+    result.setAttribute("class", markclass);
+    result.setAttribute("cx", `${cx}`);
+    result.setAttribute("cy", `${cy}`);
+    result.setAttribute("rx", `${rx}`);
+    result.setAttribute("ry", `${ry}`);
+    result.setAttribute("fill", fill);
+    result.setAttribute("stroke", stroke);
+    result.setAttribute("data-attr", "selected");
+    if (extraAttributes) {
+      for (let key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]);
       }
-      svgElement.appendChild(this);
     }
+    svgElement.appendChild(result);
+    return result
   }
-  export class Line extends SVGLineElement {
-    constructor(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
-      super();
-      this.setAttribute("class", markclass);
-      this.setAttribute("x1", `${x1}`);
-      this.setAttribute("y1", `${y1}`);
-      this.setAttribute("x2", `${x2}`);
-      this.setAttribute("y2", `${y2}`);
-      this.setAttribute("fill", fill);
-      this.setAttribute("stroke", stroke);
-      this.setAttribute("data-attr", "selected");
-      this.setAttribute("stroke-width", "1");
+  export function line(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'line')
+    result.setAttribute("class", markclass);
+    result.setAttribute("x1", `${x1}`);
+    result.setAttribute("y1", `${y1}`);
+    result.setAttribute("x2", `${x2}`);
+    result.setAttribute("y2", `${y2}`);
+    result.setAttribute("fill", fill);
+    result.setAttribute("stroke", stroke);
+    result.setAttribute("data-attr", "selected");
+    result.setAttribute("stroke-width", "1");
 
-      if (extraAttributes != undefined) {
-        for (var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]);
-        }
+    if (extraAttributes != undefined) {
+      for (var key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]);
       }
-      svgElement.appendChild(this);
     }
+    svgElement.appendChild(result);
   }
+
   /* replaces svg_arrow_head */
-  export class ArrowHead extends SVGPathElement {
+  export type ArrowHead = SVGPathElement & {
     templateArrowPoints: TwoD.Point[]
-    arrowPoints: TwoD.Point[]
-    constructor(stroke: string, fill: string, extraAttributes?: Record<string, string>) {
-      super();
-      this.setAttribute("stroke", stroke);
-      this.setAttribute("fill", fill);
-      this.templateArrowPoints = [[12, -2], [12, -6], [0, 0], [12, 6], [12, 2]];
-      this.arrowPoints = [];
+    arrowPoints: TwoD.Point[],
+    setTemplatePoints: (newPoints: TwoD.Point[]) => void
+    setPos: (pos: [number, number], directionVector?: TwoD.Point) => void
+    update: () => void
+  }
+  export function arrowHead(stroke: string, fill: string, extraAttributes?: Record<string, string>) {
+    const result = document.createElementNS("http://www.w3.org/2000/svg", 'path') as ArrowHead
+    result.setAttribute("stroke", stroke);
+    result.setAttribute("fill", fill);
+    result.templateArrowPoints = [[12, -2], [12, -6], [0, 0], [12, 6], [12, 2]]
+    result.arrowPoints = [];
 
-      if (extraAttributes) {
-        for (var key in extraAttributes) {
-          this.setAttribute(key, extraAttributes[key]);
-        }
+    if (extraAttributes) {
+      for (var key in extraAttributes) {
+        result.setAttribute(key, extraAttributes[key]);
       }
-
-      svgElement.appendChild(this);
-      return this;
     }
-    setTemplatePoints(newPoints: TwoD.Point[]) {
+
+    svgElement.appendChild(result);
+
+    result.setTemplatePoints = function (newPoints: TwoD.Point[]) {
       this.templateArrowPoints = newPoints;
     }
 
-    setPos(pos: [number, number], directionVector: TwoD.Point = [1, 0]) {
+    result.setPos = function (pos: [number, number], directionVector: TwoD.Point = [1, 0]) {
       let sine = TwoD.sin([0, 0], directionVector);
       let cosine = TwoD.cos([0, 0], directionVector);
       this.arrowPoints = TwoD.rotatePoints(this.templateArrowPoints, sine, cosine);
       this.arrowPoints = TwoD.translatePoints(this.arrowPoints, pos);
     };
 
-    update() {
+    result.update = function () {
       let d = "M" + this.arrowPoints[0][0] + "," + this.arrowPoints[0][1];
       for (let i = 1; i < this.arrowPoints.length; i++) {
         d += "L" + this.arrowPoints[i][0] + "," + this.arrowPoints[i][1] + " ";
       }
       // d += "Z";
       this.setAttribute("d", d);
-    };
+    }
+    return result;
   }
+
   export class WidePath extends SVGPathElement {
     points: TwoD.Point[]
     constructor(width: number, color: string, extraAttributes?: Record<string, string>) {
@@ -466,7 +467,7 @@ export namespace SVG {
     return newElement;
   }
   export function questionmark(color: string) {
-    return new Text(0, 6, "?", "questionmark", { "font-size": "18px", "font-weight": "bold", "stroke": color });;
+    return text(0, 6, "?", "questionmark", { "font-size": "18px", "font-weight": "bold", "stroke": color })
   }
   export type Icons = SVGGElement & {
     elements: Record<"ghost" | "questionmark" | "dice", Element>
