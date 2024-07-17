@@ -20,7 +20,7 @@
 			"dist/"
 		]
 	},
-  "scripts": {
+	"scripts": {
 		"test": "jest",
 		"build": "rollup -c",
 		"watch": "watch 'npm run build' ./src"
