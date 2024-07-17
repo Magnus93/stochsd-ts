@@ -4,13 +4,6 @@ export class BaseTool {
   static downScrollPosX = 0;
   static downScrollPosY = 0;
 
-  // TODO - Remove init?
-	static init() {
-		this.middleDownX = 0;
-		this.middleDownY = 0;
-		this.downScrollPosX = 0;
-		this.downScrollPosY = 0;
-	}
 	static leftMouseDown(x: number, y: number) {
 		// Is triggered when mouse goes down for this tool
 	}
