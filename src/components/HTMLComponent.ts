@@ -3,7 +3,7 @@ import { DisplayDialog } from "./Dialog/DisplayDialog";
 
 export class HTMLComponent {
   componentId = "component-"+Math.ceil(Math.random()*(2**32)).toString(16)
-  primitive: Primitive // TODO fix type
+  primitive: Primitive
 	constructor(public parent: DisplayDialog) {
 		this.primitive = parent.primitive;
 	}
