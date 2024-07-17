@@ -124,9 +124,9 @@ export namespace DefinitionError {
     return false
   }
 
-  export function has(prim: any) {
+  export function has(prim: Primitive) {
     try {
-      const defErr = JSON.parse(prim.getAttribute("DefinitionError"));
+      const defErr = JSON.parse(Engine.getAttribute(prim, "DefinitionError"));
       return is(defErr);
     } catch (err) {
       return false;

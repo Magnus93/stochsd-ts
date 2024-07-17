@@ -1,8 +1,11 @@
+import { OnePointer } from "./Visual/OnePointer"
+import { TwoPointer } from "./Visual/TwoPointer"
+
 export class VisualController {
   /* replaces object_array */
-  static onePointers: Record<string, any> = {} // TODO fix typedef
+  static onePointers: Record<string, OnePointer> = {}
   /* replaces connection_array */
-  static twoPointers: Record<string, any> = {} // TODO fix typedef
+  static twoPointers: Record<string, TwoPointer> = {}
 
   static unselectAll() {
     for(let key in this.onePointers) {
@@ -63,63 +66,62 @@ export class VisualController {
       }
     }
   }
-  static rotateName(node_id: string) {
-    let object = this.get(node_id);
-    if (object.name_pos<3) {
-      object.name_pos++;
+  static rotateName(id: string) {
+    let visual = this.get(id)!;
+    if (visual.namePositionIndex<3) {
+      visual.namePositionIndex++;
     } else {
-      object.name_pos = 0;
+      visual.namePositionIndex = 0;
     }
-    this.updateNamePos(node_id);
+    this.updateNamePos(id);
   }
   static updateNamePos(node_id: string) {
-    let object = this.get(node_id);
-    let name_element = object.name_element;
+    let visual = this.get(node_id)!
+    let nameElement = visual.nameElement;
     // Some objects does not have name element
-    if (name_element == null) {
+    if (!nameElement) {
       return;
     }
     // For fixed names (used only by text element)
-    if (object.name_centered) {
-      name_element.setAttribute("x",0); //Set path's data
-      name_element.setAttribute("y",0); //Set path's data
-      name_element.setAttribute("text-anchor", "middle");
+    if ("nameCentered" in visual && visual.nameCentered) {
+      nameElement.setAttribute("x", "0")
+      nameElement.setAttribute("y", "0")
+      nameElement.setAttribute("text-anchor", "middle");
       return;
     }
   
-    let visualObject = this.get(node_id);
-    let pos = visualObject.namePosList[visualObject.name_pos];
-    name_element.setAttribute("x",pos[0]); //Set path's data
-    name_element.setAttribute("y",pos[1]); //Set path's data
+    const visualObject = this.get(node_id)!
+    const pos = visualObject.namePositions[visualObject.namePositionIndex]
+    nameElement.setAttribute("x", `${pos[0]}`)
+    nameElement.setAttribute("y", `${pos[1]}`)
   
-    switch(this.get(node_id).name_pos) {
+    switch(this.get(node_id)?.namePositionIndex) {
       case 0:
         // Below
-        name_element.setAttribute("text-anchor", "middle");
+        nameElement.setAttribute("text-anchor", "middle");
       break;
       case 1:
         // To the right
-        name_element.setAttribute("text-anchor", "start");
+        nameElement.setAttribute("text-anchor", "start");
       break;
       case 2:
         // Above
-        name_element.setAttribute("text-anchor", "middle");
+        nameElement.setAttribute("text-anchor", "middle");
       break;
       case 3:
         // To the left
-        name_element.setAttribute("text-anchor", "end");
+        nameElement.setAttribute("text-anchor", "end");
       break;
     }
   }
   /* replaces get_object */
-  static get(id: string) {
+  static get(id: string): OnePointer | TwoPointer | undefined {
     if (typeof this.onePointers[id] != "undefined") {
       return this.onePointers[id];
     }
     if (typeof this.twoPointers[id] != "undefined") {
       return this.twoPointers[id];
     }
-    return false;
   }
   /* replaces rel_move */
   static relativeMove(node_id: string ,diff_x: number, diff_y: number) {
@@ -170,7 +172,7 @@ export class VisualController {
       // only one anchor in selection
       return {"parent_id": this.getParentById(keys[0]), "child_id": keys[0] };
     } else if (keys.length === 2) {
-      if (this.get(keys[0]).getType() === "dummy_anchor" && this.get(keys[1]).getType() === "dummy_anchor") {
+      if (this.get(keys[0])?.getType() === "dummy_anchor" && this.get(keys[1])?.getType() === "dummy_anchor") {
         // both anchors are dummies 
         return null;
       } else if(this.getParentById(keys[0]) === this.getParentById(keys[1])) {
@@ -192,7 +194,7 @@ export class VisualController {
   /* replaces get_only_link_selected */
   static getOnlyLinkSelected() {
     const object_ids = this.getSinglePrimitiveIdSelected();
-    if (object_ids !== null && this.get(object_ids?.parent_id ?? "").getType() === "link") {
+    if (object_ids !== null && this.get(object_ids?.parent_id ?? "")?.getType() === "link") {
       return object_ids;
     } 
     return null;
@@ -274,7 +276,7 @@ export class VisualController {
         
         // If any element is selected we add its parent
         if (all[key].isSelected()) {
-          result[parent.id]=parent;
+          result[parent!.id] = parent;
         }
       }
       return result;

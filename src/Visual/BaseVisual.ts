@@ -14,7 +14,7 @@ export class BaseVisual {
   nameElement?: SVGTextElement
   icons?: SVG.Icons
   group?: SVGGElement
-  namePositionList: [number, number][]
+  namePositions: [number, number][]
   isGhost = false
 	constructor(public id: string, public type: string, pos: [number, number]) {
 		this.color = defaultStroke;
@@ -26,7 +26,7 @@ export class BaseVisual {
 		this.selectorElements = [];
 		this.icons; 	// svg group with icons such as ghost and questionmark
 		this.group;
-		this.namePositionList = [[0, this.nameRadius+8], [this.nameRadius, 0], [0, -this.nameRadius], [-this.nameRadius, 0]];
+		this.namePositions = [[0, this.nameRadius+8], [this.nameRadius, 0], [0, -this.nameRadius], [-this.nameRadius, 0]];
 	}
 
 	setColor(color: string) {
@@ -72,6 +72,12 @@ export class BaseVisual {
 	isSelected() {
 		return this.selected;
 	}
+	select() {
+		this.selected = true
+	}
+	unselect() {
+		this.selected = false
+	}
 
 	clean() {
     // TODO fix
@@ -94,7 +100,7 @@ export class BaseVisual {
 		}
 		this.group?.remove();
 	}
-	doubleClick() {
+	doubleClick(id: string) {
 		// This function has to be overriden
 	}
 	afterNameChange() {

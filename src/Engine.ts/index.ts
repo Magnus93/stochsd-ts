@@ -30,6 +30,9 @@ export namespace Engine {
       ? primitive.rate 
       : undefined
   }
+  export function getAttribute(primitive: Primitive, attribute: string) {
+    return primitive._node.getAttribute(attribute)
+  }
   export function setAttribute(primitive: Primitive, attribute: string, value: string) {
     primitive._node.setAttribute(attribute, value)
   }
@@ -46,5 +49,16 @@ export namespace Engine {
   /* replaces isPrimitiveGhost */
   export function isGhost(primitive: Primitive) {
     return getNodeName(primitive) == "Ghost"
+  }
+  /* replaces findGhostsOfID */
+  export function findGhostsOfPrimitive(primitiveId: string) {
+    var results: string[] = [];
+    var ghosts = model.find(isGhost)
+    for (let ghost of ghosts) {
+      if (getAttribute(ghost, "Source") == primitiveId) {
+        results.push(getAttribute(ghost, "id"));
+      }
+    }
+    return results;
   }
 }
