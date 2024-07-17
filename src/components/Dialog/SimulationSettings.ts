@@ -1,4 +1,4 @@
-import { Engine } from "../../Engine.ts";
+import { Engine } from "../../Engine/index.js";
 import { formatNumber } from "../../formatNumber";
 import { Settings } from "../../Settings";
 import { HTMLString } from "../HTMLString";
@@ -15,9 +15,9 @@ export class SimulationSettings extends jqDialog {
 		this.setTitle("Simulation Settings");
 	}
 	beforeShow() {
-		let start = 0 // getTimeStart(); // TODO fix
-		let length = 0 // getTimeLength(); // TODO fix
-		let step = 0 // getTimeStep(); // TODO fix
+		let start = Engine.getTimeStart()
+		let length = Engine.getTimeLength()
+		let step = Engine.getTimeStep()
 		let timeUnit = 0 // getTimeUnits(); // TODO fix
 		this.setHtml(`
 		<table class="modern-table">

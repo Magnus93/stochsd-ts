@@ -1,5 +1,5 @@
-import { Engine } from "./Engine.ts";
-import { deletePrimitive } from "./utility.js";
+import { Engine } from "./Engine/index.js";
+import { deletePrimitive } from "./utility";
 import { BaseVisual } from "./Visual/BaseVisual";
 import { OnePointer } from "./Visual/OnePointer"
 import { TwoPointer } from "./Visual/TwoPointer"

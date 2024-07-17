@@ -1,5 +1,5 @@
 import { Flow, Link } from "simulation/src/api/Blocks";
-import { Engine } from "../Engine.ts";
+import { Engine } from "../Engine/index.js";
 import { BaseVisual } from "./BaseVisual";
 import { TwoPointer } from "./TwoPointer";
 

@@ -7,13 +7,22 @@ export namespace Engine {
     model = loadInsightMaker(fileData)
   }
   export function setTimeStart(value: number) {
-    model.timeLength = value
+    model.timeStart = value
+  }
+  export function getTimeStart(): number {
+    return model.timeStart!
   }
   export function setTimeLength(value: number) {
     model.timeLength = value
   }
+  export function getTimeLength(): number {
+    return model.timeLength!
+  }
   export function setTimeStep(value: number) {
     model.timeStep = value
+  }
+  export function getTimeStep(): number {
+    return model.timeStep!
   }
   export function setAlgorithm(value: "Euler" | "RK4") {
     model.algorithm = value

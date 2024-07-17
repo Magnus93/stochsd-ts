@@ -2,7 +2,7 @@ import { Primitive } from "simulation/src/api/Blocks";
 import { HTMLComponent } from "../../HTMLComponent";
 import { jqDialog } from "../jqDialog";
 import { SubscribePool } from "./SubscribePool";
-import { Engine } from "../../../Engine.ts";
+import { Engine } from "../../../Engine";
 
 // This is the super class dor ComparePlotDialog and TableDialog
 export class DisplayDialog extends jqDialog {

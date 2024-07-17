@@ -1,4 +1,4 @@
-import { Engine } from "./Engine.ts"
+import { Engine } from "./Engine/index.js"
 import { FunctionCategories } from "./FunctionCategories"
 import { VisualController } from "./VisualController"
 
