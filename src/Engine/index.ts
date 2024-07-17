@@ -27,6 +27,9 @@ export namespace Engine {
   export function setAlgorithm(value: "Euler" | "RK4") {
     model.algorithm = value
   }
+  export function getAlgorithm(): "Euler" | "RK4" {
+    return model.algorithm!
+  }
   export function allPrimitives(): Primitive[] {
     return model.find()
   }

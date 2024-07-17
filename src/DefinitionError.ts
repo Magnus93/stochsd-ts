@@ -1,5 +1,5 @@
-import { Converter, Primitive } from "simulation/src/api/Blocks"
-import { Engine } from "./Engine/index.js"
+import { Primitive } from "simulation/src/api/Blocks"
+import { Engine } from "./Engine/index"
 
 export type DefinitionError = {
   id: number,
