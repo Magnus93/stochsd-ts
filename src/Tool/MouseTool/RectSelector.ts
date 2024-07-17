@@ -2,6 +2,7 @@ import { CoordRect } from "../../CoordRect";
 import {Mouse} from "../../Mouse"
 import { VisualController } from "../../VisualController";
 import { SVG } from "../../SVG"
+import { TwoPointer } from "../../Visual/TwoPointer";
 
 export class RectSelector {
   static rect: CoordRect<SVGRectElement>
@@ -29,8 +30,8 @@ export class RectSelector {
     VisualController.unselectAll();
     const selection = this.getVisualsWithin();
     for(let key in selection) {
-      let parent = VisualController.getParent(selection[key]);
-      parent.select(false); // We also select the parent but not all of its anchors
+      let parent = VisualController.getParent(selection[key]) as TwoPointer;
+      parent!.select(); // We also select the parent but not all of its anchors
       selection[key].select();
     }
   }
@@ -45,10 +46,10 @@ export class RectSelector {
   
   static isWithin(node_id: string) {
     return (
-      VisualController.onePointers[node_id].pos[0] >= this.rect.xmin() &&
-      VisualController.onePointers[node_id].pos[1] >= this.rect.ymin() &&
-      VisualController.onePointers[node_id].pos[0] <= this.rect.xmin()+this.rect.width() &&
-      VisualController.onePointers[node_id].pos[1] <= this.rect.ymin()+this.rect.height()
+      VisualController.onePointers[node_id].position[0] >= this.rect.xmin() &&
+      VisualController.onePointers[node_id].position[1] >= this.rect.ymin() &&
+      VisualController.onePointers[node_id].position[0] <= this.rect.xmin()+this.rect.width() &&
+      VisualController.onePointers[node_id].position[1] <= this.rect.ymin()+this.rect.height()
     );
   }
   

@@ -30,7 +30,7 @@ export class DisplayDialog extends jqDialog {
 	}
 	getAcceptedPrimitiveList() {
 		return Engine.model.find(
-			(p) => this.acceptedPrimitiveTypes.includes(Engine.getNodeName(p)) && this.acceptsId(p.id)
+			(p: Primitive) => this.acceptedPrimitiveTypes.includes(Engine.getNodeName(p)) && this.acceptsId(p.id)
 		)
 	}
 	acceptsId(id: string) {

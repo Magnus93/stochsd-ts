@@ -25,7 +25,7 @@ export class BaseConnection extends TwoPointer {
     return false;
   }
   #startAttach?: BaseVisual
-  setStartAttach(newStartAttach: BaseVisual) {
+  setStartAttach(newStartAttach: BaseVisual | undefined) {
     if (newStartAttach != null && this.getEndAttach() == newStartAttach) {
       return;		// Will not attach if other anchor is attached to same
     }
@@ -49,7 +49,7 @@ export class BaseConnection extends TwoPointer {
     return this.#startAttach;
   }
   #endAttach?: BaseVisual
-  setEndAttach(newEndAttach: BaseVisual) {
+  setEndAttach(newEndAttach: BaseVisual | undefined) {
     if (newEndAttach != null && this.getStartAttach() == newEndAttach) {
       return; 	// Will not attach if other anchor is attached to same 
     }
