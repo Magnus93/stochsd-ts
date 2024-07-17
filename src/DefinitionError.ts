@@ -1,3 +1,5 @@
+import { Primitive } from "simulation/src/api/Blocks.js"
+import { Engine } from "./Engine.ts"
 
 export type DefinitionError = {
   id: number,
@@ -12,26 +14,26 @@ export namespace DefinitionError {
       (value.detail == undefined || typeof value.detail == "object")
   }
   export const messageTable: Record<number, (defErr: DefinitionError) => string> = {
-    "1": (defErr) => "Empty Definition",
-    "2": (defErr) => `Unknown reference ${defErr.detail?.["unknownRef"]}`,
-    // "3": (defErr) => `Unused link from [${getName(findID(defErr.detail?.["unusedId"]))}], or bracket pair [...] missing`, // TODO add back
-    "4": (defErr) => `No ingoing link`, // only for converter
-    "5": (defErr) => `More than one ingoing link`, // only for converter 
-    "6": (defErr) => `Unmatched ${defErr.detail?.["openBracket"]}`, // opening bracket unmatched
-    "7": (defErr) => `Unmatched ${defErr.detail?.["closeBracket"]}`, // closing bracket unmatched
-    "8": (defErr) => `Unmatched brackets`, // unmatching open and closing brackets  
+    1: (defErr) => "Empty Definition",
+    2: (defErr) => `Unknown reference ${defErr.detail?.["unknownRef"]}`,
+    3: (defErr) => `Unused link from [${Engine.getName(Engine.findById(defErr.detail?.["unusedId"]))}], or bracket pair [...] missing`,
+    4: (defErr) => `No ingoing link`, // only for converter
+    5: (defErr) => `More than one ingoing link`, // only for converter 
+    6: (defErr) => `Unmatched ${defErr.detail?.["openBracket"]}`, // opening bracket unmatched
+    7: (defErr) => `Unmatched ${defErr.detail?.["closeBracket"]}`, // closing bracket unmatched
+    8: (defErr) => `Unmatched brackets`, // unmatching open and closing brackets  
     // open and close brackets not disclosed to user in order not to confuse.
     // uncomment below if
-    // "8": (defErr) => `Unmatched brackets "${defErr["openBracket"]}...${defErr["closeBracket"]}"`,
-    "9": (defErr) => `Unclear converter definition`, // only for converters
-    "10": (defErr) => `Input values not in ascending order: ${defErr.detail?.Xpre} &gt; ${defErr.detail?.Xpost}`, // only for converters 
+    // 8: (defErr) => `Unmatched brackets "${defErr["openBracket"]}...${defErr["closeBracket"]}"`,
+    9: (defErr) => `Unclear converter definition`, // only for converters
+    10: (defErr) => `Input values not in ascending order: ${defErr.detail?.Xpre} &gt; ${defErr.detail?.Xpost}`, // only for converters 
   }
-  const checkFunctions: ((prim: any, defString: string) => DefinitionError | undefined)[] = [
-    (prim: any, defString: string) => {
+  const checkFunctions: ((prim: Primitive, defString: string) => DefinitionError | undefined)[] = [
+    (prim: Primitive, defString: string) => {
       // check empty string 
       if (defString === "") return { "id": 1 };
     },
-    (prim: any, defString: string) => {
+    (prim: Primitive, defString: string) => {
       // check brackets 
       const lines = defString.split("\n");
       let posCounter = 0;
@@ -46,14 +48,14 @@ export namespace DefinitionError {
         posCounter += line.length + 1;
       }
     },
-    (prim: any, defString: string) => {
+    (prim: Primitive, defString: string) => {
       // check links  
-      let primType = prim.value.nodeName;
-      let linkedIds: string[] =  [] // findLinkedInPrimitives(prim.id).map(getID); // TODO find linked primitives
+      let primType = Engine.getNodeName(prim)
+      let linkedIds = Engine.findLinkedIngoingPrimitives(prim.id).map(Engine.getId)
       if (primType === "Stock" || primType === "Variable" || primType === "Flow") {
         // 2. Unknown reference
         const definitionRefs = defString.match(/[^[]+(?=\])/g) ?? [];
-        let linkedRefs: string[] = [] // linkedIds.map(id => getName(findID(id))); // TODO find names for linked primitives
+        let linkedRefs = linkedIds.map(id => Engine.getName(Engine.findById(id)))
         for (let ref of definitionRefs) {
           if (linkedRefs.includes(ref) === false) {
             return { id: 2, detail: {unknownRef: ref }};
@@ -77,8 +79,8 @@ export namespace DefinitionError {
         }
       }
     },
-    (prim: any, defString: string) => {
-      if (prim.value.nodeName === "Converter") {
+    (prim: Primitive, defString: string) => {
+      if (Engine.isConverter(prim)) { // TODO fix
         let rows = defString.split(";").map(row => row.split(","));
         for (let i in rows) {
           let row = rows[i];
@@ -108,19 +110,18 @@ export namespace DefinitionError {
     }
   ]
 
-  export function check(prim: any) {
-    // TODO add back
-    /* if (!isPrimitiveGhost(prim)) {
-      for (let fn of this.checkFunctions) {
-        let defErr = fn(prim: any, getValue(prim));
+  export function check(prim: Primitive) {
+    if (!Engine.isGhost(prim)) {
+      for (let fn of checkFunctions) {
+        let defErr = fn(prim, Engine.getDefinition(prim) ?? "");
         if (defErr) {
-          prim.setAttribute("DefinitionError", JSON.stringify(defErr));
+          Engine.setAttribute(prim, "DefinitionError", JSON.stringify(defErr));
           return true;
         }
       }
     }
-    prim.setAttribute("DefinitionError", JSON.stringify({}));
-    return false; */
+    Engine.setAttribute(prim, "DefinitionError", JSON.stringify({}));
+    return false
   }
 
   export function has(prim: any) {
@@ -140,11 +141,9 @@ export namespace DefinitionError {
     return "";
   }
 
-  export function getAllPrims() {
-    // TODO fix
-    // let defErrPrims = primitives().filter(p => this.has(p)).filter(v => !isPrimitiveGhost(v));
-    // return defErrPrims;
-    return []
+  /* replaces getAllPrims */
+  export function getAllNonGhostsPrimitives() {
+    return Engine.allPrimitives().filter(p => has(p)).filter(v => !Engine.isGhost(v))
   }
 }
 
