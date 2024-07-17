@@ -1,3 +1,6 @@
+import { Engine } from "./Engine.ts";
+import { deletePrimitive } from "./utility.js";
+import { BaseVisual } from "./Visual/BaseVisual";
 import { OnePointer } from "./Visual/OnePointer"
 import { TwoPointer } from "./Visual/TwoPointer"
 
@@ -42,7 +45,7 @@ export class VisualController {
     return id.toString().split(".")[0];;
   }
   /* replaces get_parent */
-  static getParent(child: any) { // TODO - fix to Visual type
+  static getParent(child: BaseVisual) {
     return this.get(this.getParentById(child.id));
   }
   private static is_family(id1: string, id2: string) {
@@ -125,23 +128,23 @@ export class VisualController {
   }
   /* replaces rel_move */
   static relativeMove(node_id: string ,diff_x: number, diff_y: number) {
-    /* let primitive = findID(node_id); // TODO fix from insightmaker API - replaced by Model.getId
-    if (primitive != null) {
+    let primitive = Engine.findById(node_id);
+    /* if (primitive != null) {
       // If its a real primitive (stoch, variable etc) update it in the engine
       let oldPos = getCenterPosition(primitive); // TODO fix from insightmaker API
       let newPos = [oldPos[0]+diff_x,oldPos[1]+diff_y];
       setCenterPosition(primitive,newPos); // TODO fix from insightmaker API
     } else {
       // If its not a real primitive but rather an anchor point updated the position only graphically
-      this.onePointers[node_id].pos[0] += diff_x;
-      this.onePointers[node_id].pos[1] += diff_y;
-    }
+      this.onePointers[node_id].position[0] += diff_x;
+      this.onePointers[node_id].position[1] += diff_y;
+    } */
     this.onePointers[node_id].updatePosition();
-    this.onePointers[node_id].afterMove(diff_x,diff_y); */
+    this.onePointers[node_id].afterMove(diff_x, diff_y)
   }
   /* replaces get_selected_objects */
   static getSelected() {
-    const result: Record<string, any> = {}; // TODO fix type to VIsuals
+    const result: Record<string, BaseVisual> = {}
     for(let key in this.onePointers) {
       if (this.onePointers[key].isSelected()) {
         result[key] = this.onePointers[key];
@@ -247,7 +250,7 @@ export class VisualController {
   }
   /* replaces get_all_objects */
   static getAll() {
-    const result: Record<string, any> = {}; // TODO fix type
+    const result: Record<string, BaseVisual> = {}
     for(let key in this.onePointers) {
       result[key] = this.onePointers[key];
     }
@@ -258,7 +261,7 @@ export class VisualController {
   }
   /* replaces get_root_objects */
   static getRootVisuals() {
-    let result: Record<string, any> = {}; // TODO fix type
+    let result: Record<string, BaseVisual> = {}
     let all = this.getAll();
     for(let key in all) {
       if (key.indexOf(".") == -1) {
@@ -269,10 +272,10 @@ export class VisualController {
   }
     /* replaces get_selected_root_objects */
     static getSelectedRootVisuals() {
-      let result: Record<string, any> = {};
+      let result: Record<string, TwoPointer | OnePointer> = {};
       const all = this.getAll();
       for(let key in all) {
-        let parent = this.getParent(all[key]);
+        const parent = this.getParent(all[key])!
         
         // If any element is selected we add its parent
         if (all[key].isSelected()) {
@@ -289,7 +292,7 @@ export class VisualController {
       // check if object not already deleted
       // e.i. link gets deleted automatically if any of it's attachments gets deleted
       if (this.get(key)) {
-        // tool_deletePrimitive(key); // TODO add this function somewhere
+        deletePrimitive(key)
       }
     }
   }
