@@ -1,10 +1,12 @@
+import { Primitive } from "simulation/src/api/Blocks";
 import { HTMLComponent } from "../../HTMLComponent";
 import { jqDialog } from "../jqDialog";
 import { SubscribePool } from "./SubscribePool";
+import { Engine } from "../../../Engine.ts";
 
 // This is the super class dor ComparePlotDialog and TableDialog
 export class DisplayDialog extends jqDialog {
-  primitive: any // = findID(id); // TODO 
+  primitive: Primitive
 	displayIdList: string[] = [];
 	subscribePool = new SubscribePool();
 	acceptedPrimitiveTypes = ["Stock", "Flow", "Variable", "Converter"];
@@ -12,8 +14,7 @@ export class DisplayDialog extends jqDialog {
 	components: HTMLComponent[][] = [];
 	constructor(id: string) {
 		super();
-		this.primitive = null // findID(id); // TODO fix
-		this.acceptedPrimitiveTypes = ["Stock", "Flow", "Variable", "Converter"];
+		this.primitive = Engine.findById(id)
 		this.displayLimit = undefined;
 		this.components = [];
 	}
@@ -22,21 +23,18 @@ export class DisplayDialog extends jqDialog {
 	}
 	clearRemovedIds() {
 		for(let id of this.displayIdList) {
-			// if (findID(id) == null) { // TODO
-			// 	this.setDisplayId(id,false);
-			// }
+			if (!Engine.findById(id)) {
+				this.setDisplayId(id,false);
+			}
 		}
 	}
 	getAcceptedPrimitiveList() {
-		let results = [];
-		let primitiveList: any[] = [] // getPrimitiveList(); // TODO
-		for(let primitive of primitiveList) {
-			this.acceptsId(primitive.id) && results.push(primitive);
-		}
-		return results;
+		return Engine.model.find(
+			(p) => this.acceptedPrimitiveTypes.includes(Engine.getNodeName(p)) && this.acceptsId(p.id)
+		)
 	}
 	acceptsId(id: string) {
-		let type: string =  "" // getType(findID(id)) // TODO
+		let type: string = Engine.getNodeName(Engine.findById(id))
 		return (this.acceptedPrimitiveTypes.indexOf(type) != -1);
 	}
 	removeIdToDisplay(id: string) {
