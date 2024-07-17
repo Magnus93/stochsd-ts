@@ -1,3 +1,4 @@
+import { Engine } from "../../Engine.ts";
 import { formatNumber } from "../../formatNumber";
 import { Settings } from "../../Settings";
 import { HTMLString } from "../HTMLString";
@@ -41,7 +42,7 @@ export class SimulationSettings extends jqDialog {
 		</tr><tr>
 			<td>Method</td>
 			<td style="padding:1px;"><select class="input-method enter-apply" style="width:104px">
-			<option value="RK1">Euler</option> <!-- // TODO set selected -->
+			<option value="Euler">Euler</option> <!-- // TODO set selected -->
 			<option value="RK4">RK4</option> <!-- // TODO set selected -->
 			</select></td>
 		</tr>
@@ -115,11 +116,10 @@ export class SimulationSettings extends jqDialog {
 	makeApply() {
 		let validSettings = this.checkValidTimeSettings();
 		if (validSettings) {
-			// setTimeStart(this.startInput.val()); // TODO fix
-			// setTimeLength(this.lengthInput.val()); // TODO fix
-			// setTimeStep(this.stepInput.val()); // TODO fix
-			let method = $(".input-method :selected").val();
-			// setAlgorithm(method); // TODO fix
+			Engine.setTimeStart(Number(this.startInput.val()))
+			Engine.setTimeLength(Number(this.lengthInput.val()))
+			Engine.setTimeStep(Number(this.stepInput.val()))
+			Engine.setAlgorithm($(".input-method :selected").val() as "Euler" | "RK4")
 		}
 	}
 }

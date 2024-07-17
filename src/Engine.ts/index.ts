@@ -1,10 +1,22 @@
-import { Converter, Flow, Primitive, Stock, Variable } from "simulation/src/api/Blocks"
+import { Flow, Primitive, Stock, Variable } from "simulation/src/api/Blocks"
 import { Model, loadInsightMaker } from "simulation"
 
 export namespace Engine {
   export let model = new Model({})
   export function loadFile(fileData: string) {
     model = loadInsightMaker(fileData)
+  }
+  export function setTimeStart(value: number) {
+    model.timeLength = value
+  }
+  export function setTimeLength(value: number) {
+    model.timeLength = value
+  }
+  export function setTimeStep(value: number) {
+    model.timeStep = value
+  }
+  export function setAlgorithm(value: "Euler" | "RK4") {
+    model.algorithm = value
   }
   export function allPrimitives(): Primitive[] {
     return model.find()
