@@ -1,4 +1,4 @@
-import { Flow, Primitive, Stock, Variable } from "simulation/src/api/Blocks"
+import { Converter, Flow, Primitive, Stock, Variable } from "simulation/src/api/Blocks"
 import { Model, loadInsightMaker } from "simulation"
 
 export namespace Engine {
@@ -46,8 +46,5 @@ export namespace Engine {
   /* replaces isPrimitiveGhost */
   export function isGhost(primitive: Primitive) {
     return getNodeName(primitive) == "Ghost"
-  }
-  export function isConverter(primitive: Primitive) {
-    return getNodeName(primitive) == "Converter"
   }
 }

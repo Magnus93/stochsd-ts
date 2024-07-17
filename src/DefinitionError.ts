@@ -1,4 +1,4 @@
-import { Primitive } from "simulation/src/api/Blocks.js"
+import { Converter, Primitive } from "simulation/src/api/Blocks.js"
 import { Engine } from "./Engine.ts"
 
 export type DefinitionError = {
@@ -80,7 +80,7 @@ export namespace DefinitionError {
       }
     },
     (prim: Primitive, defString: string) => {
-      if (Engine.isConverter(prim)) { // TODO fix
+      if (Engine.getNodeName(prim) == "Converter") {
         let rows = defString.split(";").map(row => row.split(","));
         for (let i in rows) {
           let row = rows[i];
