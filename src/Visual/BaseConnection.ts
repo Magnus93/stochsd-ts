@@ -1,5 +1,6 @@
 import { Engine, Flow, Link } from "../Engine/index.js";
 import { BaseVisual } from "./BaseVisual";
+import { StockVisual } from "./StockVisual.js";
 import { TwoPointer } from "./TwoPointer";
 
 export class BaseConnection extends TwoPointer {
@@ -23,8 +24,8 @@ export class BaseConnection extends TwoPointer {
   isAcceptableEndAttach(attachVisual: BaseVisual) {
     return false;
   }
-  #startAttach?: BaseVisual
-  setStartAttach(newStartAttach: BaseVisual | undefined) {
+  protected _startAttach?: StockVisual
+  setStartAttach(newStartAttach: StockVisual | undefined) {
     if (newStartAttach != null && this.getEndAttach() == newStartAttach) {
       return;		// Will not attach if other anchor is attached to same
     }
@@ -33,11 +34,11 @@ export class BaseConnection extends TwoPointer {
     }
 
     // Update the attachment primitive
-    this.#startAttach = newStartAttach;
+    this._startAttach = newStartAttach;
 
     let sourcePrimitive = null;
-    if (this.#startAttach != null) {
-      sourcePrimitive = Engine.findById(this.#startAttach.id)
+    if (this._startAttach != null) {
+      sourcePrimitive = Engine.findById(this._startAttach.id)
     }
     (this.primitive as Flow | Link).start = sourcePrimitive
 
@@ -45,10 +46,10 @@ export class BaseConnection extends TwoPointer {
     this.triggerAttachEvents();
   }
   getStartAttach() {
-    return this.#startAttach;
+    return this._startAttach;
   }
-  #endAttach?: BaseVisual
-  setEndAttach(newEndAttach: BaseVisual | undefined) {
+  protected _endAttach?: StockVisual
+  setEndAttach(newEndAttach: StockVisual | undefined) {
     if (newEndAttach != null && this.getStartAttach() == newEndAttach) {
       return; 	// Will not attach if other anchor is attached to same 
     }
@@ -57,10 +58,10 @@ export class BaseConnection extends TwoPointer {
     }
 
     // Update the attachment primitive
-    this.#endAttach = newEndAttach;
+    this._endAttach = newEndAttach;
     let targetPrimitive = null;
-    if (this.#endAttach != null) {
-      targetPrimitive = Engine.findById(this.#endAttach.id);
+    if (this._endAttach != null) {
+      targetPrimitive = Engine.findById(this._endAttach.id);
     }
     (this.primitive as Flow | Link).end = targetPrimitive
 
@@ -68,7 +69,7 @@ export class BaseConnection extends TwoPointer {
     this.triggerAttachEvents();
   }
   getEndAttach() {
-    return this.#endAttach;
+    return this._endAttach;
   }
   triggerAttachEvents() {
     // We must always trigger both start and end, since a change in the start might affect the logics of the primitive attach at the end of a link or flow

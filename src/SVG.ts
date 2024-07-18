@@ -402,6 +402,7 @@ export namespace SVG {
 			// d += "Z";
 			result.setAttribute("d", d);
 		}
+		return result
 	}
 	export type Cloud = SVGPathElement & {
 		visible: boolean
@@ -461,6 +462,7 @@ export namespace SVG {
 				this.setAttribute("visibility", "hidden");
 			}
 		}
+		return result
 	}
 	export function ghost(stroke: string, fill: string, markclass: string = "") {
 		let newElement = document.createElementNS("http://www.w3.org/2000/svg", 'path');

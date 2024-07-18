@@ -49,7 +49,7 @@ export class StockVisual extends ValuedOnePointer {
 	}
 
 	// Used for FlowVisual
-	getFlowMountPos([xTarget, yTarget]: [number, number]) {
+	getFlowMountPos([xTarget, yTarget]: [number, number]): [number, number] {
 		const [xCenter, yCenter] = this.getPos();
 		const [width, height] = this.getSize();
 		const boxSlope = Maths.safeDivision(height, width);

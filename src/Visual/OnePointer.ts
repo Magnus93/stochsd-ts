@@ -49,7 +49,7 @@ export class OnePointer extends BaseVisual {
 		this.position = [position[0], position[1]];
 	}
 		
-	getPos() {
+	getPos(): [number, number] {
 		// This must be done by splitting up the array and joining it again to avoid sending a reference
 		// Earlier we had a bug that was caused by getPos was sent as reference and we got unwanted updates of the values
 		return [this.position[0], this.position[1]];

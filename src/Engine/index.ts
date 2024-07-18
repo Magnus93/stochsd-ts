@@ -49,6 +49,7 @@ export namespace Engine {
   export function getName(primitive: Primitive): string {
     return primitive.name ?? ""
   }
+  /* replace getValue from insightmaker API */
   export function getDefinition(primitive: Stock | Variable | Flow): string
   export function getDefinition(primitive: Primitive): string | undefined
   export function getDefinition(primitive: Primitive): string | undefined {
