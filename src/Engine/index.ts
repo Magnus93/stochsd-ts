@@ -1,6 +1,12 @@
-import { Flow, Primitive, Stock, Variable } from "simulation/src/api/Blocks"
 import { Model, loadInsightMaker } from "simulation"
 
+
+export type Primitive = ReturnType<Model["find"]>[number]
+export type Stock = ReturnType<Model["Stock"]>
+export type Variable = ReturnType<Model["Variable"]>
+export type Converter = ReturnType<Model["Converter"]>
+export type Link = ReturnType<Model["Link"]>
+export type Flow = ReturnType<Model["Flow"]>
 export namespace Engine {
   export let model = new Model({})
   export function loadFile(fileData: string) {
@@ -46,11 +52,11 @@ export namespace Engine {
   export function getDefinition(primitive: Stock | Variable | Flow): string
   export function getDefinition(primitive: Primitive): string | undefined
   export function getDefinition(primitive: Primitive): string | undefined {
-    return primitive instanceof Stock 
+    return isStock(primitive)
       ? primitive.initial 
-      : primitive instanceof Variable 
+      : isVariable(primitive)
       ? primitive.value 
-      : primitive instanceof Flow 
+      : isFlow(primitive)
       ? primitive.rate 
       : undefined
   }
@@ -63,12 +69,27 @@ export namespace Engine {
   /* replaces findLinkedInPrimitives */
   export function findLinkedIngoingPrimitives(endId: string): Primitive[] {
   	let links = model.findLinks()
-    let outgoingLinks = links.filter((link) => link.end ? (link.end as Primitive).id == endId : false)
+    let outgoingLinks = links.filter((link: Link) => link.end ? (link.end as Primitive).id == endId : false)
   	// let outgoingLinks = links.filter((l) => (l.target) ? l.target.id == id : false);
-  	return outgoingLinks.map(link => link.start as Primitive | undefined).filter((prim): prim is Primitive => !!prim);
+  	return outgoingLinks.map((link: Link) => link.start as Primitive | undefined).filter((prim): prim is Primitive => !!prim);
   }
   export function getNodeName(primitive: Primitive): string {
     return primitive._node.value.nodeName
+  }
+  export function isStock(primitive: Primitive): primitive is Stock {
+    return getNodeName(primitive) == "Stock"
+  }
+  export function isVariable(primitive: Primitive): primitive is Variable {
+    return getNodeName(primitive) == "Variable"
+  }
+  export function isConverter(primitive: Primitive): primitive is Converter {
+    return getNodeName(primitive) == "Converter"
+  }
+  export function isLink(primitive: Primitive): primitive is Link {
+    return getNodeName(primitive) == "Link"
+  }
+  export function isFlow(primitive: Primitive): primitive is Flow {
+    return getNodeName(primitive) == "Flow"
   }
   /* replaces isPrimitiveGhost */
   export function isGhost(primitive: Primitive) {

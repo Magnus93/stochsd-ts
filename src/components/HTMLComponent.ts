@@ -1,5 +1,5 @@
-import { Primitive } from "simulation/src/api/Blocks";
 import { DisplayDialog } from "./Dialog/DisplayDialog";
+import { Primitive } from "../Engine"
 
 export class HTMLComponent {
   componentId = "component-"+Math.ceil(Math.random()*(2**32)).toString(16)

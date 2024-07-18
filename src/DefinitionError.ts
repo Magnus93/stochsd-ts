@@ -1,5 +1,4 @@
-import { Primitive } from "simulation/src/api/Blocks"
-import { Engine } from "./Engine/index"
+import { Engine, Primitive } from "./Engine/index"
 
 export type DefinitionError = {
   id: number,
