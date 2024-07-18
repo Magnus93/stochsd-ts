@@ -138,7 +138,7 @@ export class BaseVisual {
 			errorPopUp("You must rename a ghost by renaming the original.");
 			return;
 		}
-		let id = VisualController.getParentById(this.id)
+		let id = VisualController.getParentId(this.id)
 		// definitionEditor.open(id, ".name-field"); // TODO implement definition editor
 		// event.stopPropagation(); // TODO is this needed?
 	}

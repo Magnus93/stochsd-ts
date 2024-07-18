@@ -40,13 +40,13 @@ export class VisualController {
       }
     }
   }
-  /* replaces get_parent_id */
-  static getParentById(id: string) {
-    return id.toString().split(".")[0];;
+  /* replaces get_parent_id - used by anchor */
+  static getParentId(id: string) {
+    return id.toString().split(".")[0]
   }
   /* replaces get_parent */
   static getParent(child: BaseVisual) {
-    return this.get(this.getParentById(child.id));
+    return this.get(this.getParentId(child.id))
   }
   private static is_family(id1: string, id2: string) {
     let parent_id1 = id1.toString().split(".")[0];
@@ -173,16 +173,16 @@ export class VisualController {
     }
     if (keys.length === 1 && selection[keys[0]].getType() === "dummy_anchor") {
       // only one anchor in selection
-      return {"parent_id": this.getParentById(keys[0]), "child_id": keys[0] };
+      return {"parent_id": this.getParentId(keys[0]), "child_id": keys[0] };
     } else if (keys.length === 2) {
       if (this.get(keys[0])?.getType() === "dummy_anchor" && this.get(keys[1])?.getType() === "dummy_anchor") {
         // both anchors are dummies 
         return null;
-      } else if(this.getParentById(keys[0]) === this.getParentById(keys[1])) {
+      } else if(this.getParentId(keys[0]) === this.getParentId(keys[1])) {
         // one anchor and parent object selected 
         let parent_id = null;
         let child_id = null;
-        if (this.getParentById(keys[0]) === keys[0]) {
+        if (this.getParentId(keys[0]) === keys[0]) {
           child_id = keys[1];
           parent_id = keys[0];
         } else {
@@ -212,11 +212,11 @@ export class VisualController {
     }
     let object_ids: { children_ids: string[], parent_id?: string } = { children_ids: [] };
     if (keys.length > 0) {
-      object_ids.parent_id = this.getParentById(keys[0]);
+      object_ids.parent_id = this.getParentId(keys[0]);
       for(let key of keys) {
-        if ( this.getParentById(key) !== object_ids.parent_id ) {
+        if ( this.getParentId(key) !== object_ids.parent_id ) {
           return null;
-        } else if ( this.getParentById(key) !== key ) {
+        } else if ( this.getParentId(key) !== key ) {
           object_ids.children_ids.push(key);
         }
       }

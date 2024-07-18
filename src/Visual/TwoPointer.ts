@@ -1,8 +1,9 @@
-import { anchorTypeEnum } from "../anchorTypeEnum";
-import { DisplayDialog } from "../components/Dialog/DisplayDialog";
-import { Engine, Flow, Link } from "../Engine";
-import { VisualController } from "../VisualController";
-import { BaseVisual } from "./BaseVisual";
+import { AnchorType } from "./AnchorType"
+import { DisplayDialog } from "../components/Dialog/DisplayDialog"
+import { Engine, Flow, Link } from "../Engine"
+import { VisualController } from "../VisualController"
+import { BaseVisual } from "./BaseVisual"
+import { AnchorPoint } from "./AnchorPoint"
 
 export class TwoPointer extends BaseVisual {
   startAnchor: any // TODO OnePointer
@@ -30,8 +31,8 @@ export class TwoPointer extends BaseVisual {
 	}
 
 	createInitialAnchors(pos0: [number, number], pos1: [number, number]) {
-		// this.start_anchor = new AnchorPoint(this.id+".start_anchor", "dummy_anchor", pos0, anchorTypeEnum.start); // TODO add AnchorPoint
-		// this.end_anchor = new AnchorPoint(this.id+".end_anchor", "dummy_anchor", pos1, anchorTypeEnum.end); // TODO add AnchorPoint
+		this.startAnchor = new AnchorPoint(this.id+".start_anchor", "dummy_anchor", pos0, "start")
+		this.endAnchor = new AnchorPoint(this.id+".end_anchor", "dummy_anchor", pos1, "end")
 	}
 
 	getAnchors() {
@@ -87,15 +88,15 @@ export class TwoPointer extends BaseVisual {
 	updateGraphics() {
 		
 	}
-	syncAnchorToPrimitive(anchorType: typeof anchorTypeEnum[keyof typeof anchorTypeEnum]) {
+	syncAnchorToPrimitive(anchorType: AnchorType) {
 		// This function should sync anchor position to primitive 
 		let primitive = Engine.findById(this.id) as Flow | Link
 		if (!primitive) return;
 		switch(anchorType) {
-			case anchorTypeEnum.start:
+			case "start":
 				Engine.setStartPosition(primitive, this.startAnchor.getPos())
 			break;
-			case anchorTypeEnum.end:
+			case "end":
 				Engine.setEndPosition(primitive, this.endAnchor.getPos())
 			break;
 		}

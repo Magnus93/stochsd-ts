@@ -1,11 +1,11 @@
-import { BaseTool } from "../BaseTool";
+import { BaseTool } from "../BaseTool"
 import { Mouse } from "../../Mouse"
-import { do_global_log } from "../../debug";
-import { RectSelector } from "./RectSelector";
-import { VisualController } from "../../VisualController";
-import { anchorTypeEnum } from "../../anchorTypeEnum";
-import { Box } from "../Box";
-import { BaseConnection } from "../../Visual/BaseConnection";
+import { do_global_log } from "../../debug"
+import { RectSelector } from "./RectSelector"
+import { VisualController } from "../../VisualController"
+import { AnchorType } from "../../Visual/AnchorType"
+import { Box } from "../Box"
+import { BaseConnection } from "../../Visual/BaseConnection"
 
 export class MouseTool extends BaseTool {
 	static init() {
@@ -25,10 +25,10 @@ export class MouseTool extends BaseTool {
 		if (selectedAnchor && parent instanceof BaseConnection) {
 			// Detach anchor 
 			// switch(VisualController.onePointers[selectedAnchor.child_id].getAnchorType()) { // TODO 
-			// 	case anchorTypeEnum.start:
+			// 	case "start":
 			// 		parent.setStartAttach(undefined);
 			// 	break;
-			// 	case anchorTypeEnum.end:
+			// 	case "end":
 			// 		parent.setEndAttach(undefined);
 			// 	break;
 			// }
@@ -117,7 +117,7 @@ export class MouseTool extends BaseTool {
 		// if (
 		// 	only_selected_anchor &&
 		// 	VisualController.twoPointers[only_selected_anchor["parent_id"]].getType() === "flow" &&
-		// 	VisualController.onePointers[only_selected_anchor["child_id"]].getAnchorType() === anchorTypeEnum.end // TODO fix getAnchorType
+		// 	VisualController.onePointers[only_selected_anchor["child_id"]].getAnchorType() === "end" // TODO fix getAnchorType
 		// ) {
 		// 		FlowTool.rightMouseDown(x, y); // TODO add FlowTool
 		// }
