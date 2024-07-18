@@ -305,7 +305,7 @@ export namespace SVG {
 		svgElement.appendChild(result);
 		return result
 	}
-	export function line(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+	export function line(x1: number, y1: number, x2: number, y2: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
 		const result = document.createElementNS("http://www.w3.org/2000/svg", 'line')
 		result.setAttribute("class", markclass);
 		result.setAttribute("x1", `${x1}`);
@@ -323,6 +323,7 @@ export namespace SVG {
 			}
 		}
 		svgElement.appendChild(result);
+		return result
 	}
 
 	/* replaces svg_arrow_head */
