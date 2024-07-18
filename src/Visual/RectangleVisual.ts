@@ -12,21 +12,18 @@ export class RectangleVisual extends TwoPointer {
 			this.updateGraphics();
 		});
 	}
-	group!: SVGGElement // TODO SVG.Group
+	group!: SVGGElement
 	rectCoord!: CoordRect<SVGRectElement>
 	clickCoord!: CoordRect<SVGRectElement>
 	makeGraphics() {
-		
-
-		// Invisible rect to more easily click
-		
 		this.rectCoord = new CoordRect(SVG.rect(this.getMinX(), this.getMinY(), this.getWidth(), this.getHeight(), defaultStroke, "none", "element"));
 		
+		// Invisible rect to more easily click
 		this.clickCoord = new CoordRect(SVG.rect(this.getMinX(), this.getMinY(), this.getWidth(), this.getHeight(), "transparent", "none"));
 		this.clickCoord.element!.setAttribute("stroke-width", "10");
 
-		// this.group = svg_group([this.rectCoord.element, this.clickCoord.element]) // TODO add group
-		// this.group.setAttribute("node_id", this.id)
+		this.group = SVG.group([this.rectCoord.element, this.clickCoord.element])
+		this.group.setAttribute("node_id", this.id)
 		this.elements = [this.rectCoord.element]
 		for(let key in this.elements) {
 			this.elements[key].setAttribute("node_id", this.id);
