@@ -3,6 +3,7 @@ import {Mouse} from "../../Mouse"
 import { VisualController } from "../../VisualController";
 import { SVG } from "../../SVG"
 import { TwoPointer } from "../../Visual/TwoPointer";
+import { OnePointer } from "../../Visual/OnePointer";
 
 export class RectSelector {
   static rect: CoordRect<SVGRectElement>
@@ -55,7 +56,7 @@ export class RectSelector {
   
   /* replaces get_objects_in_rectselect */
   static getVisualsWithin() {
-    let result: Record<string, any> = {}; // TODO fix type
+    const result: Record<string, OnePointer> = {}
     for(let key in VisualController.onePointers) {
       if (this.isWithin(key)) {
         result[key] = VisualController.onePointers[key];
