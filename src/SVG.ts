@@ -191,6 +191,7 @@ export namespace SVG {
 		result.setHeight = function (h: number) {
 			this.cutDiv.style.height = `${h}px`;
 		}
+		return result
 	}
 	export type Foreign = SVGGElement & {
 		cutDiv: HTMLDivElement
@@ -200,7 +201,7 @@ export namespace SVG {
 		setWidth: (value: number) => void
 		setHeight: (value: number) => void
 	}
-	export function foreign(svg: SVGGElement, x: number, y: number, width: number, height: number, innerHtml: string, fill = "white") {
+	export function foreign(x: number, y: number, width: number, height: number, innerHtml: string, fill = "white") {
 		const result = document.createElementNS("http://www.w3.org/2000/svg", 'g') as Foreign
 		// covers entire screen - never moves
 		// if foreignObject moves in Chrome then automatic scroll
@@ -233,7 +234,7 @@ export namespace SVG {
 		result.setAttribute("y", `${y}`);
 		result.setAttribute("width", `${width}`);
 		result.setAttribute("height", `${height}`);
-		svg.appendChild(result);
+		svgElement.appendChild(result);
 		
 		result.setX = function (x: number) {
 			result.cutDiv.style.marginLeft = `${x}px`;
@@ -247,6 +248,7 @@ export namespace SVG {
 		result.setHeight = function (h: number) {
 			this.cutDiv.style.height = `${h}px`;
 		}
+		return result
 	}
 	/* replaces svg_rect */
 	export function rect(x: number, y: number, width: number, height: number, stroke: string, fill: string, markclass?: string, extraAttributes?: Record<string, string>) {
