@@ -1,11 +1,12 @@
 import { anchorTypeEnum } from "../anchorTypeEnum";
 import { DisplayDialog } from "../components/Dialog/DisplayDialog";
+import { Engine, Flow, Link } from "../Engine";
 import { VisualController } from "../VisualController";
 import { BaseVisual } from "./BaseVisual";
 
 export class TwoPointer extends BaseVisual {
-  start_anchor: any // TODO OnePointer
-  end_anchor: any // TODO OnePointer
+  startAnchor: any // TODO OnePointer
+  endAnchor: any // TODO OnePointer
   dialog!: DisplayDialog;
 	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
 		super(id, type, pos0);
@@ -24,8 +25,8 @@ export class TwoPointer extends BaseVisual {
 		});
 		
 		// this is done so anchor is ontop 
-		this.start_anchor.reloadImage();
-		this.end_anchor.reloadImage();
+		this.startAnchor.reloadImage();
+		this.endAnchor.reloadImage();
 	}
 
 	createInitialAnchors(pos0: [number, number], pos1: [number, number]) {
@@ -34,7 +35,7 @@ export class TwoPointer extends BaseVisual {
 	}
 
 	getAnchors() {
-		return [this.start_anchor, this.end_anchor];
+		return [this.startAnchor, this.endAnchor];
 	}
 
 	getBoundRect() {
@@ -48,14 +49,14 @@ export class TwoPointer extends BaseVisual {
 
 	setColor(color: string) {
 		super.setColor(color);
-		this.start_anchor.setColor(color);
-		this.end_anchor.setColor(color);
+		this.startAnchor.setColor(color);
+		this.endAnchor.setColor(color);
 	}
 	
-	get startX() { return this.start_anchor.getPos()[0]; }
-	get startY() { return this.start_anchor.getPos()[1]; }
-	get endX() { return this.end_anchor.getPos()[0]; }
-	get endY() { return this.end_anchor.getPos()[1]; }
+	get startX() { return this.startAnchor.getPos()[0]; }
+	get startY() { return this.startAnchor.getPos()[1]; }
+	get endX() { return this.endAnchor.getPos()[0]; }
+	get endY() { return this.endAnchor.getPos()[1]; }
 
 	getPos() { return [(this.startX + this.endX)/2,(this.startY + this.endY)/2]; }
 	getMinX() { return Math.min(this.startX, this.endX); }
@@ -88,14 +89,14 @@ export class TwoPointer extends BaseVisual {
 	}
 	syncAnchorToPrimitive(anchorType: typeof anchorTypeEnum[keyof typeof anchorTypeEnum]) {
 		// This function should sync anchor position to primitive 
-		let primitive: any = null // findID(this.id); // TODO fix
+		let primitive = Engine.findById(this.id) as Flow | Link
 		if (!primitive) return;
 		switch(anchorType) {
 			case anchorTypeEnum.start:
-				// setSourcePosition(primitive, this.start_anchor.getPos()); // TODO functions from old insightmaker API
+				Engine.setStartPosition(primitive, this.startAnchor.getPos())
 			break;
 			case anchorTypeEnum.end:
-				// setTargetPosition(primitive, this.end_anchor.getPos()); // TODO functions from old insightmaker API
+				Engine.setEndPosition(primitive, this.endAnchor.getPos())
 			break;
 		}
 	}

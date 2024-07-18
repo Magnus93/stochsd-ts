@@ -6,13 +6,13 @@ export class BaseConnection extends TwoPointer {
   positionUpdateHandler: () => void
   constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
     super(id, type, pos0, pos1);
-    this.positionUpdateHandler = () => { // TODO fix setSourcePosition
-      // const primitive = Engine.findById(this.id)
-      // const sourcePoint = getSourcePosition(primitive)
-      // const targetPoint = getTargetPosition(primitive)
-      // this.start_anchor.setPos(sourcePoint);
-      // this.end_anchor.setPos(targetPoint);
-      // alert("Position got updated");
+    this.positionUpdateHandler = () => { 
+      const primitive = Engine.findById(this.id) as Flow | Link
+      const sourcePoint = Engine.getStartPosition(primitive)
+      const targetPoint = Engine.getEndPosition(primitive)
+      this.startAnchor.setPos(sourcePoint);
+      this.endAnchor.setPos(targetPoint);
+      alert("Position got updated");
     }
   }
 

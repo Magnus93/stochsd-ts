@@ -106,4 +106,26 @@ export namespace Engine {
     }
     return results;
   }
+  /* replaces getSourcePosition */
+  export function getStartPosition(primitive: Flow | Link) {
+    let source = primitive._node.children[0].children[0].children[0]
+    return [Number(source.getAttribute("x")) ?? 0, Number(source.getAttribute("y")) ?? 0]
+  }
+  /* replaces getTargetPosition */
+  export function getEndPosition(primitive: Flow | Link) {
+    let target = primitive._node.children[0].children[0].children[1]
+    return [Number(target.getAttribute("x")) ?? 0, Number(target.getAttribute("y")) ?? 0]
+  }
+  /* replaces setSourcePosition */
+  export function setStartPosition(primitive: Flow | Link, position: [number, number]) {
+    let source = primitive._node.children[0].children[0].children[0]
+    source.setAttribute("x", position[0])
+    source.setAttribute("x", position[0])
+  }
+  /* replaces setTargetPosition */
+  export function setEndPosition(primitive: Flow | Link, position: [number, number]) {
+    let source = primitive._node.children[0].children[0].children[1]
+    source.setAttribute("x", position[0])
+    source.setAttribute("x", position[0])
+  }
 }
