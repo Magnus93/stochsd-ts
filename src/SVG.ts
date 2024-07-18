@@ -287,7 +287,7 @@ export namespace SVG {
 		svgElement.appendChild(result);
 		return result
 	}
-	export function ellipse(cx: number, cy: number, rx: number, ry: number, stroke: string, fill: string, markclass: string, extraAttributes: Record<string, string>) {
+	export function ellipse(cx: number, cy: number, rx: number, ry: number, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
 		const result = document.createElementNS("http://www.w3.org/2000/svg", 'ellipse');
 		result.setAttribute("class", markclass);
 		result.setAttribute("cx", `${cx}`);
