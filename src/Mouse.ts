@@ -7,7 +7,7 @@ import { Box } from "./Tool/Box";
 // NOTE: values for event.which should be used
 // event.button will give incorrect results 
 /* replaces mouse */
-export const mouseWhichEnum = <const>{"left": 1, "middle": 2, "right": 3};
+export const mouseWhichEnum = <const>{ left: 1, middle: 2, right: 3};
 export class Mouse {
   /* replace last_click_object_clicked */
   static lastClickObjectClicked = false;

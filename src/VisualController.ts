@@ -1,4 +1,4 @@
-import { Engine } from "./Engine/index.js";
+import { Engine, Primitive } from "./Engine/index.js";
 import { deletePrimitive } from "./utility";
 import { BaseConnection } from "./Visual/BaseConnection.js";
 import { BaseVisual } from "./Visual/BaseVisual";
@@ -11,6 +11,7 @@ export class VisualController {
   /* replaces connection_array */
   static twoPointers: Record<string, TwoPointer> = {}
 
+  /* replaces unselect_all */
   static unselectAll() {
     for(let key in this.onePointers) {
       this.onePointers[key].unselect();
@@ -118,6 +119,16 @@ export class VisualController {
         nameElement.setAttribute("text-anchor", "end");
       break;
     }
+  }
+  /* replaces findFreeName from API */
+  static findFreeName(basename: string) {
+    let counter = 0;
+    let testName: string;
+    do {
+      counter++;
+      testName = basename+counter.toString();
+    } while(Engine.model.find((p: Primitive) => Engine.getName(p) == testName).length > 0)
+    return testName;
   }
   /* replaces get_object */
   static get(id: string): OnePointer | TwoPointer | undefined {

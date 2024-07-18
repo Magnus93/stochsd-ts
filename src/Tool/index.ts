@@ -4,6 +4,7 @@ import "./DeleteTool"
 import { Box as ToolBox } from "./Box";
 import { MouseTool } from "./MouseTool";
 import { DeleteTool } from "./DeleteTool";
+import { StockTool } from "./StockTool";
 
 export namespace Tool {
   export function init() {
@@ -11,7 +12,7 @@ export namespace Tool {
     ToolBox.add("delete", DeleteTool)
     // ToolBox.add("undo", UndoTool)
     // ToolBox.add("redo", RedoTool)
-    // ToolBox.add("stock", StockTool)
+    ToolBox.add("stock", StockTool)
     // ToolBox.add("converter", ConverterTool)
     // ToolBox.add("variable", VariableTool)
     // ToolBox.add("constant", ConstantTool)
