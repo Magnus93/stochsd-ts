@@ -146,7 +146,7 @@ export function formatNumber(value: number, options: FormatNumberOptions = {}) {
 	}
 
 	if (value === null || value === undefined) {
-		return options.not_defined;
+		return options.not_defined as string
 	}
 
 	// set as zero if 0 or below rounding limit 

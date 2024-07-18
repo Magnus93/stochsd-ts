@@ -79,6 +79,7 @@ export class VisualController {
     }
     this.updateNamePos(id);
   }
+  /* replaces update_name_pos */
   static updateNamePos(node_id: string) {
     let visual = this.get(node_id)!
     let nameElement = visual.nameElement;
