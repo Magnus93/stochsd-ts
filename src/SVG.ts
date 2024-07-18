@@ -508,6 +508,7 @@ export namespace SVG {
 		result.set = (icon: "ghost" | "questionmark" | "dice", visibility: "visible" | "hidden") => {
 			result.elements[icon].setAttribute("visibility", visibility);
 		}
+		return result
 	}
 }
 

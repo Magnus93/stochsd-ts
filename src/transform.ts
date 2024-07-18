@@ -84,11 +84,3 @@ export function neswDirection(point1: Point, point2: Point) {
 		return "west"
 	}
 }
-
-export function isInLimits(lowerLimit: number, value: number, upperLimit: number) {
-	return (lowerLimit < value && value < upperLimit);
-}
-
-export function clampValue(value: number, min: number, max: number) {
-	return Math.max(Math.min(value, max), min);
-}

@@ -1,5 +1,6 @@
 import { Engine } from "./Engine/index.js";
 import { deletePrimitive } from "./utility";
+import { BaseConnection } from "./Visual/BaseConnection.js";
 import { BaseVisual } from "./Visual/BaseVisual";
 import { OnePointer } from "./Visual/OnePointer"
 import { TwoPointer } from "./Visual/TwoPointer"
@@ -283,6 +284,26 @@ export class VisualController {
         }
       }
       return result;
+    }
+    /* replaces find_start_connections */
+    static findStartConnections(visual: BaseVisual): BaseConnection[] {
+      let connections = []
+      for(let conn of Object.values(VisualController.twoPointers)) {
+        if (conn instanceof BaseConnection && conn.getStartAttach() == visual) {
+          connections.push(conn);
+        }
+      }
+      return connections;
+    }
+    /* replaces find_end_connections */
+    static findEndConnections(visual: BaseVisual): BaseConnection[] {
+      let connections = []
+      for(let conn of Object.values(VisualController.twoPointers)) {
+        if (conn instanceof BaseConnection && conn.getEndAttach() == visual) {
+          connections.push(conn);
+        }
+      }
+      return connections;
     }
   /* replaces delete_selected_objects */
   static deleteSelected() {
