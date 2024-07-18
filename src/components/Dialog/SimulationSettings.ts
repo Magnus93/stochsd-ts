@@ -42,8 +42,8 @@ export class SimulationSettings extends jqDialog {
 		</tr><tr>
 			<td>Method</td>
 			<td style="padding:1px;"><select class="input-method enter-apply" style="width:104px">
-			<option value="Euler" ${Engine.getAlgorithm() == "Euler"} >Euler</option> <!-- // TODO set selected -->
-			<option value="RK4" ${Engine.getAlgorithm() == "RK4"} >RK4</option> <!-- // TODO set selected -->
+			<option value="Euler" ${Engine.getAlgorithm() == "Euler"} >Euler</option>
+			<option value="RK4" ${Engine.getAlgorithm() == "RK4"} >RK4</option>
 			</select></td>
 		</tr>
 		</table>
