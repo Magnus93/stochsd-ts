@@ -106,6 +106,18 @@ export namespace Engine {
     }
     return results;
   }
+  export function getLinkedPrimitives(primitive: Primitive): Primitive[] {
+    let result = [];
+    let allLinks = model.findLinks()
+    for(let link of allLinks) {
+      if (link.end == primitive) {
+        if (link.start != null) {
+          result.push(link.start);
+        }
+      }
+    }
+    return result;
+  }
   /* replaces getSourcePosition */
   export function getStartPosition(primitive: Flow | Link) {
     let source = primitive._node.children[0].children[0].children[0]

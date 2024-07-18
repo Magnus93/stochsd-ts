@@ -93,23 +93,24 @@ export namespace SVG {
 	export function path(dstring: string, stroke: string, fill: string, markclass: string, extraAttributes?: Record<string, string>) {
 		const result = document.createElementNS("http://www.w3.org/2000/svg", 'path') as Path
 		result.dstring = dstring
-		result.setAttribute("class", markclass); //Set path's data
-		result.setAttribute("stroke", "black");
-		result.setAttribute("fill", "transparent");
-		result.setAttribute("fill", fill);
-		result.setAttribute("stroke", stroke);
+		result.setAttribute("class", markclass) //Set path's data
+		result.setAttribute("stroke", "black")
+		result.setAttribute("fill", "transparent")
+		result.setAttribute("fill", fill)
+		result.setAttribute("stroke", stroke)
 
 		if (extraAttributes) {
 			for (var key in extraAttributes) {
-				result.setAttribute(key, extraAttributes[key]); //Set path's data
+				result.setAttribute(key, extraAttributes[key]) //Set path's data
 			}
 		}
-		result.update();
-		svgElement.appendChild(result);
+		result.update()
+		svgElement.appendChild(result)
 
 		result.update = function () {
-			result.setAttribute("d", result.dstring);
-		};
+			result.setAttribute("d", result.dstring)
+		}
+		return result
 	}
 	export function text(x: number, y: number, text: string, markclass: string, extraAttributes?: Record<string, string>) {
 		const result = document.createElementNS("http://www.w3.org/2000/svg", 'text')
