@@ -12,7 +12,7 @@ export class Box {
     this.tools[name] = tool
   }
 	static init() {
-    Object.values(this.tools).map(t => (t as any)?.init());
+    Object.values(this.tools).map(t => t.init());
     $(".tool-button").on("mousedown", function(event) {
       let toolName = $(this).attr("data-tool") as string;
       Box.setTool(toolName, event.which);

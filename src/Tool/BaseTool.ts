@@ -4,6 +4,10 @@ export class BaseTool {
   static downScrollPosX = 0;
   static downScrollPosY = 0;
 
+	static init() {
+		// Overwrite if needed
+	}
+
 	static leftMouseDown(x: number, y: number) {
 		// Is triggered when mouse goes down for this tool
 	}
