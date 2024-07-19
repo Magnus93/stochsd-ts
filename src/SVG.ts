@@ -51,7 +51,8 @@ export namespace SVG {
 			x3: number
 			y3: number
 			x4: number
-			y4: number
+			y4: number,
+			draggable?: boolean
 			update: () => void
 		}
 	/* replaces svg_curve and svg_curve_oneway */
@@ -331,7 +332,7 @@ export namespace SVG {
 		templateArrowPoints: TwoD.Point[]
 		arrowPoints: TwoD.Point[],
 		setTemplatePoints: (newPoints: TwoD.Point[]) => void
-		setPos: (pos: [number, number], directionVector?: TwoD.Point) => void
+		setPosition: (pos: [number, number], directionVector?: TwoD.Point) => void
 		update: () => void
 	}
 	export function arrowHead(stroke: string, fill: string, extraAttributes?: Record<string, string>) {
@@ -353,7 +354,7 @@ export namespace SVG {
 			this.templateArrowPoints = newPoints;
 		}
 
-		result.setPos = function (pos: [number, number], directionVector: TwoD.Point = [1, 0]) {
+		result.setPosition = function (pos: [number, number], directionVector: TwoD.Point = [1, 0]) {
 			let sine = TwoD.sin([0, 0], directionVector);
 			let cosine = TwoD.cos([0, 0], directionVector);
 			this.arrowPoints = TwoD.rotatePoints(this.templateArrowPoints, sine, cosine);
@@ -412,7 +413,7 @@ export namespace SVG {
 		pos: TwoD.Point
 		defaultStroke: string
 		defaultFill: string
-		setPos: (pos: TwoD.Point, adjacentPos: TwoD.Point) => void
+		setPosition: (pos: TwoD.Point, adjacentPos: TwoD.Point) => void
 		update: () => void
 		setVisibility: (isVisible: boolean) => void
 	}
@@ -434,7 +435,7 @@ export namespace SVG {
 			}
 		}
 		svgElement.appendChild(result);
-		result.setPos = function (pos: TwoD.Point, adjacentPos: TwoD.Point) {
+		result.setPosition = function (pos: TwoD.Point, adjacentPos: TwoD.Point) {
 			let offset: TwoD.Point = [0, 0];
 			switch (TwoD.neswDirection(adjacentPos, pos)) {
 				case "north":

@@ -1,3 +1,4 @@
+import { Engine } from "../Engine";
 import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { distance } from "../transform";
@@ -30,13 +31,13 @@ export class VariableVisual extends ValuedOnePointer {
 	getImage (): Element[] {
 		return [
 			SVG.circle(0,0,this.getRadius(), this.color, defaultFill, "element"),
-			SVG.text(0,0, this.primitive.getAttribute("name"), "name_element", {"fill": this.color}),
+			SVG.text(0,0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
 			SVG.circle(0,0,this.getRadius()-2, "none", this.color, "highlight"),
 			SVG.icons(defaultStroke, defaultFill, "icons")
 		];
 	}
 
-	getLinkMountPos([xTarget, yTarget]: [number, number]) {
+	getLinkMountPos([xTarget, yTarget]: [number, number]): [number, number] {
 		// See "docs/code/mountPoints.svg" for math explanation 
 		const [xCenter, yCenter] = this.getPos();
 		const rTarget = distance([xCenter, yCenter], [xTarget, yTarget]);

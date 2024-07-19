@@ -6,8 +6,8 @@ import { BaseVisual } from "./BaseVisual"
 import { AnchorPoint } from "./AnchorPoint"
 
 export class TwoPointer extends BaseVisual {
-  startAnchor: any // TODO OnePointer
-  endAnchor: any // TODO OnePointer
+  startAnchor!: AnchorPoint
+  endAnchor!: AnchorPoint
   dialog!: DisplayDialog;
 	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
 		super(id, type, pos0);

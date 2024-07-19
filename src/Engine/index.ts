@@ -7,6 +7,8 @@ export type Variable = ReturnType<Model["Variable"]>
 export type Converter = ReturnType<Model["Converter"]>
 export type Link = ReturnType<Model["Link"]>
 export type Flow = ReturnType<Model["Flow"]>
+// export type Primitive = Stock | Variable | Converter | Link | Flow // TODO better definition?
+
 export namespace Engine {
   export let model = new Model({})
   export function loadFile(fileData: string) {
@@ -48,6 +50,22 @@ export namespace Engine {
   }
   export function getName(primitive: Primitive): string {
     return primitive.name ?? ""
+  }
+  /* replace getSize from old insightmaker API */
+  export function getSize(primitive: Primitive): [number, number] {
+    const geometry = primitive._node.children[0].children[0].attributes
+    return [Number(geometry.get(["width"])), Number(geometry.get(["height"]))]
+  }
+  /* replace getPosition from old insightmaker API */
+  export function getPosition(primitive: Primitive): [number, number] {
+    const geometry = primitive._node.children[0].children[0].attributes
+    return [Number(geometry.get(["x"])), Number(geometry.get(["y"]))]
+  }
+  /* replace getCenterPosition from old insightmaker API */
+  export function getCenterPosition(primitive: Primitive): [number, number] {
+    const size = getSize(primitive)
+    const position = getPosition(primitive)
+    return [position[0] + size[0]/2, position[1] + size[1]/2]
   }
   /* replace getValue from insightmaker API */
   export function getDefinition(primitive: Stock | Variable | Flow): string
@@ -120,12 +138,12 @@ export namespace Engine {
     return result;
   }
   /* replaces getSourcePosition */
-  export function getStartPosition(primitive: Flow | Link) {
+  export function getStartPosition(primitive: Flow | Link): [number, number] {
     let source = primitive._node.children[0].children[0].children[0]
     return [Number(source.getAttribute("x")) ?? 0, Number(source.getAttribute("y")) ?? 0]
   }
   /* replaces getTargetPosition */
-  export function getEndPosition(primitive: Flow | Link) {
+  export function getEndPosition(primitive: Flow | Link): [number, number] {
     let target = primitive._node.children[0].children[0].children[1]
     return [Number(target.getAttribute("x")) ?? 0, Number(target.getAttribute("y")) ?? 0]
   }

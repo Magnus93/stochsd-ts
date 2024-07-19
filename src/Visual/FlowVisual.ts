@@ -105,7 +105,7 @@ export class FlowVisual extends BaseConnection {
 		
 		let pos = anchor.getPos();
 		pos[dimIndex] = newValue;
-		anchor.setPos(pos);
+		anchor.setPosition(pos);
 		return newValue;
 	}
 
@@ -161,7 +161,7 @@ export class FlowVisual extends BaseConnection {
 				y = this.requestNewAnchorY(y, nextAnchor.id);
 			}
 		}
-		mainAnchor.setPos([x,y]);
+		mainAnchor.setPosition([x,y]);
 	}
 
 
@@ -175,10 +175,10 @@ export class FlowVisual extends BaseConnection {
 			let y = pos[1];
 			middlePoints += `${x},${y} `;
 		}
-		this.primitive.setAttribute("MiddlePoints", middlePoints);
+		Engine.setAttribute(this.primitive!, "MiddlePoints", middlePoints);
 	}
 
-	getLinkMountPos([xTarget, yTarget]: [number, number]) {
+	getLinkMountPos([xTarget, yTarget]: [number, number]): [number, number] {
 		// See "docs/code/mountPoints.svg" for math explanation 
 		const [xCenter, yCenter] = this.getVariablePos();
 		const rTarget = distance([xCenter, yCenter], [xTarget, yTarget]);
@@ -197,8 +197,8 @@ export class FlowVisual extends BaseConnection {
 		}
 		this.variableSide = !this.variableSide;
 
-		this.primitive.setAttribute("ValveIndex", this.valveIndex);
-		this.primitive.setAttribute("VariableSide", this.variableSide);
+		Engine.setAttribute(this.primitive!, "ValveIndex", `${this.valveIndex}`);
+		Engine.setAttribute(this.primitive!, "VariableSide", `${this.variableSide}`);
 
     VisualController.Update.relevant([])
 	}
@@ -254,7 +254,7 @@ export class FlowVisual extends BaseConnection {
 	}
 
 	loadMiddlePoints() {
-		let middlePointsString = this.primitive.getAttribute("MiddlePoints");
+		let middlePointsString = Engine.getAttribute(this.primitive!, "MiddlePoints");
 		if (! middlePointsString) {
 			return [];
 		}
@@ -323,7 +323,7 @@ export class FlowVisual extends BaseConnection {
 
 	setColor(color: string) {
 		this.color = color;
-		this.primitive.setAttribute("Color", this.color);
+		Engine.setAttribute(this.primitive!, "Color", this.color);
 		this.startCloud.setAttribute("stroke", color);
 		this.endCloud.setAttribute("stroke", color);
 		this.outerPath.setAttribute("stroke", color);
@@ -403,7 +403,7 @@ export class FlowVisual extends BaseConnection {
     const startAttach = this.getStartAttach()
 		if (startAttach && this.startAnchor != null) {
 			let oldPos = this.startAnchor.getPos();
-			let newPos = startAttach.getFlowMountPos(connectionStartPos);
+			let newPos = (startAttach as StockVisual).getFlowMountPos(connectionStartPos);
 			if (oldPos[0] != newPos[0] || oldPos[1] != newPos[1]) {
 				this.requestNewAnchorPos(newPos, this.startAnchor.id);
 			}
@@ -411,7 +411,7 @@ export class FlowVisual extends BaseConnection {
     const endAttach = this.getEndAttach()
 		if (endAttach && this.endAnchor != null) {	
 			let oldPos = this.endAnchor.getPos();
-			let newPos = endAttach.getFlowMountPos(connectionEndPos);
+			let newPos = (endAttach as StockVisual).getFlowMountPos(connectionEndPos);
 			if (oldPos[0] != newPos[0] || oldPos[1] != newPos[1]) {
 				this.requestNewAnchorPos(newPos, this.endAnchor.id);
 			}
@@ -427,7 +427,7 @@ export class FlowVisual extends BaseConnection {
 			} else {
 				this.icons.set("questionmark", "hidden");
 			}
-			this.icons.set("dice", !hasDefError && hasRandomFunction(Engine.getDefinition(this.primitive)) ? "visible" : "hidden");
+			this.icons.set("dice", !hasDefError && hasRandomFunction(Engine.getDefinition(this.primitive) ?? "") ? "visible" : "hidden");
 		}
 	}
 	
@@ -435,19 +435,19 @@ export class FlowVisual extends BaseConnection {
 		let points = this.getAnchors().map(anchor => anchor.getPos());
 		if (this.getStartAttach() == null) {
 			this.startCloud.setVisibility(true);
-			this.startCloud.setPos(points[0], points[1]);
+			this.startCloud.setPosition(points[0], points[1]);
 		} else {
 			this.startCloud.setVisibility(false);
 		}
 		if (this.getEndAttach() == null) {
 			this.endCloud.setVisibility(true);
-			this.endCloud.setPos(points[points.length-1], points[points.length-2]);
+			this.endCloud.setPosition(points[points.length-1], points[points.length-2]);
 		} else {
 			this.endCloud.setVisibility(false);
 		}
 		this.outerPath.setPoints(this.shortenLastPoint(12));
 		this.innerPath.setPoints(this.shortenLastPoint(8));
-		this.arrowHeadPath.setPos(points[points.length-1], this.getDirection());
+		this.arrowHeadPath.setPosition(points[points.length-1], this.getDirection());
 
 		let [valveX, valveY] = this.getValvePos();
 		let valveRot = this.getValveRotation();

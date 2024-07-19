@@ -11,8 +11,8 @@ export class BaseConnection extends TwoPointer {
       const primitive = Engine.findById(this.id) as Flow | Link
       const sourcePoint = Engine.getStartPosition(primitive)
       const targetPoint = Engine.getEndPosition(primitive)
-      this.startAnchor.setPos(sourcePoint);
-      this.endAnchor.setPos(targetPoint);
+      this.startAnchor.setPosition(sourcePoint);
+      this.endAnchor.setPosition(targetPoint);
       alert("Position got updated");
     }
   }
@@ -24,8 +24,8 @@ export class BaseConnection extends TwoPointer {
   isAcceptableEndAttach(attachVisual: BaseVisual) {
     return false;
   }
-  protected _startAttach?: StockVisual
-  setStartAttach(newStartAttach: StockVisual | undefined) {
+  protected _startAttach?: BaseVisual
+  setStartAttach(newStartAttach: BaseVisual | undefined) {
     if (newStartAttach != null && this.getEndAttach() == newStartAttach) {
       return;		// Will not attach if other anchor is attached to same
     }
@@ -48,8 +48,8 @@ export class BaseConnection extends TwoPointer {
   getStartAttach() {
     return this._startAttach;
   }
-  protected _endAttach?: StockVisual
-  setEndAttach(newEndAttach: StockVisual | undefined) {
+  protected _endAttach?: BaseVisual
+  setEndAttach(newEndAttach: BaseVisual | undefined) {
     if (newEndAttach != null && this.getStartAttach() == newEndAttach) {
       return; 	// Will not attach if other anchor is attached to same 
     }

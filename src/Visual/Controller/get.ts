@@ -139,6 +139,21 @@ export function getParentId(id: string) {
 export function getParent(child: BaseVisual) {
   return get(getParentId(child.id))
 }
+// Get a list of all children for a parent
+export function getChildren(parentId: string) {
+	let result: { [id: string]: BaseVisual } = {}
+	for(let key in onePointers) {
+		if (getParentId(key) == parentId && key != parentId) {
+			result[key] = onePointers[key];
+		}
+	}
+	for(let key in twoPointers) {
+		if (getParentId(key) == parentId && key != parentId) {
+			result[key] = twoPointers[key];
+		}
+	}
+	return result;
+}
 /* replaces get_only_link_selected */
 export function getOnlyLinkSelected() {
   const object_ids = getSinglePrimitiveIdSelected();

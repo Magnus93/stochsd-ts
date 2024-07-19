@@ -4,6 +4,7 @@ import * as visual from "./get";
 import { Name as VisualName } from "./Name"
 import { Update as VisualUpdate } from "./Update"
 import { Selection as VisualSelection } from "./Selection"
+import { Sync as VisualSync } from "./Sync";
 
 export namespace VisualController {
   /* replaces object_array */
@@ -24,9 +25,11 @@ export namespace VisualController {
   export const findEndConnections = visual.findEndConnections
   export const getParentId = visual.getParentId
   export const getParent = visual.getParent
+  export const getChildren = visual.getChildren
   export import Name = VisualName
   export import Update = VisualUpdate
   export import Selection = VisualSelection
+  export import Sync = VisualSync
   
   /* replaces rel_move */
   export function relativeMove(node_id: string ,diff_x: number, diff_y: number) {

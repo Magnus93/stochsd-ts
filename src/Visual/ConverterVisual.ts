@@ -15,11 +15,11 @@ export class ConverterVisual extends ValuedOnePointer {
 			SVG.path("M-20 0  L-10 -15  L10 -15  L20 0  L10 15  L-10 15  Z", this.color, defaultFill, "element"),
 			SVG.path("M-20 0  L-10 -15  L10 -15  L20 0  L10 15  L-10 15  Z", "none", this.color, "highlight", {"transform": "scale(0.87)"}),
 			SVG.icons(defaultStroke, defaultFill, "icons"),
-			SVG.text(0,0, this.primitive.getAttribute("name"), "name_element", {"fill": this.color}),
+			SVG.text(0,0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
 		];
 	}
 
-	getLinkMountPos([xTarget, yTarget]: [number, number]) {
+	getLinkMountPos([xTarget, yTarget]: [number, number]): [number, number] {
 		// See "docs/code/mountPoints.svg" for math explanation 
 		const [xCenter, yCenter] = this.getPos();
 		const hexSlope = Maths.safeDivision(15.0, 10);  // placement of corner is at (10,15)
@@ -44,9 +44,9 @@ export class ConverterVisual extends ValuedOnePointer {
 		return [xEdge, yEdge];
 	}
 	attachEvent() {
-		let linkedPrimitives = Engine.getLinkedPrimitives(this.primitive);
+		let linkedPrimitives = Engine.getLinkedPrimitives(this.primitive!);
 		if (linkedPrimitives.length > 0) {
-			this.primitive.setAttribute("Source", linkedPrimitives[0].id);
+			Engine.setAttribute(this.primitive!, "Source", linkedPrimitives[0].id);
 		}
 	}
 	nameDoubleClick() {

@@ -1,3 +1,4 @@
+import { Engine } from "../Engine";
 import { SVG } from "../SVG";
 import { cos, neg, rotate, sin, translate } from "../transform";
 import { defaultFill, defaultStroke } from "./default";
@@ -38,13 +39,13 @@ export class LineVisual extends TwoPointer {
 		this.dialog.show();
 	}
 	updateGraphics() {
-		this.line.setAttribute("stroke-width", this.primitive.getAttribute("StrokeWidth"));
-		this.line.setAttribute("stroke-dasharray", this.primitive.getAttribute("StrokeDashArray"));
+		this.line.setAttribute("stroke-width", Engine.getAttribute(this.primitive!, "StrokeWidth"));
+		this.line.setAttribute("stroke-dasharray", Engine.getAttribute(this.primitive!, "StrokeDashArray"));
 
 		let lineStartPos = [this.startX, this.startY];
 		let lineEndPos = [this.endX, this.endY];
-		let arrowHeadStart = this.primitive.getAttribute("ArrowHeadStart") === "true";
-		let arrowHeadEnd = this.primitive.getAttribute("ArrowHeadEnd") === "true";
+		let arrowHeadStart = Engine.getAttribute(this.primitive!, "ArrowHeadStart") === "true";
+		let arrowHeadEnd = Engine.getAttribute(this.primitive!, "ArrowHeadEnd") === "true";
 		this.arrowHeadStart.setAttribute("visibility", arrowHeadStart ? "visible" : "hidden");
 		this.arrowHeadEnd.setAttribute("visibility", arrowHeadEnd ? "visible" : "hidden");
 		if (arrowHeadStart || arrowHeadEnd) {
@@ -54,29 +55,29 @@ export class LineVisual extends TwoPointer {
 			let cosine = 	cos([this.endX, this.endY], [this.startX, this.startY]);
 			let endOffset = rotate([shortenAmount, 0], sine, cosine);
 			if (arrowHeadStart) {
-				lineStartPos = translate(neg(endOffset), [this.startX, this.startY]);
-				this.arrowHeadStart.setPos([this.startX, this.startY], [this.endX-this.startX, this.endY-this.startY]);
-				this.arrowHeadStart.update();
+				lineStartPos = translate(neg(endOffset), [this.startX, this.startY])
+				this.arrowHeadStart.setPosition([this.startX, this.startY], [this.endX-this.startX, this.endY-this.startY])
+				this.arrowHeadStart.update()
 			}
 			if (arrowHeadEnd) {
-				lineEndPos = translate(endOffset, [this.endX, this.endY]);
-				this.arrowHeadEnd.setPos([this.endX, this.endY], [this.startX-this.endX, this.startY-this.endY]);
-				this.arrowHeadEnd.update();
+				lineEndPos = translate(endOffset, [this.endX, this.endY])
+				this.arrowHeadEnd.setPosition([this.endX, this.endY], [this.startX-this.endX, this.startY-this.endY])
+				this.arrowHeadEnd.update()
 			}
 		}
 		
-		this.line.setAttribute("x1", lineStartPos[0]);
-		this.line.setAttribute("y1", lineStartPos[1]);
-		this.line.setAttribute("x2", lineEndPos[0]);
-		this.line.setAttribute("y2", lineEndPos[1]);
-		this.clickLine.setAttribute("x1", this.startX);
-		this.clickLine.setAttribute("y1", this.startY);
-		this.clickLine.setAttribute("x2", this.endX);
-		this.clickLine.setAttribute("y2", this.endY);
+		this.line.setAttribute("x1", `${lineStartPos[0]}`)
+		this.line.setAttribute("y1", `${lineStartPos[1]}`)
+		this.line.setAttribute("x2", `${lineEndPos[0]}`)
+		this.line.setAttribute("y2", `${lineEndPos[1]}`)
+		this.clickLine.setAttribute("x1", `${this.startX}`)
+		this.clickLine.setAttribute("y1", `${this.startY}`)
+		this.clickLine.setAttribute("x2", `${this.endX}`)
+		this.clickLine.setAttribute("y2", `${this.endY}`)
 	}
 	setColor(color: string) {
 		super.setColor(color);
-		this.arrowHeadStart.setAttribute("fill", color);
-		this.arrowHeadEnd.setAttribute("fill", color);
+		this.arrowHeadStart.setAttribute("fill", color)
+		this.arrowHeadEnd.setAttribute("fill", color)
 	}
 }

@@ -1,3 +1,4 @@
+import { Engine } from "../Engine";
 import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { neg, translate } from "../transform";
@@ -6,13 +7,13 @@ import { defaultFill, defaultStroke } from "./default";
 import { ValuedOnePointer } from "./ValuedOnePointer";
 
 export class StockVisual extends ValuedOnePointer {
-	constructor(public id: string, public type: string, public position: [number, number], extras: any) {
+	constructor(public id: string, public type: string, public position: [number, number], extras?: any) {
 		super(id, type, position, extras);
 		this.updateDefinitionError();
 		this.namePositions = [[0, 32], [27, 5], [0, -24], [-27, 5]];
 	}
 
-	getSize() {
+	getSize(): [number, number] {
 		return [50, 38];
 	}
 
@@ -27,9 +28,9 @@ export class StockVisual extends ValuedOnePointer {
 		};
 	}
 
-	setPos(position: [number, number]) {
+	setPosition(position: [number, number]) {
 		let diff = translate(neg(this.position), position);
-		super.setPos(position);
+		super.setPosition(position);
 		let startConnections = VisualController.findStartConnections(this);
 		for(let conn of startConnections) {
 			// if (conn instanceof FlowVisual && conn.isSelected() === false) { // TODO add FlowVisual
@@ -75,7 +76,7 @@ export class StockVisual extends ValuedOnePointer {
 	}
 
 	// Used for LinkVisual
-	getLinkMountPos([xTarget, yTarget]: [number, number]) {
+	getLinkMountPos([xTarget, yTarget]: [number, number]): [number, number] {
 		// See "docs/code/mountPoints.svg" for math explanation 
 		const [xCenter, yCenter] = this.getPos();
 		const [width, height] = this.getSize();
@@ -97,7 +98,7 @@ export class StockVisual extends ValuedOnePointer {
 
 	getImage(): Element[] {
 		// let textElem = svg_text(0, 39, "stock", "name_element");
-		let textElem = SVG.text(0, 39, this.primitive.getAttribute("name"), "name_element");
+		let textElem = SVG.text(0, 39, Engine.getAttribute(this.primitive!, "name"), "name_element");
 		textElem.setAttribute("fill", this.color);
 		let size = this.getSize();
 		let w = size[0];

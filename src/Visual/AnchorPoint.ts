@@ -98,13 +98,13 @@ export class AnchorPoint extends OnePointer {
 		// 		case "start":
 		// 			{
 		// 				let oldPos = parent.b1_anchor.getPos();
-		// 				parent.b1_anchor.setPos([oldPos[0] + diffX, oldPos[1] + diffY]);
+		// 				parent.b1_anchor.setPosition([oldPos[0] + diffX, oldPos[1] + diffY]);
 		// 			}
 		// 			break;
 		// 		case "end":
 		// 			{
 		// 				let oldPos = parent.b2_anchor.getPos();
-		// 				parent.b2_anchor.setPos([oldPos[0] + diffX, oldPos[1] + diffY]);
+		// 				parent.b2_anchor.setPosition([oldPos[0] + diffX, oldPos[1] + diffY]);
 		// 			}
 		// 			break;
 		// 	}

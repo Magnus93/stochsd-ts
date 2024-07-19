@@ -1,3 +1,4 @@
+import { Engine } from "../Engine";
 import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { defaultFill, defaultStroke } from "./default";
@@ -14,7 +15,7 @@ export class ConstantVisual extends VariableVisual {
 		let rs = r - 3; // Selector radius 
 		return [
 			SVG.path(`M0,${r} ${r},0 0,-${r} -${r},0Z`, this.color, defaultFill, "element"),
-			SVG.text(0, 0, this.primitive.getAttribute("name"), "name_element", {"fill": this.color}),
+			SVG.text(0, 0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
 			SVG.path(`M0,${rs} ${rs},0 0,-${rs} -${rs},0Z`, "none", this.color, "highlight"),
 			SVG.icons(defaultStroke, defaultFill, "icons")
 		];
@@ -24,7 +25,7 @@ export class ConstantVisual extends VariableVisual {
 		return 22;
 	}
 
-	getLinkMountPos([xTarget, yTarget]: [number, number]) {
+	getLinkMountPos([xTarget, yTarget]: [number, number]): [number, number] {
 		const [xCenter, yCenter] = this.getPos();
 		const targetSlope = Maths.safeDivision(yCenter-yTarget, xCenter-xTarget);
 		

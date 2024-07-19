@@ -38,7 +38,7 @@ export class OnePointer extends BaseVisual {
 		return {"minX": x-10, "maxX": x+10, "minY": y-10, "maxY": y+10};
 	}
 
-	setPos(position: [number, number]) {
+	setPosition(position: [number, number]) {
 		if (position[0] == this.position[0] && position[1] == this.position[1]) {
 			// If the position has not changed we should not update it
 			// This turned out to be a huge optimisation
@@ -132,11 +132,11 @@ export class OnePointer extends BaseVisual {
 	update() {
 		this.group!.setAttribute("transform", "translate("+this.position[0]+","+this.position[1]+")");
 		
-		let prim = this.isGhost ? Engine.findById(this.primitive.getAttribute("Source")) : this.primitive
+		let prim = this.isGhost ? Engine.findById(Engine.getAttribute(this.primitive!, "Source")) : this.primitive
 		if (this.icons && prim) {
 			const hasDefError = DefinitionError.has(prim);
 			this.icons.set("questionmark", hasDefError ? "visible" : "hidden");
-			this.icons.set("dice", ( ! hasDefError && hasRandomFunction(Engine.getDefinition(prim))) ? "visible" : "hidden");
+			this.icons.set("dice", ( ! hasDefError && hasRandomFunction(Engine.getDefinition(prim) ?? "")) ? "visible" : "hidden");
 		}
 
 		if ( ! this.isGhost) {

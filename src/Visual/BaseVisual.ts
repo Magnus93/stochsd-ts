@@ -3,12 +3,13 @@ import { SVG } from "../SVG";
 import { DefinitionError } from "../DefinitionError";
 import { do_global_log, errorPopUp } from "../debug";
 import { VisualController } from "./Controller";
+import { Engine, Primitive } from "../Engine";
 
 export class BaseVisual {
   selected = false
   nameRadius: number = 30;
   color = defaultStroke
-  primitive: any // TODO fix
+  primitive?: Primitive
   elements: Element[]
   selectorElements: Element[] // Elements visible when selected
   nameElement?: SVGTextElement
@@ -20,7 +21,7 @@ export class BaseVisual {
 		this.color = defaultStroke;
 		// Warning: this.primitive can be null, since all DIM objects does not have a IM object such as anchors and flow_auxiliarys
 		// We should therefor check if this.primitive is null, in case we dont know which class we are dealing with
-		// this.primitive = findID(this.id); // TODO 
+		this.primitive = Engine.findById(this.id); // TODO 
 		
 		this.elements = [];
 		this.selectorElements = [];
@@ -41,14 +42,14 @@ export class BaseVisual {
 			}
 		}
 		if (this.primitive) {
-			// AnchorPoint has no primitve
-			this.primitive.setAttribute("Color", this.color);
+			// AnchorPoint has no primitive
+			Engine.setAttribute(this.primitive, "Color", this.color);
 		}
 	}
 
 	updateDefinitionError() {
 		let definitionErrorTypes = ["stock", "variable", "constant", "flow", "converter"];
-		if (definitionErrorTypes.includes(this.type)) {
+		if (definitionErrorTypes.includes(this.type) && this.primitive) {
 			DefinitionError.check(this.primitive);
 			DefinitionError.has(this.primitive);
 		}
@@ -60,7 +61,7 @@ export class BaseVisual {
 		// The hashmap dictates in what rect mouse can click to create connections
 	}
 
-  getPosition() {
+  getPosition():  [number, number] {
     // Override this function
     return [0, 0]
   }
@@ -117,17 +118,14 @@ export class BaseVisual {
   /* replaces name_pos */
   #namePositionIndex: number = 0
 	get namePositionIndex(): number {
-		return this.namePositionIndex
+		return this.#namePositionIndex
 	}
 	
 	set namePositionIndex(value: number) {
 		//~ alert("name pos for "+this.id+" "+getStackTrace());
 		//~ do_global_log("updating name pos to "+value);
-		this.namePositionIndex = Number(value);
-    // TODO fix
-		// if (this.primitive) {
-		// 	this.primitive.setAttribute("RotateName", value.toString());
-		// }
+		this.#namePositionIndex = Number(value);
+		this.primitive && Engine.setAttribute(this.primitive, "RotateName", value.toString());
 	}
 	getType() {
 		return this.type;

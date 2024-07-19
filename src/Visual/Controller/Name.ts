@@ -2,6 +2,13 @@ import { Engine, Primitive } from "../../Engine";
 import { get } from "./get";
 
 export namespace Name {
+  /* replaces set_name */
+  export function set(id: string, value: string) {
+    let visual = get(id)
+    visual?.setName(value)
+    visual?.afterNameChange()
+  }
+
   /* replaces rotate_name */
   export function rotate(id: string) {
     let visual = get(id)!;
