@@ -10,7 +10,7 @@ export class NumberboxVisual extends ValuedOnePointer {
 	constructor(public id: string, public type: string, public position: [number, number], extras?: any) {
 		super(id, type, position, extras);
 		this.nameCentered = true;
-		VisualController.updateNamePos(id);
+		VisualController.Name.updatePosition(id);
 		this.setSelectionSizeToText();
 		
 		this.runHandler = () => {

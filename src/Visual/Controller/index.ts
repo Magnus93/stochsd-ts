@@ -1,15 +1,17 @@
-import { Engine, Primitive } from "../../Engine/index.js";
-import { deletePrimitive } from "../../utility.js";
-import { BaseConnection } from "../BaseConnection.js";
-import { BaseVisual } from "../BaseVisual.js";
-import { OnePointer } from "../OnePointer.js"
-import { TwoPointer } from "../TwoPointer.js"
+import { Engine, Primitive } from "../../Engine/index";
+import { deletePrimitive } from "../../utility";
+import { BaseConnection } from "../BaseConnection";
+import { BaseVisual } from "../BaseVisual";
+import { OnePointer } from "../OnePointer"
+import { TwoPointer } from "../TwoPointer"
+import * as visual from "./get";
+import { Name as VisualName } from "./Name";
 
 export namespace VisualController {
   /* replaces object_array */
-  export const onePointers: Record<string, OnePointer> = {}
+  export const onePointers = visual.onePointers
   /* replaces connection_array */
-  export const twoPointers: Record<string, TwoPointer> = {}
+  export const twoPointers = visual.twoPointers
 
   /* replaces unselect_all */
   export function unselectAll() {
@@ -42,14 +44,6 @@ export namespace VisualController {
       }
     }
   }
-  /* replaces get_parent_id - used by anchor */
-  export function getParentId(id: string) {
-    return id.toString().split(".")[0]
-  }
-  /* replaces get_parent */
-  export function getParent(child: BaseVisual) {
-    return get(getParentId(child.id))
-  }
   function is_family(id1: string, id2: string) {
     let parent_id1 = id1.toString().split(".")[0];
     let parent_id2 = id2.toString().split(".")[0];
@@ -71,74 +65,21 @@ export namespace VisualController {
       }
     }
   }
-  export function rotateName(id: string) {
-    let visual = get(id)!;
-    if (visual.namePositionIndex<3) {
-      visual.namePositionIndex++;
-    } else {
-      visual.namePositionIndex = 0;
-    }
-    updateNamePos(id);
-  }
-  /* replaces update_name_pos */
-  export function updateNamePos(node_id: string) {
-    let visual = get(node_id)!
-    let nameElement = visual.nameElement;
-    // Some objects does not have name element
-    if (!nameElement) {
-      return;
-    }
-    // For fixed names (used only by text element)
-    if ("nameCentered" in visual && visual.nameCentered) {
-      nameElement.setAttribute("x", "0")
-      nameElement.setAttribute("y", "0")
-      nameElement.setAttribute("text-anchor", "middle");
-      return;
-    }
+  export const get = visual.get
+  export const getAll = visual.getAll
+  export const getSelected = visual.getSelected
+  export const getSelectedIds = visual.getSelectedIds
+  export const getRootVisuals = visual.getRootVisuals
+  export const getSelectedRootVisuals = visual.getSelectedRootVisuals
+  export const getOnlyLinkSelected = visual.getOnlyLinkSelected
+  export const getOnlySelectedAnchorId = visual.getOnlySelectedAnchorId
+  export const getSinglePrimitiveIdSelected = visual.getSinglePrimitiveIdSelected
+  export const findStartConnections = visual.findStartConnections
+  export const findEndConnections = visual.findEndConnections
+  export const getParentId = visual.getParentId
+  export const getParent = visual.getParent
+  export import Name = VisualName
   
-    const visualObject = get(node_id)!
-    const pos = visualObject.namePositions[visualObject.namePositionIndex]
-    nameElement.setAttribute("x", `${pos[0]}`)
-    nameElement.setAttribute("y", `${pos[1]}`)
-  
-    switch(get(node_id)?.namePositionIndex) {
-      case 0:
-        // Below
-        nameElement.setAttribute("text-anchor", "middle");
-      break;
-      case 1:
-        // To the right
-        nameElement.setAttribute("text-anchor", "start");
-      break;
-      case 2:
-        // Above
-        nameElement.setAttribute("text-anchor", "middle");
-      break;
-      case 3:
-        // To the left
-        nameElement.setAttribute("text-anchor", "end");
-      break;
-    }
-  }
-  /* replaces findFreeName from API */
-  export function findFreeName(basename: string) {
-    let counter = 0;
-    let testName: string;
-    do {
-      counter++;
-      testName = basename+counter.toString();
-    } while(Engine.model.find((p: Primitive) => Engine.getName(p) == testName).length > 0)
-    return testName;
-  }
-  /* replaces get_object */
-  export function get(id: string): OnePointer | TwoPointer | undefined {
-    if (typeof onePointers[id] != "undefined") {
-      return onePointers[id];
-    }
-    if (typeof twoPointers[id] != "undefined") {
-      return twoPointers[id];
-    }
-  }
   /* replaces rel_move */
   export function relativeMove(node_id: string ,diff_x: number, diff_y: number) {
     let primitive = Engine.findById(node_id);
@@ -154,88 +95,6 @@ export namespace VisualController {
     } */
     onePointers[node_id].updatePosition();
     onePointers[node_id].afterMove(diff_x, diff_y)
-  }
-  /* replaces get_selected_objects */
-  export function getSelected() {
-    const result: Record<string, BaseVisual> = {}
-    for(let key in onePointers) {
-      if (onePointers[key].isSelected()) {
-        result[key] = onePointers[key];
-      }
-    }
-    for(let key in twoPointers) {
-      if (twoPointers[key].isSelected()) {
-        result[key] = twoPointers[key];
-      }
-    }
-    return result;
-  }
-
-  /* replaces get_selected_ids */
-  export function getSelectedIds() {
-    return Object.keys(getSelected());
-  }
-
-  /* replaces get_only_selected_anchor_id */
-  export function getOnlySelectedAnchorId() {
-    // returns null if more is selected than one anchor is selected, else returns object {parent_id: ... , child_id: ... }
-    let selection = getSelected();
-    let keys = [];
-    for(let key in selection) { 
-      keys.push(key);
-    }
-    if (keys.length === 1 && selection[keys[0]].getType() === "dummy_anchor") {
-      // only one anchor in selection
-      return {"parent_id": getParentId(keys[0]), "child_id": keys[0] };
-    } else if (keys.length === 2) {
-      if (get(keys[0])?.getType() === "dummy_anchor" && get(keys[1])?.getType() === "dummy_anchor") {
-        // both anchors are dummies 
-        return null;
-      } else if(getParentId(keys[0]) === getParentId(keys[1])) {
-        // one anchor and parent object selected 
-        let parent_id = null;
-        let child_id = null;
-        if (getParentId(keys[0]) === keys[0]) {
-          child_id = keys[1];
-          parent_id = keys[0];
-        } else {
-          child_id = keys[0];
-          parent_id = keys[1];
-        }
-        return { "parent_id": parent_id, "child_id": child_id };
-      }
-    } 
-    return null;
-  }
-  /* replaces get_only_link_selected */
-  export function getOnlyLinkSelected() {
-    const object_ids = getSinglePrimitiveIdSelected();
-    if (object_ids !== null && get(object_ids?.parent_id ?? "")?.getType() === "link") {
-      return object_ids;
-    } 
-    return null;
-  }
-  /* replaces get_single_primitive_id_selected */
-  export function getSinglePrimitiveIdSelected() {
-    // will give object { "parent_id": ..., "children_ids": [...] } or null if more objects selected 
-    let selection = getSelected();
-    let keys = [];
-    for(let key in selection) { 
-      keys.push(key);
-    }
-    let object_ids: { children_ids: string[], parent_id?: string } = { children_ids: [] };
-    if (keys.length > 0) {
-      object_ids.parent_id = getParentId(keys[0]);
-      for(let key of keys) {
-        if ( getParentId(key) !== object_ids.parent_id ) {
-          return null;
-        } else if ( getParentId(key) !== key ) {
-          object_ids.children_ids.push(key);
-        }
-      }
-      return object_ids;
-    } 
-    return null;
   }
   /* replaces update_relevant_objects */
   export function updateRelevantVisuals(ids: string[]) {
@@ -261,62 +120,6 @@ export namespace VisualController {
       }
     }
   }
-  /* replaces get_all_objects */
-  export function getAll() {
-    const result: Record<string, BaseVisual> = {}
-    for(let key in onePointers) {
-      result[key] = onePointers[key];
-    }
-    for(let key in twoPointers) {
-      result[key] = twoPointers[key];
-    }
-    return result;
-  }
-  /* replaces get_root_objects */
-  export function getRootVisuals() {
-    let result: Record<string, BaseVisual> = {}
-    let all = getAll();
-    for(let key in all) {
-      if (key.indexOf(".") == -1) {
-        result[key]=all[key];
-      }
-    }
-    return result;
-  }
-    /* replaces get_selected_root_objects */
-    export function getSelectedRootVisuals() {
-      let result: Record<string, TwoPointer | OnePointer> = {};
-      const all = getAll();
-      for(let key in all) {
-        const parent = getParent(all[key])!
-        
-        // If any element is selected we add its parent
-        if (all[key].isSelected()) {
-          result[parent!.id] = parent;
-        }
-      }
-      return result;
-    }
-    /* replaces find_start_connections */
-    export function findStartConnections(visual: BaseVisual): BaseConnection[] {
-      let connections = []
-      for(let conn of Object.values(VisualController.twoPointers)) {
-        if (conn instanceof BaseConnection && conn.getStartAttach() == visual) {
-          connections.push(conn);
-        }
-      }
-      return connections;
-    }
-    /* replaces find_end_connections */
-    export function findEndConnections(visual: BaseVisual): BaseConnection[] {
-      let connections = []
-      for(let conn of Object.values(VisualController.twoPointers)) {
-        if (conn instanceof BaseConnection && conn.getEndAttach() == visual) {
-          connections.push(conn);
-        }
-      }
-      return connections;
-    }
   /* replaces delete_selected_objects */
   export function deleteSelected() {
     // Delete all objects that are selected
