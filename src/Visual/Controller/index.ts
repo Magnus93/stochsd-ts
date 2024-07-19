@@ -1,9 +1,5 @@
-import { Engine, Primitive } from "../../Engine/index";
+import { Engine } from "../../Engine/index";
 import { deletePrimitive } from "../../utility";
-import { BaseConnection } from "../BaseConnection";
-import { BaseVisual } from "../BaseVisual";
-import { OnePointer } from "../OnePointer"
-import { TwoPointer } from "../TwoPointer"
 import * as visual from "./get";
 import { Name as VisualName } from "./Name";
 
