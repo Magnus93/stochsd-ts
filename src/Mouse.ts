@@ -24,8 +24,8 @@ export class Mouse {
 
   static init() {
     $(SVG.svgElement).on("mousedown", this.downHandler)
-    $("html").on("mousemove", (this.moveHandler));
-	  $("html").on("mouseup", (this.upHandler));
+    $("html").on("mousemove", this.moveHandler)
+	  $("html").on("mouseup", this.upHandler)
   }
 
   /* replaces mouseDownHandler */

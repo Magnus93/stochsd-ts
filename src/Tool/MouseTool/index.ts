@@ -98,19 +98,20 @@ export class MouseTool extends BaseTool {
 	}
 	static leftMouseUp(x: number, y: number) {
 		// Check if we selected only 1 anchor element and in that case detach it;
-		let selected_anchor = VisualController.getOnlySelectedAnchorId();
-		if (selected_anchor) {
-			const parent = VisualController.twoPointers[selected_anchor.parent_id]
+		let selectedAnchor = VisualController.getOnlySelectedAnchorId();
+		if (selectedAnchor) {
+			const parent = VisualController.twoPointers[selectedAnchor.parent_id]
 			if (parent instanceof BaseConnection) {
 				let tool = Box.tools[parent.getType()];
-				tool.mouseUpSingleAnchor(x, y, false, selected_anchor.child_id);
-			}
-
-			if (Mouse.emptyClickDown) {
-				RectSelector.stop();
-				Mouse.emptyClickDown = false;
+				tool.mouseUpSingleAnchor(x, y, false, selectedAnchor.child_id);
 			}
 		}
+
+		if (Mouse.emptyClickDown) {
+			RectSelector.stop();
+			Mouse.emptyClickDown = false;
+		}
+
 	}
 	static rightMouseDown(x: number, y: number) {
 		let only_selected_anchor = VisualController.getOnlySelectedAnchorId();
