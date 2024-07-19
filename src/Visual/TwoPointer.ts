@@ -1,7 +1,7 @@
 import { AnchorType } from "./AnchorType"
 import { DisplayDialog } from "../components/Dialog/DisplayDialog"
 import { Engine, Flow, Link } from "../Engine"
-import { VisualController } from "../VisualController"
+import { VisualController } from "./Controller"
 import { BaseVisual } from "./BaseVisual"
 import { AnchorPoint } from "./AnchorPoint"
 

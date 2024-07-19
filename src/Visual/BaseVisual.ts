@@ -2,7 +2,7 @@ import { defaultStroke } from "./default";
 import { SVG } from "../SVG";
 import { DefinitionError } from "../DefinitionError";
 import { do_global_log, errorPopUp } from "../debug";
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 
 export class BaseVisual {
   selected = false

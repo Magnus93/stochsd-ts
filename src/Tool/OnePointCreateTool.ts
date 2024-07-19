@@ -1,6 +1,6 @@
 import { BaseTool } from "./BaseTool"
 import { mouseWhichEnum } from "../Mouse"
-import { VisualController } from "../VisualController"
+import { VisualController } from "../Visual/Controller"
 import { Box } from "./Box"
 
 export class OnePointCreateTool extends BaseTool {

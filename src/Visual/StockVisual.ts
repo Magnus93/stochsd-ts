@@ -1,7 +1,7 @@
 import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { neg, translate } from "../transform";
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 import { defaultFill, defaultStroke } from "./default";
 import { ValuedOnePointer } from "./ValuedOnePointer";
 

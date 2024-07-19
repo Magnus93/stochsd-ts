@@ -1,5 +1,5 @@
 import { Engine } from "../Engine";
-import { VisualController } from "../VisualController";
+import { VisualController } from "../Visual/Controller";
 import { OnePointCreateTool } from "./OnePointCreateTool";
 
 export class StockTool extends OnePointCreateTool {	

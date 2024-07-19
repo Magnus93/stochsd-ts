@@ -1,6 +1,6 @@
 import { CoordRect } from "../../CoordRect";
 import {Mouse} from "../../Mouse"
-import { VisualController } from "../../VisualController";
+import { VisualController } from "../../Visual/Controller";
 import { SVG } from "../../SVG"
 import { TwoPointer } from "../../Visual/TwoPointer";
 import { OnePointer } from "../../Visual/OnePointer";

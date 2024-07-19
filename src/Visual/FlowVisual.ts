@@ -4,7 +4,7 @@ import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { cos, distance, neswDirection, rotate, sin, translate } from "../transform";
 import { hasRandomFunction } from "../utility";
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 import { AnchorPoint } from "./AnchorPoint";
 import { AnchorType } from "./AnchorType";
 import { BaseConnection } from "./BaseConnection";

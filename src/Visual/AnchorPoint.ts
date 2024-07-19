@@ -1,5 +1,5 @@
 import { SVG } from "../SVG";
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 import { AnchorType } from "./AnchorType";
 import { BaseConnection } from "./BaseConnection";
 import { OnePointer } from "./OnePointer";

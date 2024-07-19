@@ -1,4 +1,4 @@
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 import { OnePointer } from "./OnePointer";
 
 /* Replaces BasePrimitive */

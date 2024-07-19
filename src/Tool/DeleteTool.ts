@@ -1,5 +1,5 @@
 import { Dialog } from "../components";
-import { VisualController } from "../VisualController";
+import { VisualController } from "../Visual/Controller";
 import { BaseTool } from "./BaseTool";
 import { Box } from "./Box";
 

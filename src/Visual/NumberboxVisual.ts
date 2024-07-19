@@ -1,6 +1,6 @@
 import { formatNumber } from "../formatNumber";
 import { SVG } from "../SVG";
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 import { defaultFill } from "./default";
 import { ValuedOnePointer } from "./ValuedOnePointer";
 

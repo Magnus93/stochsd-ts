@@ -3,7 +3,7 @@ import { DefinitionError } from "../DefinitionError";
 import { Engine } from "../Engine";
 import { SVG } from "../SVG";
 import { hasRandomFunction } from "../utility";
-import { VisualController } from "../VisualController";
+import { VisualController } from "./Controller";
 import { BaseVisual } from "./BaseVisual";
 
 
