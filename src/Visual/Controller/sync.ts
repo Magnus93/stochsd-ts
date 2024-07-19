@@ -1,36 +1,42 @@
-import { Primitive } from "../../Engine";
+import { Engine, Primitive } from "../../Engine";
+import { get } from "./get";
+import { Selection } from "./Selection";
+import { Update } from "./Update";
 
 // This function is important. It takes all the relevant primitives from the engine
 // And make visual objects from them
 // This is executed after loading a file or loading a whole new state such as after undo
-export function syncAllVisuals() { // TODO add
-	/* for(let type of saveblePrimitiveTypes) {
-		let primitive_list = primitives(type);
-		for(key in primitive_list) {
+export function syncAllVisuals() {
+	/* replaces saveblePrimitiveTypes */
+	const savablePrimitiveTypes = ["TextArea","Rectangle","Ellipse","Line","Setting","Stock","Variable","Converter","Ghost","Flow","Link","Text","Numberbox","Table",/*"Diagram",*/"TimePlot","ComparePlot","XyPlot","HistoPlot"]
+	for(let type of savablePrimitiveTypes) {
+		let primitives = Engine.model.find((p: Primitive) => Engine.getNodeName(p) == type);
+		for(let p of primitives) {
 			try {
-				syncVisual(primitive_list[key]);
+				syncVisual(p)
 			} catch(exception) {
-				removePrimitive(primitive_list[key]);
-				alert("Error while loading corrupted primitive of type "+type+". Removing corrupted primitive to avoid propagated errors.");
+				// removePrimitive(p) // TODO add back
+				alert(`Error while loading corrupted primitive of type ${type}. Removing corrupted primitive to avoid propagated errors.`)
 				//~ alert("Error while loading corrupted primitive of type "+type+". Removing corrupted primitive to avoid propagated errors. \n\nError happened at: "+exception.stack);
 				throw exception;
 			}
 		}
 	}
-	update_all_objects();
-	unselect_all(); */
+	Update.all()
+	Selection.unselectAll()
 }
 
 // Take a primitive from the engine(tprimitve) and makes a visual object from it
 export function syncVisual(tprimitive: Primitive) { // TODO add
-	 /*let stochsd_object = get_object(tprimitive.id);
-	if (stochsd_object != false) {
+	let visual = get(tprimitive.id);
+	if (visual) {
 		return false;
 	}
 
-	addMissingPrimitiveAttributes(tprimitive);
+	// addMissingPrimitiveAttributes(tprimitive) // TODO add this function
 
-	let nodeType = tprimitive.value.nodeName;
+	// TODO fix rest of function
+	/* let nodeType = tprimitive.value.nodeName; 
 	switch(nodeType) {
 		case "Numberbox":
 		{
@@ -288,6 +294,6 @@ export function syncVisual(tprimitive: Primitive) { // TODO add
 				connection.update();
 			}
 		}
-		break;
+		break; 
 	}*/
 }

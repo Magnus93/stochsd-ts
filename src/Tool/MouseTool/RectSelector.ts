@@ -15,7 +15,7 @@ export class RectSelector {
   }
   static start() {
     Mouse.emptyClickDown = true;
-    VisualController.unselectAll();
+    VisualController.Selection.unselectAll();
     this.rect.setVisible(true);
     this.rect.x1 = Mouse.downPosition.x;
     this.rect.y1 = Mouse.downPosition.y;
@@ -28,7 +28,7 @@ export class RectSelector {
     this.rect.x2 = Mouse.downPosition.x;
     this.rect.y2 = Mouse.downPosition.y;
     this.rect.update();
-    VisualController.unselectAll();
+    VisualController.Selection.unselectAll();
     const selection = this.getVisualsWithin();
     for(let key in selection) {
       let parent = VisualController.getParent(selection[key]) as TwoPointer;

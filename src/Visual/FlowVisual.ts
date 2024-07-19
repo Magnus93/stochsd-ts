@@ -200,7 +200,7 @@ export class FlowVisual extends BaseConnection {
 		this.primitive.setAttribute("ValveIndex", this.valveIndex);
 		this.primitive.setAttribute("VariableSide", this.variableSide);
 
-    VisualController.updateRelevantVisuals([])
+    VisualController.Update.relevant([])
 	}
 
 	createMiddleAnchorPoint(x: number, y: number) {
@@ -218,12 +218,12 @@ export class FlowVisual extends BaseConnection {
 	setStartAttach(newStartAttach?: StockVisual) {
 		super.setStartAttach(newStartAttach);
 		// needs to update Links a few times to follow along
-		for (let i = 0; i < 4; i++) VisualController.updateTwoPointers([]);
+		for (let i = 0; i < 4; i++) VisualController.Update.relevantTwoPointers([]);
 	}
 
 	setEndAttach(newEndAttach?: StockVisual) {
 		super.setEndAttach(newEndAttach);
-		for (let i = 0; i < 4; i++) VisualController.updateTwoPointers([]);
+		for (let i = 0; i < 4; i++) VisualController.Update.relevantTwoPointers([]);
 	}
 
 	removeLastMiddleAnchorPoint() {

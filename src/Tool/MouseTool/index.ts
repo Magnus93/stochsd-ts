@@ -93,7 +93,7 @@ export class MouseTool extends BaseTool {
 			for (let key in move_objects) {
 				ids.push(move_objects[key].id);
 			}
-			VisualController.updateRelevantVisuals(ids);
+			VisualController.Update.relevant(ids);
 		}
 	}
 	static leftMouseUp(x: number, y: number) {

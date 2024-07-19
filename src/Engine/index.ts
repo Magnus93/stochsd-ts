@@ -72,7 +72,7 @@ export namespace Engine {
   	let links = model.findLinks()
     let outgoingLinks = links.filter((link: Link) => link.end ? (link.end as Primitive).id == endId : false)
   	// let outgoingLinks = links.filter((l) => (l.target) ? l.target.id == id : false);
-  	return outgoingLinks.map((link: Link) => link.start as Primitive | undefined).filter((prim): prim is Primitive => !!prim);
+  	return outgoingLinks.map((link: Link) => link.start as Primitive | undefined).filter((prim?: Primitive): prim is Primitive => !!prim);
   }
   export function getNodeName(primitive: Primitive): string {
     return primitive._node.value.nodeName

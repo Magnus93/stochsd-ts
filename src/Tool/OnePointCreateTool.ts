@@ -13,9 +13,9 @@ export class OnePointCreateTool extends BaseTool {
 		// This function should be overwritten
 	}
 	static leftMouseDown(x: number, y: number) {
-		VisualController.unselectAll()
+		VisualController.Selection.unselectAll()
 		this.create(x, y)
-    VisualController.updateRelevantVisuals([])
+    VisualController.Update.relevant([])
 		// InfoBar.update() // TODO
 	}
 	static leftMouseUp(x: number, y: number) {
@@ -24,7 +24,7 @@ export class OnePointCreateTool extends BaseTool {
 		}
 	}
 	static rightMouseDown(x: number, y: number) {
-		VisualController.unselectAll()
+		VisualController.Selection.unselectAll()
 		Box.setTool("mouse")
 		// InfoBar.update() // TODO
 	}
