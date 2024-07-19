@@ -1,9 +1,9 @@
-import { Engine, Primitive } from "./Engine/index.js";
-import { deletePrimitive } from "./utility";
-import { BaseConnection } from "./Visual/BaseConnection.js";
-import { BaseVisual } from "./Visual/BaseVisual";
-import { OnePointer } from "./Visual/OnePointer"
-import { TwoPointer } from "./Visual/TwoPointer"
+import { Engine, Primitive } from "../Engine/index.js";
+import { deletePrimitive } from "../utility.js";
+import { BaseConnection } from "../Visual/BaseConnection.js";
+import { BaseVisual } from "../Visual/BaseVisual.js";
+import { OnePointer } from "../Visual/OnePointer.js"
+import { TwoPointer } from "../Visual/TwoPointer.js"
 
 export class VisualController {
   /* replaces object_array */

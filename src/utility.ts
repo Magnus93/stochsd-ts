@@ -1,6 +1,6 @@
 import { Engine } from "./Engine/index.js"
 import { FunctionCategories } from "./FunctionCategories"
-import { VisualController } from "./VisualController"
+import { VisualController } from "./VisualController/index.js"
 
 export function hasRandomFunction(definition: string) {
   if (definition) {
