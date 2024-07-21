@@ -1,6 +1,6 @@
 import { Engine } from "./Engine/index.js"
 import { FunctionCategories } from "./FunctionCategories"
-import { VisualController } from "./Visual/Controller/index.js"
+import { Visual } from "./Visual"
 
 export function hasRandomFunction(definition: string) {
   if (definition) {
@@ -17,12 +17,12 @@ export function hasRandomFunction(definition: string) {
 }
 
 export function deletePrimitive(id: string) {
-  let primitive = Engine.findById(id)
+  let primitive = Engine.Primitives.findById(id)
 	
   primitive.delete()
 	
 	// Delete ghosts
-	let ghostIDs = Engine.findGhostsOfPrimitive(id)
+	let ghostIDs = Engine.Primitives.findGhostsOfPrimitive(id)
 	for(let i in ghostIDs) {
 		deletePrimitive(ghostIDs[i])
 	}
@@ -41,8 +41,8 @@ function cleanUnconnectedLinks() {
 }
 
 function detachFlows(id: string) {
-	for (let key in VisualController.twoPointers) {
-		let connection = VisualController.twoPointers[key]
+	for (let key in Visual.Controller.twoPointers) {
+		let connection = Visual.Controller.twoPointers[key]
 		if (connection.type == "flow") { // TODO connection instanceof FlowVisual
 			// if (connection.getStartAttach() && connection.getStartAttach().id == id) {
 			// 	connection.setStartAttach(null);

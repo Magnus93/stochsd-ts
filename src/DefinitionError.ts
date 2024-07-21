@@ -15,7 +15,7 @@ export namespace DefinitionError {
   export const messageTable: Record<number, (defErr: DefinitionError) => string> = {
     1: (defErr) => "Empty Definition",
     2: (defErr) => `Unknown reference ${defErr.detail?.["unknownRef"]}`,
-    3: (defErr) => `Unused link from [${Engine.getName(Engine.findById(defErr.detail?.["unusedId"]))}], or bracket pair [...] missing`,
+    3: (defErr) => `Unused link from [${Engine.Primitives.getName(Engine.Primitives.findById(defErr.detail?.["unusedId"]))}], or bracket pair [...] missing`,
     4: (defErr) => `No ingoing link`, // only for converter
     5: (defErr) => `More than one ingoing link`, // only for converter 
     6: (defErr) => `Unmatched ${defErr.detail?.["openBracket"]}`, // opening bracket unmatched
@@ -49,12 +49,12 @@ export namespace DefinitionError {
     },
     (prim: Primitive, defString: string) => {
       // check links  
-      let primType = Engine.getNodeName(prim)
-      let linkedIds = Engine.findLinkedIngoingPrimitives(prim.id).map(Engine.getId)
+      let primType = Engine.Primitives.getNodeName(prim)
+      let linkedIds = Engine.Primitives.findLinkedIngoingPrimitives(prim.id).map(Engine.Primitives.getId)
       if (primType === "Stock" || primType === "Variable" || primType === "Flow") {
         // 2. Unknown reference
         const definitionRefs = defString.match(/[^[]+(?=\])/g) ?? [];
-        let linkedRefs = linkedIds.map(id => Engine.getName(Engine.findById(id)))
+        let linkedRefs = linkedIds.map(id => Engine.Primitives.getName(Engine.Primitives.findById(id)))
         for (let ref of definitionRefs) {
           if (linkedRefs.includes(ref) === false) {
             return { id: 2, detail: {unknownRef: ref }};
@@ -79,7 +79,7 @@ export namespace DefinitionError {
       }
     },
     (prim: Primitive, defString: string) => {
-      if (Engine.getNodeName(prim) == "Converter") {
+      if (Engine.Primitives.getNodeName(prim) == "Converter") {
         let rows = defString.split(";").map(row => row.split(","));
         for (let i in rows) {
           let row = rows[i];
@@ -110,22 +110,22 @@ export namespace DefinitionError {
   ]
 
   export function check(prim: Primitive) {
-    if (!Engine.isGhost(prim)) {
+    if (!Engine.Primitives.isGhost(prim)) {
       for (let fn of checkFunctions) {
-        let defErr = fn(prim, Engine.getDefinition(prim) ?? "");
+        let defErr = fn(prim, Engine.Primitives.getDefinition(prim) ?? "");
         if (defErr) {
-          Engine.setAttribute(prim, "DefinitionError", JSON.stringify(defErr));
+          Engine.Primitives.setAttribute(prim, "DefinitionError", JSON.stringify(defErr));
           return true;
         }
       }
     }
-    Engine.setAttribute(prim, "DefinitionError", JSON.stringify({}));
+    Engine.Primitives.setAttribute(prim, "DefinitionError", JSON.stringify({}));
     return false
   }
 
   export function has(prim: Primitive) {
     try {
-      const defErr = JSON.parse(Engine.getAttribute(prim, "DefinitionError"));
+      const defErr = JSON.parse(Engine.Primitives.getAttribute(prim, "DefinitionError"));
       return is(defErr);
     } catch (err) {
       return false;
@@ -142,7 +142,7 @@ export namespace DefinitionError {
 
   /* replaces getAllPrims */
   export function getAllNonGhostsPrimitives() {
-    return Engine.allPrimitives().filter(p => has(p)).filter(v => !Engine.isGhost(v))
+    return Engine.Primitives.allPrimitives().filter(p => has(p)).filter(v => !Engine.Primitives.isGhost(v))
   }
 }
 

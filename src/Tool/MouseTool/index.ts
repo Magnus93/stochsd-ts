@@ -2,10 +2,8 @@ import { BaseTool } from "../BaseTool"
 import { Mouse } from "../../Mouse"
 import { do_global_log } from "../../debug"
 import { RectSelector } from "./RectSelector"
-import { VisualController } from "../../Visual/Controller"
-import { AnchorType } from "../../Visual/AnchorType"
+import { Visual } from "../../Visual"
 import { Box } from "../Box"
-import { BaseConnection } from "../../Visual/BaseConnection"
 
 export class MouseTool extends BaseTool {
 	static init() {
@@ -19,10 +17,10 @@ export class MouseTool extends BaseTool {
 			RectSelector.start();
 		}
 
-		let selectedAnchor = VisualController.getOnlySelectedAnchorId();
+		let selectedAnchor = Visual.Controller.getOnlySelectedAnchorId();
 		// Only one anchor is selected AND that that anchor has attaching capabilities 
-		const parent = selectedAnchor && VisualController.twoPointers[selectedAnchor.parent_id]
-		if (selectedAnchor && parent instanceof BaseConnection) {
+		const parent = selectedAnchor && Visual.Controller.twoPointers[selectedAnchor.parent_id]
+		if (selectedAnchor && parent instanceof Visual.BaseConnection) {
 			// Detach anchor 
 			// switch(VisualController.onePointers[selectedAnchor.child_id].getAnchorType()) { // TODO 
 			// 	case "start":
@@ -48,13 +46,13 @@ export class MouseTool extends BaseTool {
 		}
 		// We only come here if some object is being dragged
 		// Otherwise we will trigger empty_click_down
-		let only_selected_anchor = VisualController.getOnlySelectedAnchorId();
-		let only_selected_link = VisualController.getOnlyLinkSelected();
+		let only_selected_anchor = Visual.Controller.getOnlySelectedAnchorId();
+		let only_selected_link = Visual.Controller.getOnlyLinkSelected();
 		if (only_selected_anchor) {
 			// Use equivalent tool type
 			// 	RectangleVisual => RectangleTool
 			// 	LinkVisual => LinkTool
-			let parent = VisualController.twoPointers[only_selected_anchor["parent_id"] ?? ""];
+			let parent = Visual.Controller.twoPointers[only_selected_anchor["parent_id"] ?? ""];
 			let tool = Box.tools[parent.type];
 			tool.mouseMoveSingleAnchor(x, y, shiftKey, only_selected_anchor["child_id"]);
 			parent.update();
@@ -64,10 +62,10 @@ export class MouseTool extends BaseTool {
 			LinkTool.mouseRelativeMoveSingleAnchor(diffX, diffY, shiftKey, only_selected_link["parent_id"] ?? ""+".b1_anchor"); // TODO add LinkTool
 			LinkTool.mouseRelativeMoveSingleAnchor(diffX, diffY, shiftKey, only_selected_link["parent_id"] ?? ""+".b2_anchor"); // TODO add LinkTool
 			*/
-			let parent = VisualController.twoPointers[only_selected_link["parent_id"] ?? ""];
+			let parent = Visual.Controller.twoPointers[only_selected_link["parent_id"] ?? ""];
 			parent.update();
 		} else {
-			let move_array = VisualController.getSelected();
+			let move_array = Visual.Controller.getSelected();
 			this.defaultRelativeMove(move_array, diffX, diffY);
 		}
 	}
@@ -84,7 +82,7 @@ export class MouseTool extends BaseTool {
 
 			objectMoved = true;
 			// This code is not very optimised. If we want to optimise it we should just find the objects that needs to be updated recursivly
-			VisualController.relativeMove(key, diffX, diffY);
+			Visual.Controller.relativeMove(key, diffX, diffY);
 		}
 		if (objectMoved) {
 			// TwoPointer objects depent on OnePointer object (e.g. AnchorPoint, Stock, Auxiliary etc.)
@@ -93,15 +91,15 @@ export class MouseTool extends BaseTool {
 			for (let key in move_objects) {
 				ids.push(move_objects[key].id);
 			}
-			VisualController.Update.relevant(ids);
+			Visual.Controller.Update.relevant(ids);
 		}
 	}
 	static leftMouseUp(x: number, y: number) {
 		// Check if we selected only 1 anchor element and in that case detach it;
-		let selectedAnchor = VisualController.getOnlySelectedAnchorId();
+		let selectedAnchor = Visual.Controller.getOnlySelectedAnchorId();
 		if (selectedAnchor) {
-			const parent = VisualController.twoPointers[selectedAnchor.parent_id]
-			if (parent instanceof BaseConnection) {
+			const parent = Visual.Controller.twoPointers[selectedAnchor.parent_id]
+			if (parent instanceof Visual.BaseConnection) {
 				let tool = Box.tools[parent.getType()];
 				tool.mouseUpSingleAnchor(x, y, false, selectedAnchor.child_id);
 			}
@@ -114,7 +112,7 @@ export class MouseTool extends BaseTool {
 
 	}
 	static rightMouseDown(x: number, y: number) {
-		let only_selected_anchor = VisualController.getOnlySelectedAnchorId();
+		let only_selected_anchor = Visual.Controller.getOnlySelectedAnchorId();
 		// if (
 		// 	only_selected_anchor &&
 		// 	VisualController.twoPointers[only_selected_anchor["parent_id"]].getType() === "flow" &&

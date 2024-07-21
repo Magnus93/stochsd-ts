@@ -13,7 +13,7 @@ export class DisplayDialog extends jqDialog {
 	components: HTMLComponent[][] = [];
 	constructor(id: string) {
 		super();
-		this.primitive = Engine.findById(id)
+		this.primitive = Engine.Primitives.findById(id)
 		this.displayLimit = undefined;
 		this.components = [];
 	}
@@ -22,18 +22,18 @@ export class DisplayDialog extends jqDialog {
 	}
 	clearRemovedIds() {
 		for(let id of this.displayIdList) {
-			if (!Engine.findById(id)) {
+			if (!Engine.Primitives.findById(id)) {
 				this.setDisplayId(id,false);
 			}
 		}
 	}
 	getAcceptedPrimitiveList() {
 		return Engine.model.find(
-			(p: Primitive) => this.acceptedPrimitiveTypes.includes(Engine.getNodeName(p)) && this.acceptsId(p.id)
+			(p: Primitive) => this.acceptedPrimitiveTypes.includes(Engine.Primitives.getNodeName(p)) && this.acceptsId(p.id)
 		)
 	}
 	acceptsId(id: string) {
-		let type: string = Engine.getNodeName(Engine.findById(id))
+		let type: string = Engine.Primitives.getNodeName(Engine.Primitives.findById(id))
 		return (this.acceptedPrimitiveTypes.indexOf(type) != -1);
 	}
 	removeIdToDisplay(id: string) {

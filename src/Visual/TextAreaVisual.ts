@@ -11,7 +11,7 @@ export class TextAreaVisual extends HtmlTwoPointer {
 	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {		
 		super(id, type, pos0, pos1);
 		
-		this.primitive = Engine.findById(id);
+		this.primitive = Engine.Primitives.findById(id);
 		
 		// this.dialog = new TextAreaDialog(id); // TODO add TextAreaDialog
 		// this.dialog.subscribePool.subscribe(()=>{
@@ -68,8 +68,8 @@ export class TextAreaVisual extends HtmlTwoPointer {
 		this.dialog.show();
 	}
 	render() {
-		let newText = Engine.getName(this.primitive);
-		let hideFrame = this.primitive.getAttribute("HideFrame") === "true";
+		let newText = Engine.Primitives.getName(this.primitive!)
+		let hideFrame = Engine.Primitives.getAttribute(this.primitive!, "HideFrame") === "true";
 		if(hideFrame && removeSpacesAtEnd(newText).length !== 0) {
 			this.coordRect.element.setAttribute("visibility", "hidden");
 		} else {

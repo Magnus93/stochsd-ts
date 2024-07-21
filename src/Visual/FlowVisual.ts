@@ -4,7 +4,7 @@ import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { cos, distance, neswDirection, rotate, sin, translate } from "../transform";
 import { hasRandomFunction } from "../utility";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { AnchorPoint } from "./AnchorPoint";
 import { AnchorType } from "./AnchorType";
 import { BaseConnection } from "./BaseConnection";
@@ -70,7 +70,7 @@ export class FlowVisual extends BaseConnection {
 
 	requestNewAnchorDim(reqValue: number, anchorId: string, dimIndex: number) {
 		// reqValue is x or y 
-		let anchor = VisualController.onePointers[anchorId] as AnchorPoint
+		let anchor = Controller.onePointers[anchorId] as AnchorPoint
 		let anchorAttach: StockVisual | undefined
 		let newValue = reqValue;
 		if (anchor.getAnchorType() === "start") {
@@ -119,7 +119,7 @@ export class FlowVisual extends BaseConnection {
 
 	requestNewAnchorPos(newPosition: [number, number], anchorId: string) {
 		let [x, y] = newPosition;
-		let mainAnchor = VisualController.onePointers[anchorId];
+		let mainAnchor = Controller.onePointers[anchorId];
 
 		let prevAnchor = this.getPreviousAnchor(anchorId);
 		let nextAnchor = this.getNextAnchor(anchorId);
@@ -175,7 +175,7 @@ export class FlowVisual extends BaseConnection {
 			let y = pos[1];
 			middlePoints += `${x},${y} `;
 		}
-		Engine.setAttribute(this.primitive!, "MiddlePoints", middlePoints);
+		Engine.Primitives.setAttribute(this.primitive!, "MiddlePoints", middlePoints);
 	}
 
 	getLinkMountPos([xTarget, yTarget]: [number, number]): [number, number] {
@@ -197,10 +197,10 @@ export class FlowVisual extends BaseConnection {
 		}
 		this.variableSide = !this.variableSide;
 
-		Engine.setAttribute(this.primitive!, "ValveIndex", `${this.valveIndex}`);
-		Engine.setAttribute(this.primitive!, "VariableSide", `${this.variableSide}`);
+		Engine.Primitives.setAttribute(this.primitive!, "ValveIndex", `${this.valveIndex}`);
+		Engine.Primitives.setAttribute(this.primitive!, "VariableSide", `${this.variableSide}`);
 
-    VisualController.Update.relevant([])
+    Controller.Update.relevant([])
 	}
 
 	createMiddleAnchorPoint(x: number, y: number) {
@@ -218,12 +218,12 @@ export class FlowVisual extends BaseConnection {
 	setStartAttach(newStartAttach?: StockVisual) {
 		super.setStartAttach(newStartAttach);
 		// needs to update Links a few times to follow along
-		for (let i = 0; i < 4; i++) VisualController.Update.relevantTwoPointers([]);
+		for (let i = 0; i < 4; i++) Controller.Update.relevantTwoPointers([]);
 	}
 
 	setEndAttach(newEndAttach?: StockVisual) {
 		super.setEndAttach(newEndAttach);
-		for (let i = 0; i < 4; i++) VisualController.Update.relevantTwoPointers([]);
+		for (let i = 0; i < 4; i++) Controller.Update.relevantTwoPointers([]);
 	}
 
 	removeLastMiddleAnchorPoint() {
@@ -254,7 +254,7 @@ export class FlowVisual extends BaseConnection {
 	}
 
 	loadMiddlePoints() {
-		let middlePointsString = Engine.getAttribute(this.primitive!, "MiddlePoints");
+		let middlePointsString = Engine.Primitives.getAttribute(this.primitive!, "MiddlePoints");
 		if (! middlePointsString) {
 			return [];
 		}
@@ -323,7 +323,7 @@ export class FlowVisual extends BaseConnection {
 
 	setColor(color: string) {
 		this.color = color;
-		Engine.setAttribute(this.primitive!, "Color", this.color);
+		Engine.Primitives.setAttribute(this.primitive!, "Color", this.color);
 		this.startCloud.setAttribute("stroke", color);
 		this.endCloud.setAttribute("stroke", color);
 		this.outerPath.setAttribute("stroke", color);
@@ -427,7 +427,7 @@ export class FlowVisual extends BaseConnection {
 			} else {
 				this.icons.set("questionmark", "hidden");
 			}
-			this.icons.set("dice", !hasDefError && hasRandomFunction(Engine.getDefinition(this.primitive) ?? "") ? "visible" : "hidden");
+			this.icons.set("dice", !hasDefError && hasRandomFunction(Engine.Primitives.getDefinition(this.primitive) ?? "") ? "visible" : "hidden");
 		}
 	}
 	
@@ -481,14 +481,14 @@ export class FlowVisual extends BaseConnection {
 
 /* replaces delete_connection */
 function deleteConnection(key: string) {
-	if (!(key in VisualController.twoPointers)) {
+	if (!(key in Controller.twoPointers)) {
 		return;
 	}
-	let startAnchor = VisualController.twoPointers[key].startAnchor;
-	let endAnchor = VisualController.twoPointers[key].endAnchor;
-	let auxiliary = (VisualController.twoPointers[key] as any).auxiliary; // TODO should this be removed?
-	VisualController.twoPointers[key].group?.remove();
-	delete VisualController.twoPointers[key];
+	let startAnchor = Controller.twoPointers[key].startAnchor;
+	let endAnchor = Controller.twoPointers[key].endAnchor;
+	let auxiliary = (Controller.twoPointers[key] as any).auxiliary; // TODO should this be removed?
+	Controller.twoPointers[key].group?.remove();
+	delete Controller.twoPointers[key];
 	
 	// Must be done last otherwise the anchors will respawn	
 	deleteOnePointer(startAnchor.id);
@@ -497,7 +497,7 @@ function deleteConnection(key: string) {
 }
 /* replaces delete_object */
 function deleteOnePointer(nodeId: string) {
-	let visualsToDelete = VisualController.onePointers[nodeId];
+	let visualsToDelete = Controller.onePointers[nodeId];
 	
 	// Delete all references to the object in the connections
 	if ("parent_id" in visualsToDelete) {
@@ -511,5 +511,5 @@ function deleteOnePointer(nodeId: string) {
 		visualsToDelete.elements[key].remove();
 	}
 	visualsToDelete.group?.remove();
-	delete VisualController.onePointers[nodeId];
+	delete Controller.onePointers[nodeId];
 }

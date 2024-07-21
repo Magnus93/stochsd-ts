@@ -6,7 +6,7 @@ import { Mouse } from './Mouse';
 import { Menu } from "./Menu"
 import { Env } from './Environment';
 import { Components } from "./components";
-import { VisualController } from "./Visual/Controller";
+import { Visual } from "./Visual"
 
 $(window).on("load", () => {
 	Components.init()
@@ -15,6 +15,7 @@ $(window).on("load", () => {
 	SVG.init()
 	Mouse.init()
 	Tool.init()
+	Visual.Controller.Sync.allVisuals()
 
 	// TODO remove openLink, and add special code in the environments that need it.
   $("a").on("click", (e: JQuery.ClickEvent) => { 

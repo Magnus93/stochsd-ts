@@ -39,13 +39,13 @@ export class LineVisual extends TwoPointer {
 		this.dialog.show();
 	}
 	updateGraphics() {
-		this.line.setAttribute("stroke-width", Engine.getAttribute(this.primitive!, "StrokeWidth"));
-		this.line.setAttribute("stroke-dasharray", Engine.getAttribute(this.primitive!, "StrokeDashArray"));
+		this.line.setAttribute("stroke-width", Engine.Primitives.getAttribute(this.primitive!, "StrokeWidth"));
+		this.line.setAttribute("stroke-dasharray", Engine.Primitives.getAttribute(this.primitive!, "StrokeDashArray"));
 
 		let lineStartPos = [this.startX, this.startY];
 		let lineEndPos = [this.endX, this.endY];
-		let arrowHeadStart = Engine.getAttribute(this.primitive!, "ArrowHeadStart") === "true";
-		let arrowHeadEnd = Engine.getAttribute(this.primitive!, "ArrowHeadEnd") === "true";
+		let arrowHeadStart = Engine.Primitives.getAttribute(this.primitive!, "ArrowHeadStart") === "true";
+		let arrowHeadEnd = Engine.Primitives.getAttribute(this.primitive!, "ArrowHeadEnd") === "true";
 		this.arrowHeadStart.setAttribute("visibility", arrowHeadStart ? "visible" : "hidden");
 		this.arrowHeadEnd.setAttribute("visibility", arrowHeadEnd ? "visible" : "hidden");
 		if (arrowHeadStart || arrowHeadEnd) {

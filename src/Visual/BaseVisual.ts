@@ -2,7 +2,7 @@ import { defaultStroke } from "./default";
 import { SVG } from "../SVG";
 import { DefinitionError } from "../DefinitionError";
 import { do_global_log, errorPopUp } from "../debug";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { Engine, Primitive } from "../Engine";
 
 export class BaseVisual {
@@ -21,7 +21,7 @@ export class BaseVisual {
 		this.color = defaultStroke;
 		// Warning: this.primitive can be null, since all DIM objects does not have a IM object such as anchors and flow_auxiliarys
 		// We should therefor check if this.primitive is null, in case we dont know which class we are dealing with
-		this.primitive = Engine.findById(this.id); // TODO 
+		this.primitive = Engine.Primitives.findById(this.id); // TODO 
 		
 		this.elements = [];
 		this.selectorElements = [];
@@ -43,7 +43,7 @@ export class BaseVisual {
 		}
 		if (this.primitive) {
 			// AnchorPoint has no primitive
-			Engine.setAttribute(this.primitive, "Color", this.color);
+			Engine.Primitives.setAttribute(this.primitive, "Color", this.color);
 		}
 	}
 
@@ -125,7 +125,7 @@ export class BaseVisual {
 		//~ alert("name pos for "+this.id+" "+getStackTrace());
 		//~ do_global_log("updating name pos to "+value);
 		this.#namePositionIndex = Number(value);
-		this.primitive && Engine.setAttribute(this.primitive, "RotateName", value.toString());
+		this.primitive && Engine.Primitives.setAttribute(this.primitive, "RotateName", value.toString());
 	}
 	getType() {
 		return this.type;
@@ -136,7 +136,7 @@ export class BaseVisual {
 			errorPopUp("You must rename a ghost by renaming the original.");
 			return;
 		}
-		let id = VisualController.getParentId(this.id)
+		let id = Controller.getParentId(this.id)
 		// definitionEditor.open(id, ".name-field"); // TODO implement definition editor
 		// event.stopPropagation(); // TODO is this needed?
 	}

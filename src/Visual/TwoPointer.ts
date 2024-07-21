@@ -1,7 +1,7 @@
 import { AnchorType } from "./AnchorType"
 import { DisplayDialog } from "../components/Dialog/DisplayDialog"
 import { Engine, Flow, Link } from "../Engine"
-import { VisualController } from "./Controller"
+import { Controller } from "./Controller"
 import { BaseVisual } from "./BaseVisual"
 import { AnchorPoint } from "./AnchorPoint"
 
@@ -14,7 +14,7 @@ export class TwoPointer extends BaseVisual {
 		this.id = id;
 		this.type = type;
 		this.selected = false;
-		VisualController.twoPointers[this.id] = this;
+		Controller.twoPointers[this.id] = this;
 
 		// anchors must exist before make graphics 
 		this.createInitialAnchors(pos0, pos1);
@@ -90,14 +90,14 @@ export class TwoPointer extends BaseVisual {
 	}
 	syncAnchorToPrimitive(anchorType: AnchorType) {
 		// This function should sync anchor position to primitive 
-		let primitive = Engine.findById(this.id) as Flow | Link
+		let primitive = Engine.Primitives.findById(this.id) as Flow | Link
 		if (!primitive) return;
 		switch(anchorType) {
 			case "start":
-				Engine.setStartPosition(primitive, this.startAnchor.getPos())
+				Engine.Primitives.setStartPosition(primitive, this.startAnchor.getPos())
 			break;
 			case "end":
-				Engine.setEndPosition(primitive, this.endAnchor.getPos())
+				Engine.Primitives.setEndPosition(primitive, this.endAnchor.getPos())
 			break;
 		}
 	}

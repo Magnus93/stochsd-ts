@@ -15,7 +15,7 @@ export class ConverterVisual extends ValuedOnePointer {
 			SVG.path("M-20 0  L-10 -15  L10 -15  L20 0  L10 15  L-10 15  Z", this.color, defaultFill, "element"),
 			SVG.path("M-20 0  L-10 -15  L10 -15  L20 0  L10 15  L-10 15  Z", "none", this.color, "highlight", {"transform": "scale(0.87)"}),
 			SVG.icons(defaultStroke, defaultFill, "icons"),
-			SVG.text(0,0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
+			SVG.text(0,0, Engine.Primitives.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
 		];
 	}
 
@@ -44,9 +44,9 @@ export class ConverterVisual extends ValuedOnePointer {
 		return [xEdge, yEdge];
 	}
 	attachEvent() {
-		let linkedPrimitives = Engine.getLinkedPrimitives(this.primitive!);
+		let linkedPrimitives = Engine.Primitives.getLinkedPrimitives(this.primitive!);
 		if (linkedPrimitives.length > 0) {
-			Engine.setAttribute(this.primitive!, "Source", linkedPrimitives[0].id);
+			Engine.Primitives.setAttribute(this.primitive!, "Source", linkedPrimitives[0].id);
 		}
 	}
 	nameDoubleClick() {

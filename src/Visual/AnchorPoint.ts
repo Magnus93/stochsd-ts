@@ -1,5 +1,5 @@
 import { SVG } from "../SVG";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { AnchorType } from "./AnchorType";
 import { BaseConnection } from "./BaseConnection";
 import { OnePointer } from "./OnePointer";
@@ -12,7 +12,7 @@ export class AnchorPoint extends OnePointer {
 		this.isSquare = false;
 	}
 	isAttached() {
-		let parent = VisualController.getParent(this);
+		let parent = Controller.getParent(this);
 		if (!(parent instanceof BaseConnection)) {
 			return;
 		}
@@ -60,7 +60,7 @@ export class AnchorPoint extends OnePointer {
 	}
 	updatePosition() {
 		this.update();
-		let parent = VisualController.getParent(this)
+		let parent = Controller.getParent(this)
 		if (parent instanceof BaseConnection) {
 			parent.syncAnchorToPrimitive(this.anchorType)
 		}
@@ -90,8 +90,8 @@ export class AnchorPoint extends OnePointer {
 	afterMove(diffX: number, diffY: number) {
 		// This is an attempt to make bezier points move with the anchors points but id does not work well with undo
 		// commented out until fixed
-		let parentId = VisualController.getParentId(this.id);
-		let parent = VisualController.get(parentId) as BaseConnection
+		let parentId = Controller.getParentId(this.id);
+		let parent = Controller.get(parentId) as BaseConnection
 
 		// if (parent instanceof LinkVisual) { // TODO add LinkVisual
 		// 	switch (this.anchorType) {

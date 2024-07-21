@@ -1,6 +1,5 @@
 import { Engine, Flow, Link } from "../Engine/index.js";
 import { BaseVisual } from "./BaseVisual";
-import { StockVisual } from "./StockVisual.js";
 import { TwoPointer } from "./TwoPointer";
 
 export class BaseConnection extends TwoPointer {
@@ -8,9 +7,9 @@ export class BaseConnection extends TwoPointer {
   constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
     super(id, type, pos0, pos1);
     this.positionUpdateHandler = () => { 
-      const primitive = Engine.findById(this.id) as Flow | Link
-      const sourcePoint = Engine.getStartPosition(primitive)
-      const targetPoint = Engine.getEndPosition(primitive)
+      const primitive = Engine.Primitives.findById(this.id) as Flow | Link
+      const sourcePoint = Engine.Primitives.getStartPosition(primitive)
+      const targetPoint = Engine.Primitives.getEndPosition(primitive)
       this.startAnchor.setPosition(sourcePoint);
       this.endAnchor.setPosition(targetPoint);
       alert("Position got updated");
@@ -38,7 +37,7 @@ export class BaseConnection extends TwoPointer {
 
     let sourcePrimitive = null;
     if (this._startAttach != null) {
-      sourcePrimitive = Engine.findById(this._startAttach.id)
+      sourcePrimitive = Engine.Primitives.findById(this._startAttach.id)
     }
     (this.primitive as Flow | Link).start = sourcePrimitive
 
@@ -61,7 +60,7 @@ export class BaseConnection extends TwoPointer {
     this._endAttach = newEndAttach;
     let targetPrimitive = null;
     if (this._endAttach != null) {
-      targetPrimitive = Engine.findById(this._endAttach.id);
+      targetPrimitive = Engine.Primitives.findById(this._endAttach.id);
     }
     (this.primitive as Flow | Link).end = targetPrimitive
 

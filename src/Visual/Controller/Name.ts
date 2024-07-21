@@ -66,7 +66,7 @@ export namespace Name {
     do {
       counter++;
       testName = basename+counter.toString();
-    } while(Engine.model.find((p: Primitive) => Engine.getName(p) == testName).length > 0)
+    } while(Engine.model.find((p: Primitive) => Engine.Primitives.getName(p) == testName).length > 0)
     return testName;
   }
 }

@@ -6,7 +6,7 @@ import { AnchorType } from "./AnchorType";
 import { BaseConnection } from "./BaseConnection";
 import { BaseVisual } from "./BaseVisual";
 import { ConstantVisual } from "./ConstantVisual";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { ConverterVisual } from "./ConverterVisual";
 import { FlowVisual } from "./FlowVisual";
 import { StockVisual } from "./StockVisual";
@@ -70,10 +70,10 @@ export class LinkVisual extends BaseConnection {
   // Return true if parent has any selected children
   private hasSelectedChildren(parentId: string) {
     // Make sure we actually work on parent element
-    parentId = VisualController.getParentId(parentId);
+    parentId = Controller.getParentId(parentId);
 
     // Find the children
-    let children = VisualController.getChildren(parentId);
+    let children = Controller.getChildren(parentId);
     for (let id in children) {
       if (children[id].isSelected()) {
         return true;
@@ -86,9 +86,9 @@ export class LinkVisual extends BaseConnection {
     if (this.hasSelectedChildren(this.id)) {
 
     } else {
-      let children = VisualController.getChildren(this.id);
+      let children = Controller.getChildren(this.id);
       for (let id in children) {
-        let visual = VisualController.get(id);
+        let visual = Controller.get(id);
         if (visual instanceof AnchorPoint) {
           visual.setVisible(false);
         }
@@ -101,9 +101,9 @@ export class LinkVisual extends BaseConnection {
     }
   }
   select(selectChildren = true) {
-    let children = VisualController.getChildren(this.id)
+    let children = Controller.getChildren(this.id)
     for (let id in children) {
-      let visual = VisualController.get(id)
+      let visual = Controller.get(id)
       if (visual instanceof AnchorPoint) {
         visual.setVisible(true);
       }
@@ -142,9 +142,9 @@ export class LinkVisual extends BaseConnection {
   isAcceptableEndAttach(attachVisual: BaseVisual): boolean {
     let okAttachTypes = ["stock", "variable", "converter", "flow"];
     if (attachVisual.getType() === "converter") {
-      let linkedPrims = Engine.getLinkedPrimitives(Engine.findById(attachVisual.id)).filter((prim: Primitive) => {
+      let linkedPrims = Engine.Primitives.getLinkedPrimitives(Engine.Primitives.findById(attachVisual.id)).filter((prim: Primitive) => {
         // filter out linked primitives that have the same source as this link.
-        let source = (Engine.findById(this.id) as any).start as Primitive | undefined;
+        let source = (Engine.Primitives.findById(this.id) as any).start as Primitive | undefined;
         if (source) {
           return prim.id !== source.id
         }
@@ -194,7 +194,7 @@ export class LinkVisual extends BaseConnection {
 
   setColor(color: string) {
     this.color = color;
-    Engine.setAttribute(this.primitive!, "Color", this.color);
+    Engine.Primitives.setAttribute(this.primitive!, "Color", this.color);
     this.curve.setAttribute("stroke", color);
     this.arrowPath.setAttribute("stroke", color);
     this.startAnchor.setColor(color);
@@ -299,8 +299,8 @@ export class LinkVisual extends BaseConnection {
           this.b1Line.setAttribute("x2", `${b1pos}`[0]);
           this.b1Line.setAttribute("y2", `${b1pos}`[1]);
 
-          Engine.setAttribute(this.primitive!, "b1x", `${b1pos}`[0]);
-          Engine.setAttribute(this.primitive!, "b1y", `${b1pos}`[1]);
+          Engine.Primitives.setAttribute(this.primitive!, "b1x", `${b1pos}`[0]);
+          Engine.Primitives.setAttribute(this.primitive!, "b1y", `${b1pos}`[1]);
         }
         break;
       case "bezier2":
@@ -312,8 +312,8 @@ export class LinkVisual extends BaseConnection {
           this.b2Line.setAttribute("x2", `${b2pos}`[0]);
           this.b2Line.setAttribute("y2", `${b2pos}`[1]);
 
-          Engine.setAttribute(this.primitive!, "b2x", `${b2pos}`[0]);
-          Engine.setAttribute(this.primitive!, "b2y", `${b2pos}`[1]);
+          Engine.Primitives.setAttribute(this.primitive!, "b2x", `${b2pos}`[0]);
+          Engine.Primitives.setAttribute(this.primitive!, "b2y", `${b2pos}`[1]);
         }
         break;
     }

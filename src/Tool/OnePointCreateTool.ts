@@ -1,6 +1,6 @@
 import { BaseTool } from "./BaseTool"
 import { mouseWhichEnum } from "../Mouse"
-import { VisualController } from "../Visual/Controller"
+import { Visual } from "../Visual"
 import { Box } from "./Box"
 
 export class OnePointCreateTool extends BaseTool {
@@ -13,9 +13,9 @@ export class OnePointCreateTool extends BaseTool {
 		// This function should be overwritten
 	}
 	static leftMouseDown(x: number, y: number) {
-		VisualController.Selection.unselectAll()
+		Visual.Controller.Selection.unselectAll()
 		this.create(x, y)
-    VisualController.Update.relevant([])
+    Visual.Controller.Update.relevant([])
 		// InfoBar.update() // TODO
 	}
 	static leftMouseUp(x: number, y: number) {
@@ -24,7 +24,7 @@ export class OnePointCreateTool extends BaseTool {
 		}
 	}
 	static rightMouseDown(x: number, y: number) {
-		VisualController.Selection.unselectAll()
+		Visual.Controller.Selection.unselectAll()
 		Box.setTool("mouse")
 		// InfoBar.update() // TODO
 	}

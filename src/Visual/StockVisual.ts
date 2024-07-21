@@ -2,7 +2,7 @@ import { Engine } from "../Engine";
 import { Maths } from "../Maths";
 import { SVG } from "../SVG";
 import { neg, translate } from "../transform";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { defaultFill, defaultStroke } from "./default";
 import { ValuedOnePointer } from "./ValuedOnePointer";
 
@@ -31,7 +31,7 @@ export class StockVisual extends ValuedOnePointer {
 	setPosition(position: [number, number]) {
 		let diff = translate(neg(this.position), position);
 		super.setPosition(position);
-		let startConnections = VisualController.findStartConnections(this);
+		let startConnections = Controller.findStartConnections(this);
 		for(let conn of startConnections) {
 			// if (conn instanceof FlowVisual && conn.isSelected() === false) { // TODO add FlowVisual
 				// let oldConnPos = conn.startAnchor.getPos()
@@ -39,7 +39,7 @@ export class StockVisual extends ValuedOnePointer {
 				// conn.requestNewAnchorPos(newConnPos, conn.startAnchor.id)
 			// }
 		}
-		let endConnections = VisualController.findEndConnections(this)
+		let endConnections = Controller.findEndConnections(this)
 		for(let conn of endConnections) {
 			// if (conn instanceof FlowVisual && conn.isSelected() === false) { // TODO add FlowVisual
 				// let oldAnchorPos = conn.endAnchor.getPos()
@@ -98,7 +98,7 @@ export class StockVisual extends ValuedOnePointer {
 
 	getImage(): Element[] {
 		// let textElem = svg_text(0, 39, "stock", "name_element");
-		let textElem = SVG.text(0, 39, Engine.getAttribute(this.primitive!, "name"), "name_element");
+		let textElem = SVG.text(0, 39, Engine.Primitives.getAttribute(this.primitive!, "name"), "name_element");
 		textElem.setAttribute("fill", this.color);
 		let size = this.getSize();
 		let w = size[0];

@@ -31,7 +31,7 @@ export class VariableVisual extends ValuedOnePointer {
 	getImage (): Element[] {
 		return [
 			SVG.circle(0,0,this.getRadius(), this.color, defaultFill, "element"),
-			SVG.text(0,0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
+			SVG.text(0,0, Engine.Primitives.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
 			SVG.circle(0,0,this.getRadius()-2, "none", this.color, "highlight"),
 			SVG.icons(defaultStroke, defaultFill, "icons")
 		];

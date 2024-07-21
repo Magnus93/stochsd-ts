@@ -3,7 +3,7 @@ import { DefinitionError } from "../DefinitionError";
 import { Engine } from "../Engine";
 import { SVG } from "../SVG";
 import { hasRandomFunction } from "../utility";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { BaseVisual } from "./BaseVisual";
 
 
@@ -13,7 +13,7 @@ export class OnePointer extends BaseVisual {
   changeAttributeHandler: (attr: string, value: string) => void // TODO remove?
 	constructor(public id: string, public type: string, public position: [number, number], extras?: { isGhost?: true }) {
 		super(id, type, position);
-		VisualController.onePointers[id] = this;
+		Controller.onePointers[id] = this;
 		this.elements = [];
 		this.selectorElements = [];
 		this.group;
@@ -132,11 +132,11 @@ export class OnePointer extends BaseVisual {
 	update() {
 		this.group!.setAttribute("transform", "translate("+this.position[0]+","+this.position[1]+")");
 		
-		let prim = this.isGhost ? Engine.findById(Engine.getAttribute(this.primitive!, "Source")) : this.primitive
+		let prim = this.isGhost ? Engine.Primitives.findById(Engine.Primitives.getAttribute(this.primitive!, "Source")) : this.primitive
 		if (this.icons && prim) {
 			const hasDefError = DefinitionError.has(prim);
 			this.icons.set("questionmark", hasDefError ? "visible" : "hidden");
-			this.icons.set("dice", ( ! hasDefError && hasRandomFunction(Engine.getDefinition(prim) ?? "")) ? "visible" : "hidden");
+			this.icons.set("dice", ( ! hasDefError && hasRandomFunction(Engine.Primitives.getDefinition(prim) ?? "")) ? "visible" : "hidden");
 		}
 
 		if ( ! this.isGhost) {
@@ -144,10 +144,10 @@ export class OnePointer extends BaseVisual {
 		}
 	}
 	updateGhosts() {
-		let ghostIds = Engine.findGhostsOfPrimitive(this.id);
+		let ghostIds = Engine.Primitives.findGhostsOfPrimitive(this.id);
 		ghostIds.map(gId => { 
-			if (VisualController.onePointers[gId]) {
-				VisualController.onePointers[gId].update(); 
+			if (Controller.onePointers[gId]) {
+				Controller.onePointers[gId].update(); 
 			}
 		});
 	}

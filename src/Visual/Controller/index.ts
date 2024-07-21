@@ -6,7 +6,7 @@ import { Update as VisualUpdate } from "./Update"
 import { Selection as VisualSelection } from "./Selection"
 import { Sync as VisualSync } from "./Sync";
 
-export namespace VisualController {
+export namespace Controller {
   /* replaces object_array */
   export const onePointers = visual.onePointers
   /* replaces connection_array */
@@ -33,7 +33,7 @@ export namespace VisualController {
   
   /* replaces rel_move */
   export function relativeMove(node_id: string ,diff_x: number, diff_y: number) {
-    let primitive = Engine.findById(node_id);
+    let primitive = Engine.Primitives.findById(node_id);
     /* if (primitive != null) {
       // If its a real primitive (stoch, variable etc) update it in the engine
       let oldPos = getCenterPosition(primitive); // TODO fix from insightmaker API

@@ -25,7 +25,7 @@ export namespace Sync {
 		/* replaces saveblePrimitiveTypes */
 		const savablePrimitiveTypes = ["TextArea", "Rectangle", "Ellipse", "Line", "Setting", "Stock", "Variable", "Converter", "Ghost", "Flow", "Link", "Text", "Numberbox", "Table",/*"Diagram",*/"TimePlot", "ComparePlot", "XyPlot", "HistoPlot"]
 		for (let type of savablePrimitiveTypes) {
-			let primitives = Engine.model.find((p: Primitive) => Engine.getNodeName(p) == type);
+			let primitives = Engine.model.find((p: Primitive) => Engine.Primitives.getNodeName(p) == type);
 			for (let p of primitives) {
 				try {
 					singleVisual(p)
@@ -52,13 +52,13 @@ export namespace Sync {
 		// addMissingPrimitiveAttributes(tprimitive) // TODO add this function
 
 		// TODO fix rest of function
-		let nodeType = Engine.getNodeName(primitive)
+		let nodeType = Engine.Primitives.getNodeName(primitive)
 		switch (nodeType) {
 			case "Numberbox":
 				{
-					let position = Engine.getCenterPosition(primitive);
+					let position = Engine.Primitives.getCenterPosition(primitive);
 					let visualObject = new NumberboxVisual(primitive.id, "numberbox", position);
-					visualObject.setColor(Engine.getAttribute(primitive, "Color"));
+					visualObject.setColor(Engine.Primitives.getAttribute(primitive, "Color"));
 					visualObject.render();
 				}
 				break;
@@ -149,65 +149,65 @@ export namespace Sync {
 							dimClass = EllipseVisual;
 							break;
 					}
-					let sourcePosition = Engine.getStartPosition(primitive as any) // TODO add Primitives somehow
-					let targetPosition = Engine.getEndPosition(primitive as any) // TODO add Primitives somehow
+					let sourcePosition = Engine.Primitives.getStartPosition(primitive as any) // TODO add Primitives somehow
+					let targetPosition = Engine.Primitives.getEndPosition(primitive as any) // TODO add Primitives somehow
 
 					let connection = new dimClass(primitive.id, nodeType.toLowerCase(), sourcePosition, targetPosition);
 
-					connection.setColor(Engine.getAttribute(primitive, "Color"));
+					connection.setColor(Engine.Primitives.getAttribute(primitive, "Color"));
 
 					connection.update();
 				}
 				break;
 			case "TextArea":
 				{
-					let source_pos = Engine.getStartPosition(primitive as any) // TODO fix
-					let target_pos = Engine.getEndPosition(primitive as any) // TODO fix
+					let source_pos = Engine.Primitives.getStartPosition(primitive as any) // TODO fix
+					let target_pos = Engine.Primitives.getEndPosition(primitive as any) // TODO fix
 
 					let connection = new TextAreaVisual(primitive.id, "text", source_pos, target_pos);
 
-					connection.setColor(Engine.getAttribute(primitive, "Color"));
+					connection.setColor(Engine.Primitives.getAttribute(primitive, "Color"));
 
 					connection.update();
 				}
 				break;
 			case "Stock":
 				{
-					let position = Engine.getCenterPosition(primitive);
+					let position = Engine.Primitives.getCenterPosition(primitive);
 					let visual = new StockVisual(primitive.id, "stock", position)
-					Name.set(primitive.id, Engine.getAttribute(primitive, "name"))
+					Name.set(primitive.id, Engine.Primitives.getAttribute(primitive, "name"))
 
-					visual.setColor(Engine.getAttribute(primitive, "Color"))
+					visual.setColor(Engine.Primitives.getAttribute(primitive, "Color"))
 
-					visual.namePositionIndex = Number(Engine.getAttribute(primitive, "RotateName"))
+					visual.namePositionIndex = Number(Engine.Primitives.getAttribute(primitive, "RotateName"))
 					Name.updatePosition(primitive.id)
 				}
 				break;
 			case "Converter":
 				{
-					let position = Engine.getCenterPosition(primitive)
+					let position = Engine.Primitives.getCenterPosition(primitive)
 					let visualObject = new ConverterVisual(primitive.id, "converter", position)
-					Name.set(primitive.id, Engine.getAttribute(primitive, "name"))
+					Name.set(primitive.id, Engine.Primitives.getAttribute(primitive, "name"))
 
-					visualObject.setColor(Engine.getAttribute(primitive, "Color"))
+					visualObject.setColor(Engine.Primitives.getAttribute(primitive, "Color"))
 
-					visualObject.namePositionIndex = Number(Engine.getAttribute(primitive, "RotateName"))
+					visualObject.namePositionIndex = Number(Engine.Primitives.getAttribute(primitive, "RotateName"))
 					Name.updatePosition(primitive.id)
 				}
 				break;
 			case "Ghost":
 				{
-					let sourcePrimitive = Engine.findById(Engine.getAttribute(primitive, "Source"))
-					let sourceType = Engine.getNodeName(sourcePrimitive)
+					let sourcePrimitive = Engine.Primitives.findById(Engine.Primitives.getAttribute(primitive, "Source"))
+					let sourceType = Engine.Primitives.getNodeName(sourcePrimitive)
 					//~ do_global_log("id is "+tprimitive.id);
-					let position = Engine.getCenterPosition(primitive);
+					let position = Engine.Primitives.getCenterPosition(primitive);
 					let visual = null;
 					switch (sourceType) {
 						case "Converter":
 							visual = new ConverterVisual(primitive.id, "converter", position, { isGhost: true })
 							break;
 						case "Variable":
-							if (Engine.getAttribute(sourcePrimitive, "isConstant") == "true") {
+							if (Engine.Primitives.getAttribute(sourcePrimitive, "isConstant") == "true") {
 								visual = new ConstantVisual(primitive.id, "variable", position, { isGhost: true })
 							} else {
 								visual = new VariableVisual(primitive.id, "variable", position, { isGhost: true })
@@ -217,70 +217,70 @@ export namespace Sync {
 							visual = new StockVisual(primitive.id, "stock", position, { isGhost: true });
 							break;
 					}
-					Name.set(primitive.id, Engine.getAttribute(primitive, "name"))
+					Name.set(primitive.id, Engine.Primitives.getAttribute(primitive, "name"))
 
-					visual!.setColor(Engine.getAttribute(primitive, "Color"))
+					visual!.setColor(Engine.Primitives.getAttribute(primitive, "Color"))
 
-					visual!.namePositionIndex = Number(Engine.getAttribute(primitive, "RotateName"))
+					visual!.namePositionIndex = Number(Engine.Primitives.getAttribute(primitive, "RotateName"))
 					Name.updatePosition(primitive.id)
 				}
 				break;
 			case "Variable":
 				{
 					//~ do_global_log("VARIABLE id is "+tprimitive.id);
-					let position = Engine.getCenterPosition(primitive);
+					let position = Engine.Primitives.getCenterPosition(primitive);
 					let visual;
-					if (Engine.getAttribute(primitive, "isConstant") == "false") {
+					if (Engine.Primitives.getAttribute(primitive, "isConstant") == "false") {
 						visual = new VariableVisual(primitive.id, "variable", position);
 					} else {
 						visual = new ConstantVisual(primitive.id, "constant", position);
 					}
-					Name.set(primitive.id, Engine.getAttribute(primitive, "name"));
+					Name.set(primitive.id, Engine.Primitives.getAttribute(primitive, "name"));
 
-					visual.setColor(Engine.getAttribute(primitive, "Color"));
+					visual.setColor(Engine.Primitives.getAttribute(primitive, "Color"));
 
-					visual.namePositionIndex = Number(Engine.getAttribute(primitive, "RotateName"));
+					visual.namePositionIndex = Number(Engine.Primitives.getAttribute(primitive, "RotateName"));
 					Name.updatePosition(primitive.id);
 				}
 				break;
 			case "Flow":
 
-				let source_pos = Engine.getStartPosition(primitive as Flow)
-				let target_pos = Engine.getEndPosition(primitive as Flow)
+				let source_pos = Engine.Primitives.getStartPosition(primitive as Flow)
+				let target_pos = Engine.Primitives.getEndPosition(primitive as Flow)
 
 				let connection = new FlowVisual(primitive.id, "flow", source_pos, target_pos)
 
-				connection.namePositionIndex = Number(Engine.getAttribute(primitive, "RotateName"))
+				connection.namePositionIndex = Number(Engine.Primitives.getAttribute(primitive, "RotateName"))
 				Name.updatePosition(primitive.id);
 
 				connection.loadMiddlePoints();
 
-				connection.setColor(Engine.getAttribute(primitive, "Color"));
-				connection.valveIndex = parseInt(Engine.getAttribute(primitive, "ValveIndex"));
-				connection.variableSide = (Engine.getAttribute(primitive, "VariableSide") === "true");
+				connection.setColor(Engine.Primitives.getAttribute(primitive, "Color"));
+				connection.valveIndex = parseInt(Engine.Primitives.getAttribute(primitive, "ValveIndex"));
+				connection.variableSide = (Engine.Primitives.getAttribute(primitive, "VariableSide") === "true");
 
 				if ((primitive as Flow).start != null) {
 					// Attach to object
-					const stockId = Engine.getAttribute((primitive as Flow).start as Primitive, "id")
+					const stockId = Engine.Primitives.getAttribute((primitive as Flow).start as Primitive, "id")
 					connection.setStartAttach(get(stockId) as StockVisual)
 				}
 				if ((primitive as Flow).end != null) {
 					// Attach to object
-					const stockId = Engine.getAttribute((primitive as Flow).end as Primitive, "id")
+					const stockId = Engine.Primitives.getAttribute((primitive as Flow).end as Primitive, "id")
 					connection.setEndAttach(get(stockId) as StockVisual)
 				}
 				connection.update()
 
-				Name.set(primitive.id, Engine.getName(primitive))
+				Name.set(primitive.id, Engine.Primitives.getName(primitive))
 				break;
 			case "Link":
 				{
-					let source_pos = Engine.getStartPosition(primitive as Link)
-					let target_pos = Engine.getEndPosition(primitive as Link)
+					let source_pos = Engine.Primitives.getStartPosition(primitive as Link)
+					let target_pos = Engine.Primitives.getEndPosition(primitive as Link)
 
 					let connection = new LinkVisual(primitive.id, "link", source_pos, target_pos)
 
-					connection.setColor(Engine.getAttribute(primitive, "Color"))
+					connection.setColor(Engine.Primitives.getAttribute(primitive, "Color"))
 
 					if ((primitive as Link).start != null) {
 						// Attach to object
@@ -291,10 +291,10 @@ export namespace Sync {
 						connection.setEndAttach(get((primitive as Link).end.getAttribute("id")))
 					}
 					let bezierPoints = [
-						Engine.getAttribute(primitive, "b1x"),
-						Engine.getAttribute(primitive, "b1y"),
-						Engine.getAttribute(primitive, "b2x"),
-						Engine.getAttribute(primitive, "b2y")
+						Engine.Primitives.getAttribute(primitive, "b1x"),
+						Engine.Primitives.getAttribute(primitive, "b1y"),
+						Engine.Primitives.getAttribute(primitive, "b2x"),
+						Engine.Primitives.getAttribute(primitive, "b2y")
 					]
 
 					if ((bezierPoints as any[]).indexOf(undefined) == -1) {

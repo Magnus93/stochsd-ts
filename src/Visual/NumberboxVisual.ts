@@ -1,6 +1,6 @@
 import { formatNumber } from "../formatNumber";
 import { SVG } from "../SVG";
-import { VisualController } from "./Controller";
+import { Controller } from "./Controller";
 import { defaultFill } from "./default";
 import { ValuedOnePointer } from "./ValuedOnePointer";
 
@@ -10,7 +10,7 @@ export class NumberboxVisual extends ValuedOnePointer {
 	constructor(public id: string, public type: string, public position: [number, number], extras?: any) {
 		super(id, type, position, extras);
 		this.nameCentered = true;
-		VisualController.Name.updatePosition(id);
+		Controller.Name.updatePosition(id);
 		this.setSelectionSizeToText();
 		
 		this.runHandler = () => {

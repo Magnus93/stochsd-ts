@@ -15,7 +15,7 @@ export class ConstantVisual extends VariableVisual {
 		let rs = r - 3; // Selector radius 
 		return [
 			SVG.path(`M0,${r} ${r},0 0,-${r} -${r},0Z`, this.color, defaultFill, "element"),
-			SVG.text(0, 0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
+			SVG.text(0, 0, Engine.Primitives.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
 			SVG.path(`M0,${rs} ${rs},0 0,-${rs} -${rs},0Z`, "none", this.color, "highlight"),
 			SVG.icons(defaultStroke, defaultFill, "icons")
 		];
