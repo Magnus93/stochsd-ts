@@ -1,4 +1,3 @@
-import { HTMLComponent } from "../../HTMLComponent";
 import { jqDialog } from "../jqDialog";
 import { SubscribePool } from "./SubscribePool";
 import { Engine, Primitive } from "../../../Engine";
@@ -98,4 +97,18 @@ export class DisplayDialog extends jqDialog {
 		this.components.forEach(column => column.forEach(component => component.bindEvents()));
 		this.bindEnterApplyEvents();
 	}
+}
+
+export class HTMLComponent {
+	componentId = "component-" + Math.ceil(Math.random() * (2 ** 32)).toString(16)
+	primitive: Primitive
+	constructor(public parent: DisplayDialog) {
+		this.primitive = parent.primitive;
+	}
+	find(selector: string) {
+		return $(this.parent.dialogContent).find(selector);
+	}
+	render() { return "<p>EmptyComponent</p>"; }
+	bindEvents() { }
+	applyChange() { }
 }
