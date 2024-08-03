@@ -236,7 +236,7 @@ export namespace SVG {
 		result.setAttribute("width", `${width}`);
 		result.setAttribute("height", `${height}`);
 		svgElement.appendChild(result);
-		
+
 		result.setX = function (x: number) {
 			result.cutDiv.style.marginLeft = `${x}px`;
 		}

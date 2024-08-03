@@ -11,7 +11,7 @@ export class DeleteTool extends BaseTool {
 			Box.setTool("mouse");
 			return;
 		}
-    VisualController.deleteSelected();
+		VisualController.deleteSelected();
 		// History.storeUndoState(); // TODO add History
 		// InfoBar.update(); // TODO add InfoBar
 		Box.setTool("mouse");

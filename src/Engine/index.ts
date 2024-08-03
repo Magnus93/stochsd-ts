@@ -65,19 +65,19 @@ export namespace Engine {
   export function getCenterPosition(primitive: Primitive): [number, number] {
     const size = getSize(primitive)
     const position = getPosition(primitive)
-    return [position[0] + size[0]/2, position[1] + size[1]/2]
+    return [position[0] + size[0] / 2, position[1] + size[1] / 2]
   }
   /* replace getValue from insightmaker API */
   export function getDefinition(primitive: Stock | Variable | Flow): string
   export function getDefinition(primitive: Primitive): string | undefined
   export function getDefinition(primitive: Primitive): string | undefined {
     return isStock(primitive)
-      ? primitive.initial 
+      ? primitive.initial
       : isVariable(primitive)
-      ? primitive.value 
-      : isFlow(primitive)
-      ? primitive.rate 
-      : undefined
+        ? primitive.value
+        : isFlow(primitive)
+          ? primitive.rate
+          : undefined
   }
   export function getAttribute(primitive: Primitive, attribute: string) {
     return primitive._node.getAttribute(attribute)
@@ -87,10 +87,10 @@ export namespace Engine {
   }
   /* replaces findLinkedInPrimitives */
   export function findLinkedIngoingPrimitives(endId: string): Primitive[] {
-  	let links = model.findLinks()
+    let links = model.findLinks()
     let outgoingLinks = links.filter((link: Link) => link.end ? (link.end as Primitive).id == endId : false)
-  	// let outgoingLinks = links.filter((l) => (l.target) ? l.target.id == id : false);
-  	return outgoingLinks.map((link: Link) => link.start as Primitive | undefined).filter((prim?: Primitive): prim is Primitive => !!prim);
+    // let outgoingLinks = links.filter((l) => (l.target) ? l.target.id == id : false);
+    return outgoingLinks.map((link: Link) => link.start as Primitive | undefined).filter((prim?: Primitive): prim is Primitive => !!prim);
   }
   export function getNodeName(primitive: Primitive): string {
     return primitive._node.value.nodeName
@@ -128,7 +128,7 @@ export namespace Engine {
   export function getLinkedPrimitives(primitive: Primitive): Primitive[] {
     let result = [];
     let allLinks = model.findLinks()
-    for(let link of allLinks) {
+    for (let link of allLinks) {
       if (link.end == primitive) {
         if (link.start != null) {
           result.push(link.start);

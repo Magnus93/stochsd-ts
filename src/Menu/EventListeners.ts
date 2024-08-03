@@ -31,7 +31,7 @@ export namespace EventListeners {
     // 	});
     // });
     $("#btn_simulation_settings").on("click", () => {
-    	Dialog.simulationSettings.show();
+      Dialog.simulationSettings.show();
     });
     // $("#btn_equation_list").click(function() {
     // 	equationList.show();

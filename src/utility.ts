@@ -3,27 +3,27 @@ import { FunctionCategories } from "./FunctionCategories"
 import { VisualController } from "./Visual/Controller/index.js"
 
 export function hasRandomFunction(definition: string) {
-  if (definition) {
-    let randomFunctions: string[] = []
-    for (let category of FunctionCategories) {
-      if (category.name === "Random Number Functions") {
-        randomFunctions = (category.functions).map(f => f.replacement.substring(0, f.replacement.indexOf("#")).toLowerCase())
-        break
-      }
-    }
-    return randomFunctions.some(elem => definition.toLowerCase().includes(elem))
-  }
-  return false
+	if (definition) {
+		let randomFunctions: string[] = []
+		for (let category of FunctionCategories) {
+			if (category.name === "Random Number Functions") {
+				randomFunctions = (category.functions).map(f => f.replacement.substring(0, f.replacement.indexOf("#")).toLowerCase())
+				break
+			}
+		}
+		return randomFunctions.some(elem => definition.toLowerCase().includes(elem))
+	}
+	return false
 }
 
 export function deletePrimitive(id: string) {
-  let primitive = Engine.findById(id)
-	
-  primitive.delete()
-	
+	let primitive = Engine.findById(id)
+
+	primitive.delete()
+
 	// Delete ghosts
 	let ghostIDs = Engine.findGhostsOfPrimitive(id)
-	for(let i in ghostIDs) {
+	for (let i in ghostIDs) {
 		deletePrimitive(ghostIDs[i])
 	}
 	cleanUnconnectedLinks()
@@ -33,7 +33,7 @@ export function deletePrimitive(id: string) {
 
 function cleanUnconnectedLinks() {
 	let allLinks = Engine.model.findLinks()
-	for(let link of allLinks) {
+	for (let link of allLinks) {
 		if (!link.start || !link.end) {
 			link.delete()
 		}

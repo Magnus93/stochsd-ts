@@ -4,8 +4,8 @@ import { VisualController } from "../Visual/Controller"
 import { Box } from "./Box"
 
 export class OnePointCreateTool extends BaseTool {
-  static rightClickMode = false
-	
+	static rightClickMode = false
+
 	static enterTool(whichMouseButton: number) {
 		this.rightClickMode = (whichMouseButton === mouseWhichEnum.right)
 	}
@@ -15,11 +15,11 @@ export class OnePointCreateTool extends BaseTool {
 	static leftMouseDown(x: number, y: number) {
 		VisualController.Selection.unselectAll()
 		this.create(x, y)
-    VisualController.Update.relevant([])
+		VisualController.Update.relevant([])
 		// InfoBar.update() // TODO
 	}
 	static leftMouseUp(x: number, y: number) {
-		if (! this.rightClickMode) {
+		if (!this.rightClickMode) {
 			Box.setTool("mouse")
 		}
 	}

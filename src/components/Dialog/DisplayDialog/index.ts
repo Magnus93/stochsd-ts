@@ -5,7 +5,7 @@ import { Engine, Primitive } from "../../../Engine";
 
 // This is the super class dor ComparePlotDialog and TableDialog
 export class DisplayDialog extends jqDialog {
-  primitive: Primitive
+	primitive: Primitive
 	displayIdList: string[] = [];
 	subscribePool = new SubscribePool();
 	acceptedPrimitiveTypes = ["Stock", "Flow", "Variable", "Converter"];
@@ -21,9 +21,9 @@ export class DisplayDialog extends jqDialog {
 		return 1 // getTimeStep(); // TODO
 	}
 	clearRemovedIds() {
-		for(let id of this.displayIdList) {
+		for (let id of this.displayIdList) {
 			if (!Engine.findById(id)) {
-				this.setDisplayId(id,false);
+				this.setDisplayId(id, false);
 			}
 		}
 	}
@@ -42,11 +42,11 @@ export class DisplayDialog extends jqDialog {
 	}
 	addIdToDisplay(id: string) {
 		let index = this.displayIdList.indexOf(id)
-		index === -1 &&	this.displayIdList.push(id)
+		index === -1 && this.displayIdList.push(id)
 	}
 	setDisplayId(id: string, value: boolean) {
 		let oldIdIndex = this.displayIdList.indexOf(id);
-		switch(value) {
+		switch (value) {
 			case true:
 				// Check that the id can be added
 				if (!this.acceptsId(id)) {
@@ -59,14 +59,14 @@ export class DisplayDialog extends jqDialog {
 				// Add the value
 				this.displayIdList.push(id.toString());
 
-			break;
+				break;
 			case false:
 				// Check if id is not in the list
 				if (oldIdIndex == -1) {
 					return;
-				}				
-				this.displayIdList.splice(oldIdIndex,1);
-			break;
+				}
+				this.displayIdList.splice(oldIdIndex, 1);
+				break;
 		}
 	}
 	getDisplayId(id: string) {

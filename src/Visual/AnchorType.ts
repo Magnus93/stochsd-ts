@@ -8,7 +8,7 @@ export const anchorTypeEnum = <const>{
 	orthoMiddle: 6
 }; */
 
-export type AnchorType = 
+export type AnchorType =
 	| "invalid"
 	| "start"
 	| "end"

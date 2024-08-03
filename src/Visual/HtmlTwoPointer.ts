@@ -2,7 +2,7 @@ import { SVG } from "../SVG";
 import { TwoPointer } from "./TwoPointer";
 
 export class HtmlTwoPointer extends TwoPointer {
-  htmlElement!: SVG.Foreign | SVG.ForeignScrollable
+	htmlElement!: SVG.Foreign | SVG.ForeignScrollable
 	updateHTML(html: string) {
 		this.htmlElement.contentDiv.innerHTML = html;
 	}

@@ -7,11 +7,11 @@ class XAlertDialog extends jqDialog {
 		this.setHtml(message);
 	}
 	afterClose() {
-			this.closeHandler?.();
+		this.closeHandler?.();
 	}
 	beforeCreateDialog() {
 		this.dialogParameters.buttons = {
-			"OK":() => {
+			"OK": () => {
 				$(this.dialog).dialog('close')
 				$(this.dialog).remove()
 			}

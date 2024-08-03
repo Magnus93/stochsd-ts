@@ -17,10 +17,10 @@ $(window).on("load", () => {
 	Tool.init()
 
 	// TODO remove openLink, and add special code in the environments that need it.
-  $("a").on("click", (e: JQuery.ClickEvent) => { 
-		let url=e.currentTarget.href;
-		if(Env.environment.openLink(url)) {			
+	$("a").on("click", (e: JQuery.ClickEvent) => {
+		let url = e.currentTarget.href;
+		if (Env.environment.openLink(url)) {
 			e.preventDefault();
 		}
-  })
+	})
 })

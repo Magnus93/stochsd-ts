@@ -14,30 +14,30 @@ import { OrthoAnchorPoint } from "./OrthoAnchorPoint";
 import { StockVisual } from "./StockVisual";
 
 export class FlowVisual extends BaseConnection {
-  middleAnchors: AnchorPoint[] = [] // List of anchors. Not start- and end-anchor. TYPE: [AnchorPoint]
-  valveIndex!: number  	// index to indicate what inbetween path valve is placed
-  variableSide!: boolean 	// bool to indicate what side of path variable is placed
-  startCloud!: SVG.Cloud
-  endCloud!: SVG.Cloud
-  outerPath!: SVG.WidePath 	// Black path element
-  innerPath!: SVG.WidePath 	// White path element
-  arrowHeadPath!: SVG.ArrowHead // Head of Arrow element
-  flowPathGroup!: SVGGElement // Group element with outer- inner- & arrowHeadPath within.
-  valve!: SVGPathElement 
-  variable!: SVGGElement 		// variable (only svg group-element with circle and text)
+	middleAnchors: AnchorPoint[] = [] // List of anchors. Not start- and end-anchor. TYPE: [AnchorPoint]
+	valveIndex!: number  	// index to indicate what inbetween path valve is placed
+	variableSide!: boolean 	// bool to indicate what side of path variable is placed
+	startCloud!: SVG.Cloud
+	endCloud!: SVG.Cloud
+	outerPath!: SVG.WidePath 	// Black path element
+	innerPath!: SVG.WidePath 	// White path element
+	arrowHeadPath!: SVG.ArrowHead // Head of Arrow element
+	flowPathGroup!: SVGGElement // Group element with outer- inner- & arrowHeadPath within.
+	valve!: SVGPathElement
+	variable!: SVGGElement 		// variable (only svg group-element with circle and text)
 	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
 		super(id, type, pos0, pos1);
 		this.updateDefinitionError();
-		this.namePositions = [[0,40],[31,5],[0,-33],[-31,5]]; 	// Text placement when rotating text
+		this.namePositions = [[0, 40], [31, 5], [0, -33], [-31, 5]]; 	// Text placement when rotating text
 	}
 
 	isAcceptableStartAttach(attachVisual: BaseVisual) {
 		return attachVisual instanceof StockVisual
-	}	
+	}
 
 	isAcceptableEndAttach(attachVisual: BaseVisual) {
 		return attachVisual instanceof StockVisual
-	}	
+	}
 
 	getRadius() {
 		return 20;
@@ -50,21 +50,21 @@ export class FlowVisual extends BaseConnection {
 		return anchors;
 	}
 
-	getPreviousAnchor(anchorId: string) { 
+	getPreviousAnchor(anchorId: string) {
 		let anchors = this.getAnchors();
 		let anchor_ids = anchors.map(anchor => anchor.id);
 		let prev_index = anchor_ids.indexOf(anchorId) - 1;
 		return prev_index >= 0 ? anchors[prev_index] : null;
 	}
 
-	getNextAnchor(anchorId: string) { 
+	getNextAnchor(anchorId: string) {
 		let anchors = this.getAnchors();
 		let anchor_ids = anchors.map(anchor => anchor.id);
 		let index = anchor_ids.indexOf(anchorId);
-		if (index === -1 && index === anchors.length-1) {
+		if (index === -1 && index === anchors.length - 1) {
 			return null;
 		} else {
-			return anchors[index+1];
+			return anchors[index + 1];
 		}
 	}
 
@@ -84,8 +84,8 @@ export class FlowVisual extends BaseConnection {
 			let stockDim = anchorAttach.getPos()[dimIndex];
 			// stockWidth or stockHeight
 			let stockSpanSize = anchorAttach.getSize()[dimIndex];
-			newValue = Maths.clampValue(reqValue, stockDim-stockSpanSize/2, stockDim+stockSpanSize/2);
-		} else {	
+			newValue = Maths.clampValue(reqValue, stockDim - stockSpanSize / 2, stockDim + stockSpanSize / 2);
+		} else {
 			// dont allow being closer than minDistance units to a neightbour node 
 			let minDistance = 10;
 			let prevAnchor = this.getPreviousAnchor(anchorId);
@@ -94,7 +94,7 @@ export class FlowVisual extends BaseConnection {
 			let requestPos = anchor.getPos();
 			requestPos[dimIndex] = reqValue;
 			if ((prevAnchor && distance(requestPos, prevAnchor.getPos()) < minDistance) ||
-			  	(nextAnchor && distance(requestPos, nextAnchor.getPos()) < minDistance) ) {
+				(nextAnchor && distance(requestPos, nextAnchor.getPos()) < minDistance)) {
 				// set old value of anchor 
 				newValue = anchor.getPos()[dimIndex];
 			} else {
@@ -102,7 +102,7 @@ export class FlowVisual extends BaseConnection {
 				newValue = reqValue;
 			}
 		}
-		
+
 		let pos = anchor.getPos();
 		pos[dimIndex] = newValue;
 		anchor.setPosition(pos);
@@ -141,27 +141,27 @@ export class FlowVisual extends BaseConnection {
 			let [x1, y1] = anchors[0].getPos()
 			let [x2, y2] = anchors[1].getPos()
 			let flow_start_direction_x = Math.abs(x1 - x2) < Math.abs(y1 - y2);
-			let index = anchors.map(anchor => anchor.id).indexOf(anchorId);			
-			prevMoveInX = ((index%2) === 1) === flow_start_direction_x;
-			nextMoveInX = ! prevMoveInX;
+			let index = anchors.map(anchor => anchor.id).indexOf(anchorId);
+			prevMoveInX = ((index % 2) === 1) === flow_start_direction_x;
+			nextMoveInX = !prevMoveInX;
 		}
 
 		if (prevAnchor) {
 			// Get direction of movement or direction of previous anchor 
-			if ( prevMoveInX ) {
+			if (prevMoveInX) {
 				x = this.requestNewAnchorX(x, prevAnchor.id);
 			} else {
 				y = this.requestNewAnchorY(y, prevAnchor.id);
 			}
 		}
 		if (nextAnchor) {
-			if ( nextMoveInX ) {
+			if (nextMoveInX) {
 				x = this.requestNewAnchorX(x, nextAnchor.id);
 			} else {
 				y = this.requestNewAnchorY(y, nextAnchor.id);
 			}
 		}
-		mainAnchor.setPosition([x,y]);
+		mainAnchor.setPosition([x, y]);
 	}
 
 
@@ -184,8 +184,8 @@ export class FlowVisual extends BaseConnection {
 		const rTarget = distance([xCenter, yCenter], [xTarget, yTarget]);
 		const dXTarget = xTarget - xCenter
 		const dYTarget = yTarget - yCenter
-		const dXEdge = Maths.safeDivision(dXTarget*this.getRadius(), rTarget)
-		const dYEdge = Maths.safeDivision(dYTarget*this.getRadius(), rTarget)
+		const dXEdge = Maths.safeDivision(dXTarget * this.getRadius(), rTarget)
+		const dYEdge = Maths.safeDivision(dYTarget * this.getRadius(), rTarget)
 		const xEdge = dXEdge + xCenter
 		const yEdge = dYEdge + yCenter
 		return [xEdge, yEdge]
@@ -193,23 +193,23 @@ export class FlowVisual extends BaseConnection {
 
 	moveValve() {
 		if (this.variableSide) {
-			this.valveIndex = (this.valveIndex+1)%(this.middleAnchors.length+1);
+			this.valveIndex = (this.valveIndex + 1) % (this.middleAnchors.length + 1);
 		}
 		this.variableSide = !this.variableSide;
 
 		Engine.setAttribute(this.primitive!, "ValveIndex", `${this.valveIndex}`);
 		Engine.setAttribute(this.primitive!, "VariableSide", `${this.variableSide}`);
 
-    VisualController.Update.relevant([])
+		VisualController.Update.relevant([])
 	}
 
 	createMiddleAnchorPoint(x: number, y: number) {
 		let index = this.middleAnchors.length;
 		let newAnchor = new OrthoAnchorPoint(
-			this.id+".point"+index, 
-			"dummy_anchor", 
-			[x, y], 
-			"orthoMiddle", 
+			this.id + ".point" + index,
+			"dummy_anchor",
+			[x, y],
+			"orthoMiddle",
 			index
 		);
 		this.middleAnchors.push(newAnchor);
@@ -229,24 +229,24 @@ export class FlowVisual extends BaseConnection {
 	removeLastMiddleAnchorPoint() {
 		// set valveIndex to 0 to avoid valveplacement bug 
 		if (this.valveIndex === this.middleAnchors.length) {
-			this.valveIndex = this.middleAnchors.length-1;
+			this.valveIndex = this.middleAnchors.length - 1;
 		}
 		let removedAnchor = this.middleAnchors.pop();
 		deleteOnePointer(removedAnchor!.id);
 	}
-	
+
 	parseMiddlePoints(middlePointsString: string): [number, number][] {
 		if (middlePointsString == "") {
 			return [];
 		}
 		// example input: "15,17 19,12 "
-		
+
 		// example ["15,17", "19,12"]
 		let stringPoints = middlePointsString.trim().split(" ");
-		
+
 		// example [["15", "17"], ["19", "12"]]
 		let stringDimension = stringPoints.map(stringPos => stringPos.split(","));
-		
+
 		// example [[15,17], [19,12]]
 		let points = stringDimension.map((dim): [number, number] => [parseInt(dim[0]), parseInt(dim[1])]);
 
@@ -255,17 +255,17 @@ export class FlowVisual extends BaseConnection {
 
 	loadMiddlePoints() {
 		let middlePointsString = Engine.getAttribute(this.primitive!, "MiddlePoints");
-		if (! middlePointsString) {
+		if (!middlePointsString) {
 			return [];
 		}
 		let points = this.parseMiddlePoints(middlePointsString);
 		for (let point of points) {
 			let index = this.middleAnchors.length;
 			let newAnchor = new OrthoAnchorPoint(
-				this.id+".point"+index, 
-				"dummy_anchor", 
+				this.id + ".point" + index,
+				"dummy_anchor",
 				point,
-				"orthoMiddle", 
+				"orthoMiddle",
 				index
 			);
 			this.middleAnchors.push(newAnchor);
@@ -276,7 +276,7 @@ export class FlowVisual extends BaseConnection {
 		let pos = this.getVariablePos();
 		let radius = this.getRadius();
 		return {
-			"minX": pos[0] - radius, 
+			"minX": pos[0] - radius,
 			"maxX": pos[0] + radius,
 			"minY": pos[1] - radius,
 			"maxY": pos[1] + radius
@@ -285,14 +285,14 @@ export class FlowVisual extends BaseConnection {
 
 	getValvePos() {
 		let points = this.getAnchors().map(anchor => anchor.getPos());
-		let valveX = (points[this.valveIndex][0]+points[this.valveIndex+1][0])/2;
-		let valveY = (points[this.valveIndex][1]+points[this.valveIndex+1][1])/2;
+		let valveX = (points[this.valveIndex][0] + points[this.valveIndex + 1][0]) / 2;
+		let valveY = (points[this.valveIndex][1] + points[this.valveIndex + 1][1]) / 2;
 		return [valveX, valveY];
 	}
 
 	getValveRotation() {
 		const points = this.getAnchors().map(anchor => anchor.getPos());
-		const dir = neswDirection(points[this.valveIndex], points[this.valveIndex+1]);
+		const dir = neswDirection(points[this.valveIndex], points[this.valveIndex + 1]);
 		let valveRot = 0;
 		if (dir == "north" || dir == "south") {
 			valveRot = 90;
@@ -302,7 +302,7 @@ export class FlowVisual extends BaseConnection {
 
 	getVariablePos() {
 		const points = this.getAnchors().map(anchor => anchor.getPos());
-		const dir = neswDirection(points[this.valveIndex], points[this.valveIndex+1]);
+		const dir = neswDirection(points[this.valveIndex], points[this.valveIndex + 1]);
 		let variableOffset = [0, 0];
 		if (dir == "north" || dir == "south") {
 			if (this.variableSide) {
@@ -316,9 +316,9 @@ export class FlowVisual extends BaseConnection {
 			} else {
 				variableOffset = [0, this.getRadius()];
 			}
-		} 
+		}
 		let [valveX, valveY] = this.getValvePos();
-		return [valveX+variableOffset[0], valveY+variableOffset[1]];
+		return [valveX + variableOffset[0], valveY + variableOffset[1]];
 	}
 
 	setColor(color: string) {
@@ -336,71 +336,71 @@ export class FlowVisual extends BaseConnection {
 	}
 
 	makeGraphics() {
-		this.startCloud = SVG.cloud(this.color, defaultFill, {"class": "element"});
-		this.endCloud = SVG.cloud(this.color, defaultFill, {"class": "element"});
-		this.outerPath = SVG.widePath(5, this.color, {"class": "element"});
+		this.startCloud = SVG.cloud(this.color, defaultFill, { "class": "element" });
+		this.endCloud = SVG.cloud(this.color, defaultFill, { "class": "element" });
+		this.outerPath = SVG.widePath(5, this.color, { "class": "element" });
 		this.innerPath = SVG.widePath(3, "white"); // Must have white ohterwise path is black
-		this.arrowHeadPath = SVG.arrowHead(this.color, defaultFill, {"class": "element"});
+		this.arrowHeadPath = SVG.arrowHead(this.color, defaultFill, { "class": "element" });
 		this.flowPathGroup = SVG.group([this.startCloud, this.endCloud, this.outerPath, this.innerPath, this.arrowHeadPath]);
 		this.valve = SVG.path("M8,8 -8,-8 8,-8 -8,8 Z", this.color, defaultFill, "element");
 		this.nameElement = SVG.text(0, -this.getRadius(), "vairable", "name_element");
 		this.icons = SVG.icons(defaultStroke, defaultFill, "icons");
 		this.variable = SVG.group(
-			[SVG.circle(0, 0, this.getRadius(), this.color, "white", "element"), 
-			SVG.circle(0, 0, this.getRadius()-2, "none", this.color, "highlight"),
-			this.icons,	
+			[SVG.circle(0, 0, this.getRadius(), this.color, "white", "element"),
+			SVG.circle(0, 0, this.getRadius() - 2, "none", this.color, "highlight"),
+			this.icons,
 			this.nameElement]
 		);
 		this.icons.setColor("white");
 		this.middleAnchors = [];
 		this.valveIndex = 0;
 		this.variableSide = false;
-		
-		$(this.nameElement).dblclick((event) => {	
+
+		$(this.nameElement).dblclick((event) => {
 			this.nameDoubleClick();
 		});
-		
+
 		this.group = SVG.group([this.flowPathGroup, this.valve, this.variable]);
-		this.group.setAttribute("node_id",this.id);
+		this.group.setAttribute("node_id", this.id);
 
 		$(this.group).on("dblclick", () => {
 			this.doubleClick();
 		});
 		this.updateGraphics();
 	}
-	
+
 	getDirection(): [number, number] {
 		// This function is used to determine which way the arrowHead should aim 
 		let points = this.getAnchors().map(anchor => anchor.getPos());
 		let len = points.length;
-		let p1 = points[len-1];
-		let p2 = points[len-2];
-		return [p2[0]-p1[0], p2[1]-p1[1]];
+		let p1 = points[len - 1];
+		let p2 = points[len - 2];
+		return [p2[0] - p1[0], p2[1] - p1[1]];
 	}
 
 	shortenLastPoint(shortenAmount: number) {
 		let points = this.getAnchors().map(anchor => anchor.getPos());
-		let last = points[points.length-1];
-		let secondLast = points[points.length-2];
+		let last = points[points.length - 1];
+		let secondLast = points[points.length - 2];
 		let sine = sin(last, secondLast);
 		let cosine = cos(last, secondLast);
 		let newLast = rotate([shortenAmount, 0], sine, cosine);
 		newLast = translate(newLast, last);
-		points[points.length-1] = newLast;
+		points[points.length - 1] = newLast;
 		return points;
 	}
 
 	update() {
 		// This function is similar to TwoPointer::update but it takes attachments into account
-		
+
 		// Get start position from attach
 		// _start_attach is null if we are not attached to anything
-		
+
 		let points = this.getAnchors().map(anchor => anchor.getPos());
 		let connectionStartPos = points[1];
-		let connectionEndPos = points[points.length-2]; 
+		let connectionEndPos = points[points.length - 2];
 
-    const startAttach = this.getStartAttach()
+		const startAttach = this.getStartAttach()
 		if (startAttach && this.startAnchor != null) {
 			let oldPos = this.startAnchor.getPos();
 			let newPos = (startAttach as StockVisual).getFlowMountPos(connectionStartPos);
@@ -408,8 +408,8 @@ export class FlowVisual extends BaseConnection {
 				this.requestNewAnchorPos(newPos, this.startAnchor.id);
 			}
 		}
-    const endAttach = this.getEndAttach()
-		if (endAttach && this.endAnchor != null) {	
+		const endAttach = this.getEndAttach()
+		if (endAttach && this.endAnchor != null) {
 			let oldPos = this.endAnchor.getPos();
 			let newPos = (endAttach as StockVisual).getFlowMountPos(connectionEndPos);
 			if (oldPos[0] != newPos[0] || oldPos[1] != newPos[1]) {
@@ -418,9 +418,9 @@ export class FlowVisual extends BaseConnection {
 		}
 		super.update();
 		// update anchors 
-		this.getAnchors().map( anchor => anchor.updatePosition() );
+		this.getAnchors().map(anchor => anchor.updatePosition());
 
-		if(this.primitive && this.icons) {
+		if (this.primitive && this.icons) {
 			const hasDefError = DefinitionError.has(this.primitive);
 			if (hasDefError) {
 				this.icons.set("questionmark", "visible");
@@ -430,7 +430,7 @@ export class FlowVisual extends BaseConnection {
 			this.icons.set("dice", !hasDefError && hasRandomFunction(Engine.getDefinition(this.primitive) ?? "") ? "visible" : "hidden");
 		}
 	}
-	
+
 	updateGraphics() {
 		let points = this.getAnchors().map(anchor => anchor.getPos());
 		if (this.getStartAttach() == null) {
@@ -441,13 +441,13 @@ export class FlowVisual extends BaseConnection {
 		}
 		if (this.getEndAttach() == null) {
 			this.endCloud.setVisibility(true);
-			this.endCloud.setPosition(points[points.length-1], points[points.length-2]);
+			this.endCloud.setPosition(points[points.length - 1], points[points.length - 2]);
 		} else {
 			this.endCloud.setVisibility(false);
 		}
 		this.outerPath.setPoints(this.shortenLastPoint(12));
 		this.innerPath.setPoints(this.shortenLastPoint(8));
-		this.arrowHeadPath.setPosition(points[points.length-1], this.getDirection());
+		this.arrowHeadPath.setPosition(points[points.length - 1], this.getDirection());
 
 		let [valveX, valveY] = this.getValvePos();
 		let valveRot = this.getValveRotation();
@@ -461,7 +461,7 @@ export class FlowVisual extends BaseConnection {
 		this.innerPath.update();
 		this.arrowHeadPath.update();
 	}
-	
+
 	unselect() {
 		super.unselect();
 		this.variable.getElementsByClassName("highlight")[0].setAttribute("visibility", "hidden");
@@ -473,7 +473,7 @@ export class FlowVisual extends BaseConnection {
 		this.variable.getElementsByClassName("highlight")[0].setAttribute("visibility", "visible");
 		this.icons?.setColor("white");
 	}
-	
+
 	doubleClick() {
 		// openPrimitiveDialog(this.id) // TODO add primitiveDialog
 	}
@@ -489,25 +489,25 @@ function deleteConnection(key: string) {
 	let auxiliary = (VisualController.twoPointers[key] as any).auxiliary; // TODO should this be removed?
 	VisualController.twoPointers[key].group?.remove();
 	delete VisualController.twoPointers[key];
-	
+
 	// Must be done last otherwise the anchors will respawn	
 	deleteOnePointer(startAnchor.id);
 	deleteOnePointer(endAnchor.id);
-	deleteOnePointer(auxiliary.id);	
+	deleteOnePointer(auxiliary.id);
 }
 /* replaces delete_object */
 function deleteOnePointer(nodeId: string) {
 	let visualsToDelete = VisualController.onePointers[nodeId];
-	
+
 	// Delete all references to the object in the connections
 	if ("parent_id" in visualsToDelete) {
 		deleteConnection(visualsToDelete.parent_id as string);
 	}
-	
-	for(let i in visualsToDelete.selectorElements) {
+
+	for (let i in visualsToDelete.selectorElements) {
 		visualsToDelete.selectorElements[i].remove();
 	}
-	for(let key in visualsToDelete.elements) {
+	for (let key in visualsToDelete.elements) {
 		visualsToDelete.elements[key].remove();
 	}
 	visualsToDelete.group?.remove();

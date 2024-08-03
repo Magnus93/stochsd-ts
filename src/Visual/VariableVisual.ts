@@ -10,7 +10,7 @@ export class VariableVisual extends ValuedOnePointer {
 	constructor(public id: string, public type: string, public position: [number, number], extras?: any) {
 		super(id, type, position, extras);
 		this.updateDefinitionError();
-		this.namePositions = [[0, 34],[23, 5],[0, -25],[-23, 5]];
+		this.namePositions = [[0, 34], [23, 5], [0, -25], [-23, 5]];
 	}
 
 	getRadius() {
@@ -18,8 +18,8 @@ export class VariableVisual extends ValuedOnePointer {
 	}
 
 	getBoundRect() {
-	let pos = this.getPos();
-	let radius = this.getRadius();
+		let pos = this.getPos();
+		let radius = this.getRadius();
 		return {
 			"minX": pos[0] - radius,
 			"maxX": pos[0] + radius,
@@ -28,11 +28,11 @@ export class VariableVisual extends ValuedOnePointer {
 		};
 	}
 
-	getImage (): Element[] {
+	getImage(): Element[] {
 		return [
-			SVG.circle(0,0,this.getRadius(), this.color, defaultFill, "element"),
-			SVG.text(0,0, Engine.getAttribute(this.primitive!, "name"), "name_element", {"fill": this.color}),
-			SVG.circle(0,0,this.getRadius()-2, "none", this.color, "highlight"),
+			SVG.circle(0, 0, this.getRadius(), this.color, defaultFill, "element"),
+			SVG.text(0, 0, Engine.getAttribute(this.primitive!, "name"), "name_element", { "fill": this.color }),
+			SVG.circle(0, 0, this.getRadius() - 2, "none", this.color, "highlight"),
 			SVG.icons(defaultStroke, defaultFill, "icons")
 		];
 	}
@@ -43,10 +43,10 @@ export class VariableVisual extends ValuedOnePointer {
 		const rTarget = distance([xCenter, yCenter], [xTarget, yTarget]);
 		const dXTarget = xTarget - xCenter;
 		const dYTarget = yTarget - yCenter;
-		const dXEdge = Maths.safeDivision(dXTarget*this.getRadius(), rTarget);
-		const dYEdge = Maths.safeDivision(dYTarget*this.getRadius(), rTarget);
-		const xEdge = dXEdge + xCenter; 
+		const dXEdge = Maths.safeDivision(dXTarget * this.getRadius(), rTarget);
+		const dYEdge = Maths.safeDivision(dYTarget * this.getRadius(), rTarget);
+		const xEdge = dXEdge + xCenter;
 		const yEdge = dYEdge + yCenter;
-		return [xEdge, yEdge]; 
+		return [xEdge, yEdge];
 	}
 }

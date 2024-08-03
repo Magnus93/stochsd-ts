@@ -6,16 +6,16 @@ import { defaultStroke } from "./default";
 import { HtmlTwoPointer } from "./HtmlTwoPointer";
 
 export class TextAreaVisual extends HtmlTwoPointer {
-  coordRect!: CoordRect<SVGRectElement>
-  htmlElement!: SVG.Foreign
-	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {		
+	coordRect!: CoordRect<SVGRectElement>
+	htmlElement!: SVG.Foreign
+	constructor(public id: string, public type: string, pos0: [number, number], pos1: [number, number]) {
 		super(id, type, pos0, pos1);
-		
+
 		this.primitive = Engine.findById(id);
-		
+
 		// this.dialog = new TextAreaDialog(id); // TODO add TextAreaDialog
 		// this.dialog.subscribePool.subscribe(()=>{
-			// this.render();
+		// this.render();
 		// });
 		// this.render();
 	}
@@ -32,35 +32,35 @@ export class TextAreaVisual extends HtmlTwoPointer {
 		this.coordRect.update();
 	}
 	makeGraphics() {
-		
+
 		this.coordRect = new CoordRect(
-      SVG.rect(this.getMinX(), this.getMinY(), this.getWidth(), this.getHeight(), defaultStroke, "none", "element")
-    )
+			SVG.rect(this.getMinX(), this.getMinY(), this.getWidth(), this.getHeight(), defaultStroke, "none", "element")
+		)
 
 		this.htmlElement = SVG.foreign(this.getMinX(), this.getMinY(), this.getWidth(), this.getHeight(), "Text not rendered yet", "white");
 
 		$(this.htmlElement.cutDiv).mousedown((event) => {
 			// This is an alternative to having the htmlElement in the group
-				// primitive_mousedown(this.id,event) // TODO add function
-        Mouse.downHandler(event)
-				event.stopPropagation();
+			// primitive_mousedown(this.id,event) // TODO add function
+			Mouse.downHandler(event)
+			event.stopPropagation();
 		});
-		
+
 		// Emergency solution since double clicking a ComparePlot or XyPlot does not always work.
-		$(this.htmlElement.cutDiv).bind("contextmenu", ()=> {
+		$(this.htmlElement.cutDiv).bind("contextmenu", () => {
 			this.doubleClick();
 		});
 
-		$(this.htmlElement.cutDiv).dblclick(()=>{
+		$(this.htmlElement.cutDiv).dblclick(() => {
 			this.doubleClick();
 		});
 
 		this.group = SVG.group([this.coordRect.element]);
-		this.group.setAttribute("node_id",this.id);	
-		
+		this.group.setAttribute("node_id", this.id);
+
 		this.elements = [this.coordRect.element];
 		this.elements = [this.htmlElement.contentDiv, this.coordRect.element];
-		for(let key in this.elements) {
+		for (let key in this.elements) {
 			this.elements[key].setAttribute("node_id", this.id);
 		}
 	}
@@ -68,9 +68,9 @@ export class TextAreaVisual extends HtmlTwoPointer {
 		this.dialog.show();
 	}
 	render() {
-		let newText = Engine.getName(this.primitive);
-		let hideFrame = this.primitive.getAttribute("HideFrame") === "true";
-		if(hideFrame && removeSpacesAtEnd(newText).length !== 0) {
+		let newText = Engine.getName(this.primitive!);
+		let hideFrame = Engine.getAttribute(this.primitive!, "HideFrame") === "true";
+		if (hideFrame && removeSpacesAtEnd(newText).length !== 0) {
 			this.coordRect.element.setAttribute("visibility", "hidden");
 		} else {
 			this.coordRect.element.setAttribute("visibility", "visible");
@@ -92,8 +92,8 @@ export class TextAreaVisual extends HtmlTwoPointer {
 
 function removeSpacesAtEnd(str: string) {
 	let value = str;
-	while(value[value.length-1] === " ") {
-		value = value.substring(0, value.length-1);
+	while (value[value.length - 1] === " ") {
+		value = value.substring(0, value.length - 1);
 	}
 	return value;
 }

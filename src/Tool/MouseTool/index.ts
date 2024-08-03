@@ -3,7 +3,6 @@ import { Mouse } from "../../Mouse"
 import { do_global_log } from "../../debug"
 import { RectSelector } from "./RectSelector"
 import { VisualController } from "../../Visual/Controller"
-import { AnchorType } from "../../Visual/AnchorType"
 import { Box } from "../Box"
 import { BaseConnection } from "../../Visual/BaseConnection"
 

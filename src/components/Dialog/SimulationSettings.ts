@@ -5,11 +5,11 @@ import { HTMLString } from "../HTMLString";
 import { jqDialog } from "./jqDialog";
 
 export class SimulationSettings extends jqDialog {
-  startInput!: JQuery<HTMLInputElement>
-  lengthInput!: JQuery<HTMLInputElement>
-  stepInput!: JQuery<HTMLInputElement>
-  warningDiv!: JQuery<HTMLDivElement>
-  methodSelect!: JQuery<HTMLSelectElement>
+	startInput!: JQuery<HTMLInputElement>
+	lengthInput!: JQuery<HTMLInputElement>
+	stepInput!: JQuery<HTMLInputElement>
+	warningDiv!: JQuery<HTMLDivElement>
+	methodSelect!: JQuery<HTMLSelectElement>
 	constructor() {
 		super();
 		this.setTitle("Simulation Settings");
@@ -49,7 +49,7 @@ export class SimulationSettings extends jqDialog {
 		</table>
 		<div class="simulation-settings-warning"></div>
 		`);
-		
+
 		this.bindEnterApplyEvents();
 
 		this.startInput = $(this.dialogContent).find(".input-start") as JQuery<HTMLInputElement>;
@@ -82,18 +82,18 @@ export class SimulationSettings extends jqDialog {
 		} else if (Number(this.stepInput.val()) <= 0) {
 			this.warningDiv.html(HTMLString.warning(`Step must be &gt;0`, true));
 			return false;
-		} else if( Settings.limitSimulationSteps && Number(this.lengthInput.val())/Number(this.stepInput.val()) > 1e5) {
-			let iterations = Math.ceil(Number(this.lengthInput.val())/Number(this.stepInput.val()));
-			let iters_str = formatNumber(iterations, {use_e_format_upper_limit: 1e5, precision: 3});
+		} else if (Settings.limitSimulationSteps && Number(this.lengthInput.val()) / Number(this.stepInput.val()) > 1e5) {
+			let iterations = Math.ceil(Number(this.lengthInput.val()) / Number(this.stepInput.val()));
+			let iters_str = formatNumber(iterations, { use_e_format_upper_limit: 1e5, precision: 3 });
 			this.warningDiv.html(HTMLString.warning(`
 				This Length requires ${iters_str} time steps. <br/>
 				The limit is 10<sup>5</sup> time steps per simulation.
 			`, true));
 			return false;
 
-		}else if( Settings.limitSimulationSteps && Number(this.lengthInput.val())/Number(this.stepInput.val()) > 1e4) {
-			let iterations = Math.ceil(Number(this.lengthInput.val())/Number(this.stepInput.val()));
-			let iters_str = formatNumber(iterations, {use_e_format_upper_limit: 1e4, precision: 3});
+		} else if (Settings.limitSimulationSteps && Number(this.lengthInput.val()) / Number(this.stepInput.val()) > 1e4) {
+			let iterations = Math.ceil(Number(this.lengthInput.val()) / Number(this.stepInput.val()));
+			let iters_str = formatNumber(iterations, { use_e_format_upper_limit: 1e4, precision: 3 });
 			this.warningDiv.html(HTMLString.note(`
 				This Length requires ${iters_str} time steps. <br/>
 				More than 10<sup>4</sup> time steps per simulation <br/>

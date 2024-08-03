@@ -33,8 +33,8 @@ export class WebFileManagerModern extends BaseFileManager {
   async getRecentFiles(): Promise<FileSystemFileHandle[]> {
     let recentFiles: FileSystemFileHandle[];
     try {
-       recentFiles = await idbKeyval.get<FileSystemFileHandle[]>("recentFiles") ?? []
-    } catch { 
+      recentFiles = await idbKeyval.get<FileSystemFileHandle[]>("recentFiles") ?? []
+    } catch {
       recentFiles = [];
     }
     return recentFiles;
@@ -48,8 +48,8 @@ export class WebFileManagerModern extends BaseFileManager {
 
   async removeDuplicatesFromRecent(fileHandle: any, recentFiles: any[]) {
     let newRecentFiles = []
-    for(let i in recentFiles) {
-      if(!await recentFiles[i].isSameEntry(fileHandle))  {
+    for (let i in recentFiles) {
+      if (!await recentFiles[i].isSameEntry(fileHandle)) {
         newRecentFiles.push(recentFiles[i]);
       }
     }
@@ -148,24 +148,24 @@ export class WebFileManagerModern extends BaseFileManager {
     if (withWrite) {
       opts.mode = 'readwrite';
     }
-  
+
     // Check if we already have permission, if so, return true.
     if (await (fileHandle as any).queryPermission(opts) === 'granted') { // TODO remove any
       return true;
     }
-  
+
     // Request permission to the file, if the user grants permission, return true.
     if (await (fileHandle as any).requestPermission(opts) === 'granted') { // TODO remove any
       return true;
     }
-  
+
     // The user did not grant permission, return false.
     return false;
   }
 
   async loadFromFileHandle(fileHandle: FileSystemFileHandle) {
     const allowedPermission = await this.verifyPermission(fileHandle, false);
-    if(!allowedPermission) {
+    if (!allowedPermission) {
       return;
     }
     await idbKeyval.del('fileHandle');

@@ -6,28 +6,28 @@ import { VisualController } from "./Controller";
 import { Engine, Primitive } from "../Engine";
 
 export class BaseVisual {
-  selected = false
-  nameRadius: number = 30;
-  color = defaultStroke
-  primitive?: Primitive
-  elements: Element[]
-  selectorElements: Element[] // Elements visible when selected
-  nameElement?: SVGTextElement
-  icons?: SVG.Icons
-  group?: SVGGElement
-  namePositions: [number, number][]
-  isGhost = false
+	selected = false
+	nameRadius: number = 30;
+	color = defaultStroke
+	primitive?: Primitive
+	elements: Element[]
+	selectorElements: Element[] // Elements visible when selected
+	nameElement?: SVGTextElement
+	icons?: SVG.Icons
+	group?: SVGGElement
+	namePositions: [number, number][]
+	isGhost = false
 	constructor(public id: string, public type: string, pos: [number, number]) {
 		this.color = defaultStroke;
 		// Warning: this.primitive can be null, since all DIM objects does not have a IM object such as anchors and flow_auxiliarys
 		// We should therefor check if this.primitive is null, in case we dont know which class we are dealing with
 		this.primitive = Engine.findById(this.id); // TODO 
-		
+
 		this.elements = [];
 		this.selectorElements = [];
 		this.icons; 	// svg group with icons such as ghost and questionmark
 		this.group;
-		this.namePositions = [[0, this.nameRadius+8], [this.nameRadius, 0], [0, -this.nameRadius], [-this.nameRadius, 0]];
+		this.namePositions = [[0, this.nameRadius + 8], [this.nameRadius, 0], [0, -this.nameRadius], [-this.nameRadius, 0]];
 	}
 
 	setColor(color: string) {
@@ -35,9 +35,9 @@ export class BaseVisual {
 		for (let element of this.elements) {
 			if (element.getAttribute("class") == "element") {
 				element.setAttribute("stroke", this.color);
-			} else if(element.getAttribute("class") == "name_element") {
+			} else if (element.getAttribute("class") == "name_element") {
 				element.setAttribute("fill", this.color);
-			} else if(element.getAttribute("class") == "highlight") {
+			} else if (element.getAttribute("class") == "highlight") {
 				element.setAttribute("fill", this.color);
 			}
 		}
@@ -61,15 +61,15 @@ export class BaseVisual {
 		// The hashmap dictates in what rect mouse can click to create connections
 	}
 
-  getPosition():  [number, number] {
-    // Override this function
-    return [0, 0]
-  }
+	getPosition(): [number, number] {
+		// Override this function
+		return [0, 0]
+	}
 
 	getLinkMountPos(closeToPoint: [number, number]) {
 		return this.getPosition();
 	}
-	
+
 	isSelected() {
 		return this.selected;
 	}
@@ -81,22 +81,22 @@ export class BaseVisual {
 	}
 
 	clean() {
-    // TODO fix
+		// TODO fix
 		// // Clean all children
 		// let children = getChildren(this.id);
 		// for(let id in children) {
 		// 	children[id].clean();
 		// 	delete object_array[id];
 		// }
-		
+
 		// this.clearImage();
 	}
 	clearImage() {
 		// Do the cleaning
-		for(let i in this.selectorElements) {
+		for (let i in this.selectorElements) {
 			this.selectorElements[i].remove();
 		}
-		for(let key in this.elements) {
+		for (let key in this.elements) {
 			this.elements[key].remove();
 		}
 		this.group?.remove();
@@ -115,12 +115,12 @@ export class BaseVisual {
 		// Or when the connections starting point is connected or disconnected
 		// Override this
 	}
-  /* replaces name_pos */
-  #namePositionIndex: number = 0
+	/* replaces name_pos */
+	#namePositionIndex: number = 0
 	get namePositionIndex(): number {
 		return this.#namePositionIndex
 	}
-	
+
 	set namePositionIndex(value: number) {
 		//~ alert("name pos for "+this.id+" "+getStackTrace());
 		//~ do_global_log("updating name pos to "+value);
@@ -131,7 +131,7 @@ export class BaseVisual {
 		return this.type;
 	}
 	nameDoubleClick() {
-					
+
 		if (this.isGhost) {
 			errorPopUp("You must rename a ghost by renaming the original.");
 			return;
@@ -140,15 +140,15 @@ export class BaseVisual {
 		// definitionEditor.open(id, ".name-field"); // TODO implement definition editor
 		// event.stopPropagation(); // TODO is this needed?
 	}
-	
+
 	setName(value: string) {
-			if (this.nameElement == null) {
-				do_global_log("Element has no name");
-				return;
-			}
-			this.nameElement.innerHTML = value;
+		if (this.nameElement == null) {
+			do_global_log("Element has no name");
+			return;
+		}
+		this.nameElement.innerHTML = value;
 	}
-	
+
 	attributeChangeHandler(attributeName: string, value: string) {
 		// Override this
 	}

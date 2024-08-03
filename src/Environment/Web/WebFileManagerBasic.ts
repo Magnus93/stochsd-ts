@@ -40,7 +40,7 @@ export class WebFileManagerBasic extends BaseFileManager {
   exportFile(dataToSave: any, fileExtension: string, onSuccess: (filePath: string) => void) {
     if (onSuccess == undefined) {
       // On success is optional, so if it was not set we set it to an empty function
-      onSuccess = () => {};
+      onSuccess = () => { };
     }
 
     var fileName = prompt("Filename:", fileExtension);

@@ -57,7 +57,7 @@ export namespace DefinitionError {
         let linkedRefs = linkedIds.map(id => Engine.getName(Engine.findById(id)))
         for (let ref of definitionRefs) {
           if (linkedRefs.includes(ref) === false) {
-            return { id: 2, detail: {unknownRef: ref }};
+            return { id: 2, detail: { unknownRef: ref } };
           }
         }
 
@@ -65,16 +65,16 @@ export namespace DefinitionError {
         for (let i = 0; i < linkedIds.length; i++) {
           let ref = linkedRefs[i];
           if ((definitionRefs as any).includes(ref) === false) {
-            return { id: 3, detail: { unusedId: linkedIds[i] }}
+            return { id: 3, detail: { unusedId: linkedIds[i] } }
           }
         }
       } else if (primType === "Converter") {
         if (linkedIds.length === 0) {
           // 4. No ingoing link 
-          return { id: 4, detail: {}};
+          return { id: 4, detail: {} };
         } else if (linkedIds.length > 1) {
           // 5. More then one ingoing link 
-          return { id: 5,detail: {"linkedIds": linkedIds }};
+          return { id: 5, detail: { "linkedIds": linkedIds } };
         }
       }
     },
@@ -96,10 +96,10 @@ export namespace DefinitionError {
           if (Number(i) > 0) {
             if (Number(rows[Number(i) - 1][0]) > Number(rows[i][0])) {
               // not sorted inputs order 
-              return { 
-                id: 10, 
+              return {
+                id: 10,
                 detail: {
-                  Xpre: Number(rows[Number(i) - 1][0]), Xpost: Number(rows[i][0]) 
+                  Xpre: Number(rows[Number(i) - 1][0]), Xpost: Number(rows[i][0])
                 }
               };
             }
@@ -229,12 +229,12 @@ function checkBracketErrors(str: string): DefinitionError | undefined {
     const openPos = topStack.pos
     const openChar = topStack.bracket
     const closeChar = closeBrackets[topStack.index]
-    return { 
-      id: 6, 
+    return {
+      id: 6,
       detail: {
-        openPos: { col: openPos }, 
-        openBracket: openChar, 
-        closeBracket: closeChar 
+        openPos: { col: openPos },
+        openBracket: openChar,
+        closeBracket: closeChar
       }
     }
   }

@@ -12,11 +12,11 @@ export class Env {
   }
   static detect(): BaseEnvironment {
     // if (isRunningElectron()) {
-      // return new ElectronEnvironment();
+    // return new ElectronEnvironment();
     // } else if (isRunningNwjs()) {
-      // return new NwEnvironment();
+    // return new NwEnvironment();
     // } else {
-      return new WebEnvironment();
+    return new WebEnvironment();
     // }
   }
 }

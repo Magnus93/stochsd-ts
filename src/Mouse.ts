@@ -7,7 +7,7 @@ import { Box } from "./Tool/Box";
 // NOTE: values for event.which should be used
 // event.button will give incorrect results 
 /* replaces mouse */
-export const mouseWhichEnum = <const>{ left: 1, middle: 2, right: 3};
+export const mouseWhichEnum = <const>{ left: 1, middle: 2, right: 3 };
 export class Mouse {
   /* replace last_click_object_clicked */
   static lastClickObjectClicked = false;
@@ -25,7 +25,7 @@ export class Mouse {
   static init() {
     $(SVG.svgElement).on("mousedown", this.downHandler)
     $("html").on("mousemove", this.moveHandler)
-	  $("html").on("mouseup", this.upHandler)
+    $("html").on("mouseup", this.upHandler)
   }
 
   /* replaces mouseDownHandler */
@@ -37,28 +37,28 @@ export class Mouse {
       return;
     } */ // TODO add back when TimeUnit fixed
     let offset = $(SVG.svgElement).offset()!;
-    let x = event.pageX-offset.left;
-    let y = event.pageY-offset.top;
-    do_global_log("x:"+x+" y:"+y);
+    let x = event.pageX - offset.left;
+    let y = event.pageY - offset.top;
+    do_global_log("x:" + x + " y:" + y);
     switch (event.which) { // TODO replace which with event.button
       case mouseWhichEnum.left:
         // if left mouse button down
         Mouse.leftIsDown = true;
-        Box.currentTool.leftMouseDown(x,y);
+        Box.currentTool.leftMouseDown(x, y);
         break;
-      case mouseWhichEnum.right: 
+      case mouseWhichEnum.right:
         // if right mouse button down
-        Box.currentTool.rightMouseDown(x,y);
+        Box.currentTool.rightMouseDown(x, y);
         break;
     }
   }
   /* replaces mouseMoveHandler */
   static moveHandler(event: JQuery.MouseMoveEvent) {
     const offset = $(SVG.svgElement).offset()!;
-    const x = event.pageX-offset.left;
-    const y = event.pageY-offset.top;
+    const x = event.pageX - offset.left;
+    const y = event.pageY - offset.top;
     Mouse.lastPosition = { x, y };
-    
+
     if (Mouse.leftIsDown) {
       Box.currentTool.mouseMove(x, y, event.shiftKey);
     }
@@ -72,14 +72,14 @@ export class Mouse {
       // does not work to store UndoState here, because mouseUpHandler happens even when we are outside the svg (click buttons etc)
       do_global_log("mouseUpHandler");
       let offset = $(SVG.svgElement).offset()!;
-      let x = event.pageX-offset.left;
-      let y = event.pageY-offset.top;
-      
+      let x = event.pageX - offset.left;
+      let y = event.pageY - offset.top;
+
       Box.currentTool.leftMouseUp(x, y, event.shiftKey);
       Mouse.leftIsDown = false;
       // InfoBar.update(); // TODO add InfoBar
       // History.storeUndoState(); // TODO add History
-    }	
+    }
   }
 
 }

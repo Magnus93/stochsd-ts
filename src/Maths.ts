@@ -1,15 +1,15 @@
 
 
 export namespace Maths {
-  export function safeDivision(nominator: number, denominator: number) { 
+  export function safeDivision(nominator: number, denominator: number) {
     // Make sure division by Zero does not happen 
     if (denominator == 0) {
-      return 9999999; 
+      return 9999999;
     } else {
-      return nominator/denominator;
+      return nominator / denominator;
     }
   }
-  
+
   export function sign(value: number) {
     if (value < 0) {
       return -1;
@@ -21,7 +21,7 @@ export namespace Maths {
   export function isInLimits(lowerLimit: number, value: number, upperLimit: number) {
     return (lowerLimit < value && value < upperLimit);
   }
-  
+
   export function clampValue(value: number, min: number, max: number) {
     return Math.max(Math.min(value, max), min);
   }

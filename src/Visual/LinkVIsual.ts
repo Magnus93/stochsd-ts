@@ -134,7 +134,7 @@ export class LinkVisual extends BaseConnection {
     this.clickCurve.update();
   }
 
-  isAcceptableStartAttach(attachVisual: BaseVisual): boolean { 
+  isAcceptableStartAttach(attachVisual: BaseVisual): boolean {
     let okAttachTypes = ["stock", "variable", "constant", "converter", "flow"];
     return okAttachTypes.includes(attachVisual.getType());
   }

@@ -1,10 +1,10 @@
 export const Settings: {
-  fileExtension: string
-  MaxRecentFiles: number
-  nwInitZoom: number
-  primitiveFontSize: number
-  showDebug: boolean
-  limitSimulationSteps: true
+	fileExtension: string
+	MaxRecentFiles: number
+	nwInitZoom: number
+	primitiveFontSize: number
+	showDebug: boolean
+	limitSimulationSteps: true
 } = {
 	fileExtension: ".ssd",
 	// Maximum recent files to be displayed in menu
@@ -16,5 +16,5 @@ export const Settings: {
 	// Whatever to show debug
 	showDebug: false,
 	// limit how many steps a simulation may take
-	limitSimulationSteps: true    
+	limitSimulationSteps: true
 };
