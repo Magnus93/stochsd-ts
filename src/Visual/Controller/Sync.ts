@@ -4,7 +4,7 @@ import { ConverterVisual } from "../ConverterVisual";
 import { EllipseVisual } from "../EllipseVisual";
 import { FlowVisual } from "../FlowVisual";
 import { LineVisual } from "../LineVisual";
-import { LinkVisual } from "../LinkVIsual";
+import { LinkVisual } from "../LinkVisual";
 import { NumberboxVisual } from "../NumberboxVisual";
 import { RectangleVisual } from "../RectangleVisual";
 import { StockVisual } from "../StockVisual";
